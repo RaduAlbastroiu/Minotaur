@@ -1,0 +1,15 @@
+
+
+==== SETUP ====
+
+  1. Download Pytho 2.7 
+  https://www.python.org/ftp/python/2.7.16/python-2.7.16.amd64.msi
+  
+  2. Add environment paths for python as explained in here
+  https://superuser.com/questions/143119/how-do-i-add-python-to-the-windows-path
+  
+  3. Download cocos 2d from
+  https://cocos2d-x.org/download
+  
+==== CREATE PROJECT ====
+
