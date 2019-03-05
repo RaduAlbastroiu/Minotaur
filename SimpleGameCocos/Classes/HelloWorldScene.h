@@ -27,6 +27,7 @@
 
 #include "cocos2d.h"
 
+
 class HelloWorld : public cocos2d::Scene
 {
 public:
@@ -35,8 +36,11 @@ public:
 
   void AddHelloWorld();
   void AddBackground();
+  void AddCharacter();
 
   CREATE_FUNC(HelloWorld);
+
+  cocos2d::Vector getAnimation(const char *format, int count);
 
 private:
   cocos2d::Director* mDirector;

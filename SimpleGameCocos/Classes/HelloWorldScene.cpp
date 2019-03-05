@@ -51,6 +51,8 @@ bool HelloWorld::init()
   mWindow.height = mDirector->getVisibleSize().height;
 
   AddBackground();
+  //AddHelloWorld();
+  AddCharacter();
 
   return true;
 }
@@ -76,4 +78,29 @@ void HelloWorld::AddBackground()
       this->addChild(background);
     }
   }
+}
+
+void HelloWorld::AddCharacter()
+{
+  // sprite
+  auto frames = getAnimation("minotaur.png", 8);
+  auto sprite = Sprite::createWithSpriteFrame(frames.front());
+  background->addChild(sprite);
+  sprite->setPosition(100, 620);
+
+  auto animation = Animation::createWithSpriteFrames(frames, 1.0f / 8);
+  sprite->runAction(RepeatForever::create(Animate::create(animation)));
+}
+
+Vector HelloWorld::getAnimation(const char *format, int count)
+{
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector animFrames;
+  char str[100];
+  for (int i = 1; i <= count; i++)
+  {
+    sprintf(str, format, i);
+    animFrames.pushBack(spritecache->getSpriteFrameByName(str));
+  }
+  return animFrames;
 }

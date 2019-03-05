@@ -10,3 +10,6 @@
   
   4. Skeleton Sprite Pack
   https://jesse-m.itch.io/skeleton-pack
+  
+  5. Minotaur Sprite Sheet
+  https://elthen.itch.io/2d-pixel-art-minotaur-sprites
