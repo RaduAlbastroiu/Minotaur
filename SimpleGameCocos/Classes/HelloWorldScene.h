@@ -30,15 +30,21 @@
 class HelloWorld : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
+  static cocos2d::Scene* createScene();
+  virtual bool init();
 
-    virtual bool init();
-    
-    // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+  void AddHelloWorld();
+
+  CREATE_FUNC(HelloWorld);
+
+private:
+  cocos2d::Director* mDirector;
+
+  struct WindowSize
+  {
+    int height;
+    int width;
+  }mWindow;
 };
 
 #endif // __HELLOWORLD_SCENE_H__
