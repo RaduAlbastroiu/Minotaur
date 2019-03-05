@@ -1,0 +1,12 @@
+
+  1. Cocos2dx for the tools 
+  https://cocos2d-x.org/
+  
+  2. Tutorial from
+  https://www.gamefromscratch.com/page/Cocos2d-x-CPP-Game-Programming-Tutorial-Series.aspx
+  
+  3. Grass Asset
+  https://opengameart.org/content/30-grass-textures-tilable
+  
+  4. Skeleton Sprite Pack
+  https://jesse-m.itch.io/skeleton-pack

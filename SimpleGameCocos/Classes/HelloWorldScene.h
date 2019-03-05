@@ -34,6 +34,7 @@ public:
   virtual bool init();
 
   void AddHelloWorld();
+  void AddBackground();
 
   CREATE_FUNC(HelloWorld);
 

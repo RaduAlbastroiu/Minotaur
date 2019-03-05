@@ -50,7 +50,7 @@ bool HelloWorld::init()
   mWindow.width = mDirector->getVisibleSize().width;
   mWindow.height = mDirector->getVisibleSize().height;
 
-  AddHelloWorld();
+  AddBackground();
 
   return true;
 }
@@ -62,4 +62,18 @@ void HelloWorld::AddHelloWorld()
   label->setPosition(cocos2d::Vec2(mWindow.width / 2, mWindow.height / 2));
 
   this->addChild(label, 1);
+}
+
+void HelloWorld::AddBackground()
+{
+  for (int i = 0; i < 3; i++)
+  {
+    for (int j = 0; j < 2; j++)
+    {
+      cocos2d::Sprite* background = Sprite::create("grass.png");
+      background->setAnchorPoint(Vec2(0, 0));
+      background->setPosition(Vec2(1024 * i, 1024 * j));
+      this->addChild(background);
+    }
+  }
 }
