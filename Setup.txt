@@ -13,3 +13,8 @@
   
 ==== CREATE PROJECT ====
 
+ 1. Creating project
+ cocos new -l cpp -p com.gamefromscratch.gamename -d D:\path\to\game\here gamename
+ 
+ 2. Open project from gamename\proj.win32\gamename.sln using visual studio 2017, link for donwload below
+ https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=Community&rel=15
