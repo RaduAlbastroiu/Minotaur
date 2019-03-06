@@ -24,7 +24,6 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
-#include "Minotaur.h"
 
 USING_NS_CC;
 
@@ -53,9 +52,10 @@ bool HelloWorld::init()
 
   AddBackground();
   AddHelloWorld();
-  //AddCharacter();
 
   this->scheduleUpdate();
+
+  mHero = Hero(this, mWindow.width / 2, mWindow.height / 2);
 
   return true;
 }
@@ -83,55 +83,8 @@ void HelloWorld::AddBackground()
   }
 }
 
-void HelloWorld::AddCharacter()
-{
-  minotaur = GetMinotaurAt(0, 0);
-  minotaur->setScale(10);
-  minotaur->setAnchorPoint(Vec2(0.5, 0.5));
-  minotaur->setPosition(Vec2(mWindow.width / 2, mWindow.height / 2.5));
-
-  this->addChild(minotaur);
-}
-
-void HelloWorld::DrawNextMinotaur()
-{
-  if (currentMinotaur == maxMinotaur)
-  {
-    currentMinotaur = 0;
-  }
-
-  auto sprite = GetMinotaurAt(minotaurLine, currentMinotaur);
-  //minotaur->setTexture(sprite->getTexture());
-  sprite->setScale(10);
-  sprite->setAnchorPoint(Vec2(0.5, 0.5));
-  sprite->setPosition(Vec2(mWindow.width / 2, mWindow.height / 2));
-
-  if (lastSprite != nullptr)
-  {
-    lastSprite->removeFromParent();
-  }
-
-  this->addChild(sprite);
-  lastSprite = sprite;
-  currentMinotaur++;
-}
-
-cocos2d::Sprite * HelloWorld::GetMinotaurAt(int x, int y)
-{
-  int X = x * 96;
-  int Y = y * 96;
-
-  cocos2d::Sprite* sprite = Sprite::create("Minotaur.png", Rect(Y, X, 96, 96));
-  return sprite;
-}
-
 void HelloWorld::update(float delta)
 {
   elapsedTime += delta;
-  if (elapsedTime - lastSecond >= 0.1)
-  {
-    lastSecond = elapsedTime;
-
-    DrawNextMinotaur();
-  }
+  mHero.Update(delta);
 }

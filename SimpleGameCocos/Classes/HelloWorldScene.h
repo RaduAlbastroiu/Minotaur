@@ -24,9 +24,9 @@
 
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
-
+#pragma once
 #include "cocos2d.h"
-
+#include "Hero.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -36,13 +36,9 @@ public:
 
   void AddHelloWorld();
   void AddBackground();
-  void AddCharacter();
   void update(float delta) override;
 
   CREATE_FUNC(HelloWorld);
-
-  void DrawNextMinotaur();
-  cocos2d::Sprite* GetMinotaurAt(int x, int y);
 
 private:
 
@@ -51,6 +47,8 @@ private:
   int currentMinotaur = 0;
   int maxMinotaur = 9;
   int minotaurLine = 3;
+
+  Hero mHero;
 
   cocos2d::Director* mDirector;
 
