@@ -37,13 +37,25 @@ public:
   void AddHelloWorld();
   void AddBackground();
   void AddCharacter();
+  void update(float delta) override;
 
   CREATE_FUNC(HelloWorld);
 
-  cocos2d::Vector getAnimation(const char *format, int count);
+  void DrawNextMinotaur();
+  cocos2d::Sprite* GetMinotaurAt(int x, int y);
 
 private:
+
+  float elapsedTime = 0;
+  float lastSecond = 0;
+  int currentMinotaur = 0;
+  int maxMinotaur = 9;
+  int minotaurLine = 3;
+
   cocos2d::Director* mDirector;
+
+  cocos2d::Sprite* minotaur;
+  cocos2d::Sprite* lastSprite = nullptr;
 
   struct WindowSize
   {

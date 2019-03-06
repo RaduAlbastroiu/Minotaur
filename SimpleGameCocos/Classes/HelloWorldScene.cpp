@@ -24,6 +24,7 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "Minotaur.h"
 
 USING_NS_CC;
 
@@ -51,8 +52,10 @@ bool HelloWorld::init()
   mWindow.height = mDirector->getVisibleSize().height;
 
   AddBackground();
-  //AddHelloWorld();
-  AddCharacter();
+  AddHelloWorld();
+  //AddCharacter();
+
+  this->scheduleUpdate();
 
   return true;
 }
@@ -61,7 +64,7 @@ void HelloWorld::AddHelloWorld()
 {
   auto label = Label::createWithSystemFont("Hello World", "Arial", 96);
   label->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
-  label->setPosition(cocos2d::Vec2(mWindow.width / 2, mWindow.height / 2));
+  label->setPosition(cocos2d::Vec2(mWindow.width / 2, mWindow.height / 1.25));
 
   this->addChild(label, 1);
 }
@@ -82,25 +85,53 @@ void HelloWorld::AddBackground()
 
 void HelloWorld::AddCharacter()
 {
-  // sprite
-  auto frames = getAnimation("minotaur.png", 8);
-  auto sprite = Sprite::createWithSpriteFrame(frames.front());
-  background->addChild(sprite);
-  sprite->setPosition(100, 620);
+  minotaur = GetMinotaurAt(0, 0);
+  minotaur->setScale(10);
+  minotaur->setAnchorPoint(Vec2(0.5, 0.5));
+  minotaur->setPosition(Vec2(mWindow.width / 2, mWindow.height / 2.5));
 
-  auto animation = Animation::createWithSpriteFrames(frames, 1.0f / 8);
-  sprite->runAction(RepeatForever::create(Animate::create(animation)));
+  this->addChild(minotaur);
 }
 
-Vector HelloWorld::getAnimation(const char *format, int count)
+void HelloWorld::DrawNextMinotaur()
 {
-  auto spritecache = SpriteFrameCache::getInstance();
-  Vector animFrames;
-  char str[100];
-  for (int i = 1; i <= count; i++)
+  if (currentMinotaur == maxMinotaur)
   {
-    sprintf(str, format, i);
-    animFrames.pushBack(spritecache->getSpriteFrameByName(str));
+    currentMinotaur = 0;
   }
-  return animFrames;
+
+  auto sprite = GetMinotaurAt(minotaurLine, currentMinotaur);
+  //minotaur->setTexture(sprite->getTexture());
+  sprite->setScale(10);
+  sprite->setAnchorPoint(Vec2(0.5, 0.5));
+  sprite->setPosition(Vec2(mWindow.width / 2, mWindow.height / 2));
+
+  if (lastSprite != nullptr)
+  {
+    lastSprite->removeFromParent();
+  }
+
+  this->addChild(sprite);
+  lastSprite = sprite;
+  currentMinotaur++;
+}
+
+cocos2d::Sprite * HelloWorld::GetMinotaurAt(int x, int y)
+{
+  int X = x * 96;
+  int Y = y * 96;
+
+  cocos2d::Sprite* sprite = Sprite::create("Minotaur.png", Rect(Y, X, 96, 96));
+  return sprite;
+}
+
+void HelloWorld::update(float delta)
+{
+  elapsedTime += delta;
+  if (elapsedTime - lastSecond >= 0.1)
+  {
+    lastSecond = elapsedTime;
+
+    DrawNextMinotaur();
+  }
 }
