@@ -45,6 +45,8 @@ bool HelloWorld::init()
     return false;
   }
 
+  SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur/MinotaurAttack.plist");
+
   // set private members
   mDirector = Director::getInstance();
   mWindow.width = mDirector->getVisibleSize().width;
@@ -52,11 +54,19 @@ bool HelloWorld::init()
 
   AddBackground();
   AddHelloWorld();
+  
 
   this->scheduleUpdate();
 
-  mHero = Hero(this, mWindow.width / 2, mWindow.height / 2);
+  // sprite
+  auto frames = getAnimation(9);
+  aHero = Sprite::createWithSpriteFrame(frames.front());
+  this->addChild(aHero);
+  aHero->setPosition(500, 500);
+  aHero->setScale(5.0);
 
+  AttackAnimation = Animation::createWithSpriteFrames(frames, 8, 5);
+  AddCharacter();
   return true;
 }
 
@@ -83,8 +93,26 @@ void HelloWorld::AddBackground()
   }
 }
 
+void HelloWorld::AddCharacter()
+{
+  cocos2d::Action* action = RepeatForever::create(Animate::create(AttackAnimation));
+  aHero->runAction(action);
+
+}
+
 void HelloWorld::update(float delta)
 {
   elapsedTime += delta;
-  mHero.Update(delta);
+  //mHero.Update(delta);
+}
+
+cocos2d::Vector<SpriteFrame *> HelloWorld::getAnimation(int count)
+{
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector<SpriteFrame *> animFrames;
+  for (int i = 0; i < count; i++)
+  {
+    animFrames.pushBack(spritecache->getSpriteFrameByName(str[0]));
+  }
+  return animFrames;
 }

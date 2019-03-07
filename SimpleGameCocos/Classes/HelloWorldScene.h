@@ -36,9 +36,12 @@ public:
 
   void AddHelloWorld();
   void AddBackground();
+  void AddCharacter();
   void update(float delta) override;
 
   CREATE_FUNC(HelloWorld);
+
+  cocos2d::Vector<SpriteFrame *> getAnimation(int count);
 
 private:
 
@@ -48,7 +51,20 @@ private:
   int maxMinotaur = 9;
   int minotaurLine = 3;
 
-  Hero mHero;
+  cocos2d::Sprite* aHero;
+  cocos2d::Animation* AttackAnimation;
+
+  vector<string> str = { "MinotaurAttack_0.png", 
+  "MinotaurAttack_1.png" 
+  "MinotaurAttack_2.png" 
+  "MinotaurAttack_3.png" 
+  "MinotaurAttack_4.png" 
+  "MinotaurAttack_5.png" 
+  "MinotaurAttack_6.png" 
+  "MinotaurAttack_7.png" 
+  "MinotaurAttack_8.png" };
+
+  //Hero mHero;
 
   cocos2d::Director* mDirector;
 
