@@ -65,8 +65,10 @@ bool HelloWorld::init()
   aHero->setPosition(500, 500);
   aHero->setScale(5.0);
 
-  AttackAnimation = Animation::createWithSpriteFrames(frames, 8, 5);
-  AddCharacter();
+  AttackAnimation = Animation::createWithSpriteFrames(frames, 0.1, 5);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(AttackAnimation));
+  aHero->runAction(action);
+
   return true;
 }
 
@@ -95,9 +97,7 @@ void HelloWorld::AddBackground()
 
 void HelloWorld::AddCharacter()
 {
-  cocos2d::Action* action = RepeatForever::create(Animate::create(AttackAnimation));
-  aHero->runAction(action);
-
+  
 }
 
 void HelloWorld::update(float delta)
@@ -112,7 +112,7 @@ cocos2d::Vector<SpriteFrame *> HelloWorld::getAnimation(int count)
   Vector<SpriteFrame *> animFrames;
   for (int i = 0; i < count; i++)
   {
-    animFrames.pushBack(spritecache->getSpriteFrameByName(str[0]));
+    animFrames.pushBack(spritecache->getSpriteFrameByName(str[i]));
   }
   return animFrames;
 }
