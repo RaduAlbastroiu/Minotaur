@@ -18,6 +18,19 @@ public:
 
 private:
   
+  cocos2d::Sprite* aHero;
+  cocos2d::Animation* AttackAnimation;
+
+  vector<string> str = { "MinotaurAttack_0.png",
+  "MinotaurAttack_1.png" ,
+  "MinotaurAttack_2.png" ,
+  "MinotaurAttack_3.png" ,
+  "MinotaurAttack_4.png" ,
+  "MinotaurAttack_5.png" ,
+  "MinotaurAttack_6.png" ,
+  "MinotaurAttack_7.png" ,
+  "MinotaurAttack_8.png" };
+
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mCurrentSprite;
 

@@ -49,8 +49,16 @@ void Hero::MoveToPosition(float x, float y)
 
 void Hero::Attack(int type)
 {
-  mCurrentState = HeroState::attack;
-  numberOfRunsAnimation = 0;
+  // sprite
+  auto frames = getAnimation(9);
+  aHero = Sprite::createWithSpriteFrame(frames.front());
+  this->addChild(aHero);
+  aHero->setPosition(500, 500);
+  aHero->setScale(5.0);
+
+  AttackAnimation = Animation::createWithSpriteFrames(frames, 0.1, 5);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(AttackAnimation));
+  aHero->runAction(action);
 }
 
 void Hero::Update(float delta)
