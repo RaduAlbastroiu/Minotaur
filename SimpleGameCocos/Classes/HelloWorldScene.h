@@ -24,7 +24,7 @@
 
 #ifndef __HELLOWORLD_SCENE_H__
 #define __HELLOWORLD_SCENE_H__
-#pragma once
+
 #include "cocos2d.h"
 #include "Hero.h"
 
@@ -36,12 +36,9 @@ public:
 
   void AddHelloWorld();
   void AddBackground();
-  void AddCharacter();
   void update(float delta) override;
 
   CREATE_FUNC(HelloWorld);
-
-  cocos2d::Vector<SpriteFrame *> getAnimation(int count);
 
 private:
 
@@ -50,6 +47,8 @@ private:
   int currentMinotaur = 0;
   int maxMinotaur = 9;
   int minotaurLine = 3;
+
+  Hero* mHero;
 
   cocos2d::Sprite* aHero;
   cocos2d::Animation* AttackAnimation;

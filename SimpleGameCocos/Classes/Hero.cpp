@@ -2,6 +2,7 @@
 
 Hero::Hero()
 {
+  Init();
 }
 
 Hero::Hero(cocos2d::Scene * scene, float positionX, float positionY)
@@ -9,38 +10,56 @@ Hero::Hero(cocos2d::Scene * scene, float positionX, float positionY)
   mScene = scene;
   mCurrentPosition.x = positionX;
   mCurrentPosition.y = positionY;
-  speed = 10;
-  animationDuration = 0.2f;
-  lastAnimationTime = 0;
-  timePassed = 0;
 
-  mCurrentState = HeroState::stand;
+  mHero = Sprite::create("MinotaurFirst.png");
+  mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
+  mHero->setScale(5);
 
-  mCurrentSprite = nullptr;
+  Init();
+}
 
-  for (int i = 0; i < 8; i++)
-  {
-    auto sprite = GetMinotaurAt(1, i);
-    sprite->setScale(5);
-    sprite->setAnchorPoint(Vec2(0.5, 0.5));
-    mMoveAnimation.push_back(sprite);
-  }
-  for (int i = 0; i < 9; i++)
-  {
-    auto sprite = GetMinotaurAt(3, i);
-    sprite->setScale(5);
-    sprite->setAnchorPoint(Vec2(0.5, 0.5));
-    mAttackAnimation.push_back(sprite);
-  }
+void Hero::Init()
+{
+  SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
+
+  InitIdleAnimation();
+  InitMoveAnimation();
+  InitAttackAnimation();
+
+  mScene->addChild(mHero);
+}
+
+void Hero::InitIdleAnimation()
+{
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector<SpriteFrame *> animIdle;
   for (int i = 0; i < 5; i++)
   {
-    auto sprite = GetMinotaurAt(0, i);
-    sprite->setScale(5);
-    sprite->setAnchorPoint(Vec2(0.5, 0.5));
-    mStandingAnimation.push_back(sprite);
+    animIdle.pushBack(spritecache->getSpriteFrameByName(mHeroIdle[i]));
   }
+  mIdleAnimation = Animation::createWithSpriteFrames(animIdle, 0.2);
+}
 
-  ResetCurrentSprite();
+void Hero::InitMoveAnimation()
+{
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector<SpriteFrame *> animMove;
+  for (int i = 0; i < 8; i++)
+  {
+    animMove.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
+  }
+  mMoveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
+}
+
+void Hero::InitAttackAnimation()
+{
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector<SpriteFrame *> attackAnim;
+  for (int i = 0; i < 8; i++)
+  {
+    attackAnim.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
+  }
+  mAttackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.1);
 }
 
 void Hero::MoveToPosition(float x, float y)
@@ -49,126 +68,27 @@ void Hero::MoveToPosition(float x, float y)
 
 void Hero::Attack(int type)
 {
-  // sprite
-  auto frames = getAnimation(9);
-  aHero = Sprite::createWithSpriteFrame(frames.front());
-  this->addChild(aHero);
-  aHero->setPosition(500, 500);
-  aHero->setScale(5.0);
-
-  AttackAnimation = Animation::createWithSpriteFrames(frames, 0.1, 5);
-  cocos2d::Action* action = RepeatForever::create(Animate::create(AttackAnimation));
-  aHero->runAction(action);
 }
 
 void Hero::Update(float delta)
 {
-  timePassed += delta;
-  if (mCurrentState == HeroState::attack && numberOfRunsAnimation >= 1)
-  {
-    mCurrentState = HeroState::stand;
-  }
+  mTimePassed += delta;
 
-  if (timePassed - lastAnimationTime > animationDuration)
+  if (mTimePassed > 3 && started == false)
   {
-    position pos;
-    pos.x = 500;
-    pos.y = 300;
-    switch (mCurrentState)
+    auto spritecache = SpriteFrameCache::getInstance();
+    Vector<SpriteFrame *> animMove;
+    for (int i = 0; i < 8; i++)
     {
-    case Hero::attack:
-      DrawNextAttackAnimation(pos);
-      break;
-    case Hero::move:
-      DrawNextMoveAnimation(pos);
-      break;
-    case Hero::stand:
-      DrawNextStandingAnimation(pos);
-      break;
-    default:
-      break;
+      animMove.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
     }
+    mMoveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
+
+    cocos2d::Action* action = RepeatForever::create(Animate::create(mMoveAnimation));
+    mHero->runAction(action);
+    cocos2d::Action* action2 = cocos2d::MoveBy::create(7, cocos2d::Vec2(2500, 0));
+    mHero->runAction(action2);
+    started = true;
   }
-}
-
-void Hero::ResetCurrentSprite()
-{
-  mCurrentMoveSprite = 0;
-  mCurrentAttackSprite = 0;
-  mCurrentStangindSprite = 0;
-}
-
-void Hero::DrawNextMoveAnimation(position aPosition)
-{
-  if (mCurrentMoveSprite == mMoveAnimation.size())
-  {
-    mCurrentMoveSprite = 0;
-  }
-
-  if (mCurrentSprite != nullptr)
-  {
-    mCurrentSprite->removeFromParent();
-  }
-  mCurrentSprite = mMoveAnimation[mCurrentMoveSprite];
-  mCurrentSprite->setPosition(Vec2(aPosition.x, aPosition.y));
-  mScene->addChild(mCurrentSprite);
-
-  mCurrentMoveSprite++;
-  if (mCurrentMoveSprite == mMoveAnimation.size())
-  {
-    numberOfRunsAnimation++;
-  }
-}
-
-void Hero::DrawNextAttackAnimation(position aPosition)
-{
-  if (mCurrentAttackSprite == mAttackAnimation.size())
-  {
-    mCurrentAttackSprite = 0;
-  }
-
-  if (mCurrentSprite != nullptr)
-  {
-    mCurrentSprite->removeFromParent();
-  }
-  mCurrentSprite = mAttackAnimation[mCurrentAttackSprite];
-  mCurrentSprite->setPosition(Vec2(aPosition.x, aPosition.y));
-  mScene->addChild(mCurrentSprite);
-
-  mCurrentAttackSprite++;
-  if (mCurrentAttackSprite == mAttackAnimation.size())
-  {
-    numberOfRunsAnimation++;
-  }
-}
-
-void Hero::DrawNextStandingAnimation(position aPosition)
-{
-  if (mCurrentStangindSprite == mStandingAnimation.size())
-  {
-    mCurrentStangindSprite = 0;
-  }
-
-  if (mCurrentSprite != nullptr)
-  {
-    mCurrentSprite->removeFromParent();
-  }
-  mCurrentSprite = mStandingAnimation[mCurrentStangindSprite];
-  mCurrentSprite->setPosition(Vec2(aPosition.x, aPosition.y));
-  mScene->addChild(mCurrentSprite);
-
-  mCurrentStangindSprite++;
-  if (mCurrentStangindSprite == mStandingAnimation.size())
-  {
-    numberOfRunsAnimation++;
-  }
-}
-
-cocos2d::Sprite * Hero::GetMinotaurAt(int x, int y)
-{
-  int X = x * 96;
-  int Y = y * 96;
-
-  cocos2d::Sprite* sprite = Sprite::create("Minotaur.png", Rect(Y, X, 96, 96));
-  return sprite;
+  
 }

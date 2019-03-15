@@ -17,11 +17,40 @@ public:
   void Update(float delta);
 
 private:
-  
-  cocos2d::Sprite* aHero;
-  cocos2d::Animation* AttackAnimation;
 
-  vector<string> str = { "MinotaurAttack_0.png",
+  void Init();
+  void InitIdleAnimation();
+  void InitMoveAnimation();
+  void InitAttackAnimation();
+
+  struct position
+  {
+    float x, y;
+  };
+
+  enum heroState
+  {
+    attack,
+    move,
+    stand
+  };
+
+  float mTimePassed = 0;
+
+  cocos2d::Scene* mScene;
+  cocos2d::Sprite* mHero;
+
+  bool started = false;
+
+  cocos2d::Animation* mIdleAnimation;
+  cocos2d::Animation* mMoveAnimation;
+  cocos2d::Animation* mAttackAnimation;
+
+  heroState mCurrentState = heroState::stand;
+  position mCurrentPosition;
+  float mSpeed = 10;;
+
+  vector<string> mHeroAttack = { "MinotaurAttack_0.png",
   "MinotaurAttack_1.png" ,
   "MinotaurAttack_2.png" ,
   "MinotaurAttack_3.png" ,
@@ -31,41 +60,18 @@ private:
   "MinotaurAttack_7.png" ,
   "MinotaurAttack_8.png" };
 
-  cocos2d::Scene* mScene;
-  cocos2d::Sprite* mCurrentSprite;
+  vector<string> mHeroIdle = { "MinotaurIdle_0.png",
+  "MinotaurIdle_1.png" ,
+  "MinotaurIdle_2.png" ,
+  "MinotaurIdle_3.png" ,
+  "MinotaurIdle_4.png" };
 
-  struct position
-  {
-    float x, y;
-  };
-  position mCurrentPosition;
-  float speed;
-  float animationDuration;
-
-  enum HeroState
-  {
-    attack,
-    move,
-    stand
-  };
-  HeroState mCurrentState;
-  float numberOfRunsAnimation;
-
-  float lastAnimationTime;
-  float timePassed;
-
-  vector<cocos2d::Sprite*> mMoveAnimation;
-  vector<cocos2d::Sprite*> mAttackAnimation;
-  vector<cocos2d::Sprite*> mStandingAnimation;
-
-  int mCurrentMoveSprite;
-  int mCurrentAttackSprite;
-  int mCurrentStangindSprite;
-
-  void ResetCurrentSprite();
-  void DrawNextMoveAnimation(position aPosition);
-  void DrawNextAttackAnimation(position aPosition);
-  void DrawNextStandingAnimation(position aPosition);
-
-  cocos2d::Sprite* GetMinotaurAt(int x, int y);
+  vector<string> mHeroMove = { "MinotaurMove_0.png",
+  "MinotaurMove_1.png" ,
+  "MinotaurMove_2.png" ,
+  "MinotaurMove_3.png" ,
+  "MinotaurMove_4.png" ,
+  "MinotaurMove_5.png" ,
+  "MinotaurMove_6.png" ,
+  "MinotaurMove_7.png" };
 };
