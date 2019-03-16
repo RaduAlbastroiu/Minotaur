@@ -16,12 +16,14 @@ public:
   void Attack(int type);
   void Update(float delta);
 
+  void Move(int direction, float delta);
+
 private:
 
   void Init();
-  void InitIdleAnimation();
-  void InitMoveAnimation();
-  void InitAttackAnimation();
+  void RunIdleAnimation();
+  void RunMoveAnimation();
+  void RunAttackAnimation();
 
   struct position
   {
@@ -32,7 +34,7 @@ private:
   {
     attack,
     move,
-    stand
+    idle
   };
 
   float mTimePassed = 0;
@@ -41,10 +43,6 @@ private:
   cocos2d::Sprite* mHero;
 
   bool started = false;
-
-  cocos2d::Animation* mIdleAnimation;
-  cocos2d::Animation* mMoveAnimation;
-  cocos2d::Animation* mAttackAnimation;
 
   heroState mCurrentState = heroState::stand;
   position mCurrentPosition;

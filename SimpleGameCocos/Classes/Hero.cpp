@@ -22,14 +22,13 @@ void Hero::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
 
-  InitIdleAnimation();
-  InitMoveAnimation();
-  InitAttackAnimation();
+  mCurrentState = heroState::idle;
+  RunIdleAnimation();
 
   mScene->addChild(mHero);
 }
 
-void Hero::InitIdleAnimation()
+void Hero::RunIdleAnimation()
 {
   auto spritecache = SpriteFrameCache::getInstance();
   Vector<SpriteFrame *> animIdle;
@@ -37,10 +36,12 @@ void Hero::InitIdleAnimation()
   {
     animIdle.pushBack(spritecache->getSpriteFrameByName(mHeroIdle[i]));
   }
-  mIdleAnimation = Animation::createWithSpriteFrames(animIdle, 0.2);
+  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.2);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(idleAnimation));
+  mHero->runAction(action);
 }
 
-void Hero::InitMoveAnimation()
+void Hero::RunMoveAnimation()
 {
   auto spritecache = SpriteFrameCache::getInstance();
   Vector<SpriteFrame *> animMove;
@@ -48,10 +49,12 @@ void Hero::InitMoveAnimation()
   {
     animMove.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
   }
-  mMoveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
+  auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(moveAnimation));
+  mHero->runAction(action);
 }
 
-void Hero::InitAttackAnimation()
+void Hero::RunAttackAnimation()
 {
   auto spritecache = SpriteFrameCache::getInstance();
   Vector<SpriteFrame *> attackAnim;
@@ -59,7 +62,9 @@ void Hero::InitAttackAnimation()
   {
     attackAnim.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
   }
-  mAttackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.1);
+  auto attackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.1);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(attackAnimation));
+  mHero->runAction(action);
 }
 
 void Hero::MoveToPosition(float x, float y)
@@ -73,22 +78,33 @@ void Hero::Attack(int type)
 void Hero::Update(float delta)
 {
   mTimePassed += delta;
+}
 
-  if (mTimePassed > 3 && started == false)
+void Hero::Move(int direction, float delta)
+{
+  if (mCurrentState != move)
   {
-    auto spritecache = SpriteFrameCache::getInstance();
-    Vector<SpriteFrame *> animMove;
-    for (int i = 0; i < 8; i++)
-    {
-      animMove.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
-    }
-    mMoveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
-
-    cocos2d::Action* action = RepeatForever::create(Animate::create(mMoveAnimation));
-    mHero->runAction(action);
-    cocos2d::Action* action2 = cocos2d::MoveBy::create(7, cocos2d::Vec2(2500, 0));
-    mHero->runAction(action2);
-    started = true;
+    mCurrentState = move;
+    RunMoveAnimation();
   }
-  
+
+  switch (direction)
+  {
+  case 1:
+    // left
+    break;
+  case 2:
+    // right
+    break;
+  case 3:
+    // up
+    break;
+  case 4:
+    // down
+    break;
+  default:
+    mCurrentState = idle;
+    RunIdleAnimation();
+    break;
+  }
 }

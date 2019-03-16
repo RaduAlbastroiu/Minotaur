@@ -38,6 +38,8 @@ public:
   void AddBackground();
   void update(float delta) override;
 
+  void InitKeyboard();
+
   CREATE_FUNC(HelloWorld);
 
 private:
@@ -49,6 +51,7 @@ private:
   int minotaurLine = 3;
 
   Hero* mHero;
+  int mDirection = 0;
 
   cocos2d::Sprite* aHero;
   cocos2d::Animation* AttackAnimation;
