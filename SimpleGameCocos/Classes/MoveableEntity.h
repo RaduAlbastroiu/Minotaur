@@ -11,8 +11,7 @@ class MoveableEntity
 public:
   MoveableEntity(cocos2d::Sprite* aEntity, float aPosX, float aPosY, float aSpeed);
 
-  void SetMoveDirection(Direction direction);
-  void StopMoving();
+  
 
   void Update(float delta);
 

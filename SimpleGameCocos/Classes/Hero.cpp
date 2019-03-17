@@ -1,7 +1,6 @@
 #include "Hero.h"
 
 Hero::Hero(cocos2d::Scene * scene, float positionX, float positionY)
-  :MoveableEntity
 {
   mScene = scene;
   mCurrentPosition.x = positionX;
@@ -65,6 +64,16 @@ void Hero::RunAttackAnimation()
 
 void Hero::Attack()
 {
+}
+
+void Hero::SetMoveDirection(int direction)
+{
+  mDirection = direction;
+}
+
+void Hero::StopMoving()
+{
+  mDirection = -1;
 }
 
 void Hero::Update(float delta)

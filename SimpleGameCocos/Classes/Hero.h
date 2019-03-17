@@ -6,12 +6,15 @@
 USING_NS_CC;
 using namespace std;
 
-class Hero : public MoveableEntity
+class Hero
 {
 public:
   Hero(cocos2d::Scene* scene, float positionX, float positionY);
 
   void Attack();
+  void SetMoveDirection(int direction);
+  void StopMoving();
+
   void Update(float delta);
 
 private:
@@ -32,6 +35,8 @@ private:
     move,
     idle
   };
+
+  int mDirection = 0;
 
   float mTimePassed = 0;
 
