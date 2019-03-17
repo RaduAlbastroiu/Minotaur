@@ -1,22 +1,18 @@
 #pragma once
 
-#include <vector>
 #include "cocos2d.h"
+#include "MoveableEntity.h"
 
 USING_NS_CC;
 using namespace std;
 
-class Hero
+class Hero : public MoveableEntity
 {
 public:
-  Hero();
   Hero(cocos2d::Scene* scene, float positionX, float positionY);
 
-  void MoveToPosition(float x, float y);
-  void Attack(int type);
+  void Attack();
   void Update(float delta);
-
-  void Move(int direction, float delta);
 
 private:
 
@@ -44,7 +40,7 @@ private:
 
   bool started = false;
 
-  heroState mCurrentState = heroState::stand;
+  heroState mCurrentState = heroState::idle;
   position mCurrentPosition;
   float mSpeed = 10;;
 

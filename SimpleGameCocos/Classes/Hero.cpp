@@ -1,11 +1,7 @@
 #include "Hero.h"
 
-Hero::Hero()
-{
-  Init();
-}
-
 Hero::Hero(cocos2d::Scene * scene, float positionX, float positionY)
+  :MoveableEntity
 {
   mScene = scene;
   mCurrentPosition.x = positionX;
@@ -67,44 +63,11 @@ void Hero::RunAttackAnimation()
   mHero->runAction(action);
 }
 
-void Hero::MoveToPosition(float x, float y)
-{
-}
-
-void Hero::Attack(int type)
+void Hero::Attack()
 {
 }
 
 void Hero::Update(float delta)
 {
   mTimePassed += delta;
-}
-
-void Hero::Move(int direction, float delta)
-{
-  if (mCurrentState != move)
-  {
-    mCurrentState = move;
-    RunMoveAnimation();
-  }
-
-  switch (direction)
-  {
-  case 1:
-    // left
-    break;
-  case 2:
-    // right
-    break;
-  case 3:
-    // up
-    break;
-  case 4:
-    // down
-    break;
-  default:
-    mCurrentState = idle;
-    RunIdleAnimation();
-    break;
-  }
 }
