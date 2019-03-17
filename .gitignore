@@ -84,6 +84,9 @@ StyleCopReport.xml
 *.tmp_proj
 *_wpftmp.csproj
 *.log
+*.idb
+*.command.1.tlog
+*.read.1.tlog
 *.vspscc
 *.vssscc
 .builds
@@ -345,4 +348,4 @@ ASALocalRun/
 healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
-MigrationBackup/
+MigrationBackup/SimpleGameCocos/proj.win32/Debug.win32/SimpleGameCocos.tlog/CL.read.1.tlogSimpleGameCocos/proj.win32/Debug.win32/SimpleGameCocos.tlog/CL.command.1.tlogSimpleGameCocos/proj.win32/Debug.win32/vc141.idb
