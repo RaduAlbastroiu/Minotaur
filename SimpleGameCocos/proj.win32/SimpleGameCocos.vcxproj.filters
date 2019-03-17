@@ -27,7 +27,10 @@
     <ClCompile Include="..\Classes\KeyboardController.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\IMoveableEntity.cpp">
+    <ClCompile Include="..\Classes\Direction.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MoveableEntity.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,7 +50,10 @@
     <ClInclude Include="..\Classes\KeyboardController.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\IMoveableEntity.h">
+    <ClInclude Include="..\Classes\Direction.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MoveableEntity.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
