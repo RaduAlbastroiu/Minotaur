@@ -45,6 +45,12 @@ bool HelloWorld::init()
     return false;
   }
 
+  // add keyboard listener
+  auto listener = EventListenerKeyboard::create();
+  listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
+  listener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
+  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
+
   // set private members
   mDirector = Director::getInstance();
   mWindow.width = mDirector->getVisibleSize().width;
@@ -85,6 +91,59 @@ void HelloWorld::AddBackground()
   }
 }
 
+bool HelloWorld::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
+{
+  switch (keyCode) {
+  case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+  case EventKeyboard::KeyCode::KEY_A:
+    mHero->SetMoveDirection(LEFT);
+    break;
+  case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+  case EventKeyboard::KeyCode::KEY_D:
+    mHero->SetMoveDirection(RIGHT);
+    break;
+  case EventKeyboard::KeyCode::KEY_UP_ARROW:
+  case EventKeyboard::KeyCode::KEY_W:
+    mHero->SetMoveDirection(UP);
+    break;
+  case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+  case EventKeyboard::KeyCode::KEY_S:
+    mHero->SetMoveDirection(DOWN);
+    break;
+  default:
+    break;
+  }
+
+  return true;
+}
+
+bool HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
+{
+  switch (keyCode) {
+  case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+  case EventKeyboard::KeyCode::KEY_A:
+    mHero->SetMoveDirection(NODIRECTION);
+    break;
+  case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+  case EventKeyboard::KeyCode::KEY_D:
+    mHero->SetMoveDirection(NODIRECTION);
+    break;
+  case EventKeyboard::KeyCode::KEY_UP_ARROW:
+  case EventKeyboard::KeyCode::KEY_W:
+    mHero->SetMoveDirection(NODIRECTION);
+    break;
+  case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
+  case EventKeyboard::KeyCode::KEY_S:
+    mHero->SetMoveDirection(NODIRECTION);
+    break;
+  default:
+    break;
+  }
+
+  return true;
+}
+
+
 void HelloWorld::update(float delta)
 {
   elapsedTime += delta;
@@ -95,4 +154,3 @@ void HelloWorld::InitKeyboard()
 {
    
 }
-

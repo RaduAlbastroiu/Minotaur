@@ -5,6 +5,8 @@ Hero::Hero(cocos2d::Scene * scene, float positionX, float positionY)
   mScene = scene;
   mCurrentPosition.x = positionX;
   mCurrentPosition.y = positionY;
+  mDirection = NODIRECTION;
+  mCurrentState = heroState::idle;
 
   mHero = Sprite::create("MinotaurFirst.png");
   mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
@@ -15,11 +17,9 @@ Hero::Hero(cocos2d::Scene * scene, float positionX, float positionY)
 
 void Hero::Init()
 {
+  // Add sprites
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
-
-  mCurrentState = heroState::idle;
   RunIdleAnimation();
-
   mScene->addChild(mHero);
 }
 
@@ -33,6 +33,7 @@ void Hero::RunIdleAnimation()
   }
   auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.2);
   cocos2d::Action* action = RepeatForever::create(Animate::create(idleAnimation));
+  mIdleAction = action;
   mHero->runAction(action);
 }
 
@@ -46,6 +47,7 @@ void Hero::RunMoveAnimation()
   }
   auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
   cocos2d::Action* action = RepeatForever::create(Animate::create(moveAnimation));
+  mMoveAction = action;
   mHero->runAction(action);
 }
 
@@ -59,6 +61,7 @@ void Hero::RunAttackAnimation()
   }
   auto attackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.1);
   cocos2d::Action* action = RepeatForever::create(Animate::create(attackAnimation));
+  mAttackAction = action;
   mHero->runAction(action);
 }
 
@@ -71,12 +74,22 @@ void Hero::SetMoveDirection(int direction)
   mDirection = direction;
 }
 
-void Hero::StopMoving()
-{
-  mDirection = -1;
-}
-
 void Hero::Update(float delta)
 {
   mTimePassed += delta;
+
+  if (mDirection != NODIRECTION && mCurrentState != heroState::move)
+  {
+    mCurrentState = heroState::move;
+    mHero->stopAction(mIdleAction);
+    RunMoveAnimation();
+  }
+
+  if (mDirection == NODIRECTION && mCurrentState == heroState::move)
+  {
+    mCurrentState = heroState::idle;
+    mHero->stopAction(mMoveAction);
+    RunIdleAnimation();
+  }
+
 }

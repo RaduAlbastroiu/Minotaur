@@ -3,17 +3,22 @@
 #include "cocos2d.h"
 #include "MoveableEntity.h"
 
+#define LEFT 1
+#define RIGHT 2
+#define UP 3
+#define DOWN 4
+#define NODIRECTION -1
+
 USING_NS_CC;
 using namespace std;
 
-class Hero
+class Hero : public cocos2d::Node
 {
 public:
   Hero(cocos2d::Scene* scene, float positionX, float positionY);
 
   void Attack();
   void SetMoveDirection(int direction);
-  void StopMoving();
 
   void Update(float delta);
 
@@ -23,6 +28,10 @@ private:
   void RunIdleAnimation();
   void RunMoveAnimation();
   void RunAttackAnimation();
+
+  cocos2d::Action* mIdleAction;
+  cocos2d::Action* mMoveAction;
+  cocos2d::Action* mAttackAction;
 
   struct position
   {

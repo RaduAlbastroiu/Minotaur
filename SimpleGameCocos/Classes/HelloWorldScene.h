@@ -44,6 +44,9 @@ public:
 
 private:
 
+  bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+  bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+
   float elapsedTime = 0;
   float lastSecond = 0;
   int currentMinotaur = 0;
@@ -51,7 +54,6 @@ private:
   int minotaurLine = 3;
 
   Hero* mHero;
-  int mDirection = 0;
 
   cocos2d::Sprite* aHero;
   cocos2d::Animation* AttackAnimation;
