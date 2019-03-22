@@ -110,6 +110,9 @@ bool HelloWorld::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::
   case EventKeyboard::KeyCode::KEY_S:
     mHero->SetMoveDirection(DOWN);
     break;
+  case EventKeyboard::KeyCode::KEY_SPACE:
+    mHero->Attack();
+    break;
   default:
     break;
   }

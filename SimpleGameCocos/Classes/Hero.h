@@ -24,16 +24,7 @@ public:
 
 private:
 
-  void Init();
-  void RunIdleAnimation();
-  void RunMoveAnimation();
-  void RunLeftMoveAnimation();
-  void RunAttackAnimation();
-
-  cocos2d::Action* mIdleAction;
-  cocos2d::Action* mMoveAction;
-  cocos2d::Action* mMoveActionLeft;
-  cocos2d::Action* mAttackAction;
+  cocos2d::Action* mLastAction;
 
   struct position
   {
@@ -47,14 +38,19 @@ private:
     idle
   };
 
+  void Init();
+  void RunIdleAnimation();
+  void RunMoveAnimation();
+  void RunAttackAnimation();
+  void ChangeState(heroState newState);
+
   int mDirection = 0;
 
   float mTimePassed = 0;
+  float mAttackTimeStart = -0.5;
 
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mHero;
-
-  bool started = false;
 
   heroState mCurrentState = heroState::idle;
   position mCurrentPosition;
