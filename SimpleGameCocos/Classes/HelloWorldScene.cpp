@@ -57,7 +57,7 @@ bool HelloWorld::init()
   mWindow.height = mDirector->getVisibleSize().height;
 
   AddBackground();
-  AddHelloWorld();
+  //AddHelloWorld();
   
   this->scheduleUpdate();
 
@@ -70,10 +70,11 @@ bool HelloWorld::init()
 
 void HelloWorld::AddHelloWorld()
 {
+  
   auto label = Label::createWithSystemFont("Hello World", "Arial", 96);
   label->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
   label->setPosition(cocos2d::Vec2(mWindow.width / 2, mWindow.height / 1.25));
-
+  
   this->addChild(label, 1);
 }
 

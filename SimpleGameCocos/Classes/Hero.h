@@ -19,7 +19,6 @@ public:
 
   void Attack();
   void SetMoveDirection(int direction);
-
   void Update(float delta);
 
 private:
@@ -43,6 +42,7 @@ private:
   void RunMoveAnimation();
   void RunAttackAnimation();
   void ChangeState(heroState newState);
+  void MovePosition();
 
   int mDirection = 0;
 
@@ -54,7 +54,7 @@ private:
 
   heroState mCurrentState = heroState::idle;
   position mCurrentPosition;
-  float mSpeed = 10;;
+  float mSpeed = 4;
 
   vector<string> mHeroAttack = { "MinotaurAttack_0.png",
   "MinotaurAttack_1.png" ,

@@ -11,7 +11,7 @@ Hero::Hero(cocos2d::Scene * scene)
 
   mHero = Sprite::create("MinotaurFirst.png");
   mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
-  mHero->setScale(5);
+  mHero->setScale(3);
 
   Init();
 }
@@ -118,6 +118,30 @@ void Hero::ChangeState(heroState newState)
   }
 }
 
+void Hero::MovePosition()
+{
+  auto direction = Vec2(0, 0);
+  if (mDirection == LEFT)
+  {
+   direction = Vec2(-1 * mSpeed, 0);
+  }
+  if (mDirection == RIGHT)
+  {
+    direction = Vec2(1 * mSpeed, 0);
+  }
+  if (mDirection == UP)
+  {
+    direction = Vec2(0, 1 * mSpeed);
+  }
+  if (mDirection == DOWN)
+  {
+    direction = Vec2(0, -1 * mSpeed);
+  }
+
+  auto moveBy = MoveBy::create(0.01667f, direction);
+  mHero->runAction(moveBy);
+}
+
 void Hero::Attack()
 {
   mAttackTimeStart = mTimePassed;
@@ -138,6 +162,12 @@ void Hero::Update(float delta)
     mHero->setFlippedX(true);
   if (mDirection == RIGHT)
     mHero->setFlippedX(false);
+
+  // change position relative to framerate
+  if (mCurrentState == heroState::move)
+  {
+    MovePosition();
+  }
 
   // change between walking and idling
   if (mDirection != NODIRECTION && mCurrentState == heroState::idle)
