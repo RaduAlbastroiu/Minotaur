@@ -44,8 +44,11 @@ public:
 
 private:
 
+  map<cocos2d::EventKeyboard::KeyCode, bool> mKeyboard;
   bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
   bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+
+  void UpdateHero(float delta);
 
   float elapsedTime = 0;
   float lastSecond = 0;

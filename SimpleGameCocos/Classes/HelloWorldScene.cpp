@@ -45,12 +45,6 @@ bool HelloWorld::init()
     return false;
   }
 
-  // add keyboard listener
-  auto listener = EventListenerKeyboard::create();
-  listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
-  listener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
-  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
-
   // set private members
   mDirector = Director::getInstance();
   mWindow.width = mDirector->getVisibleSize().width;
@@ -94,67 +88,71 @@ void HelloWorld::AddBackground()
 
 bool HelloWorld::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
-  switch (keyCode) {
-  case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-  case EventKeyboard::KeyCode::KEY_A:
-    mHero->SetMoveDirection(LEFT);
-    break;
-  case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-  case EventKeyboard::KeyCode::KEY_D:
-    mHero->SetMoveDirection(RIGHT);
-    break;
-  case EventKeyboard::KeyCode::KEY_UP_ARROW:
-  case EventKeyboard::KeyCode::KEY_W:
-    mHero->SetMoveDirection(UP);
-    break;
-  case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-  case EventKeyboard::KeyCode::KEY_S:
-    mHero->SetMoveDirection(DOWN);
-    break;
-  case EventKeyboard::KeyCode::KEY_SPACE:
-    mHero->Attack();
-    break;
-  default:
-    break;
-  }
-
+  mKeyboard[keyCode] = true;
   return true;
 }
 
 bool HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
 {
-  switch (keyCode) {
-  case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
-  case EventKeyboard::KeyCode::KEY_A:
-    mHero->SetMoveDirection(NODIRECTION);
-    break;
-  case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
-  case EventKeyboard::KeyCode::KEY_D:
-    mHero->SetMoveDirection(NODIRECTION);
-    break;
-  case EventKeyboard::KeyCode::KEY_UP_ARROW:
-  case EventKeyboard::KeyCode::KEY_W:
-    mHero->SetMoveDirection(NODIRECTION);
-    break;
-  case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-  case EventKeyboard::KeyCode::KEY_S:
-    mHero->SetMoveDirection(NODIRECTION);
-    break;
-  default:
-    break;
-  }
-
+  mKeyboard[keyCode] = false;
   return true;
 }
-
 
 void HelloWorld::update(float delta)
 {
   elapsedTime += delta;
+  UpdateHero(delta);
+}
+
+void HelloWorld::UpdateHero(float delta)
+{
+  bool moveKeyPressed = false;
+
+  for (auto keyPressed : mKeyboard)
+  {
+    if (keyPressed.second == true)
+    {
+      auto keyCode = keyPressed.first;
+
+      switch (keyCode) {
+      case EventKeyboard::KeyCode::KEY_A:
+        mHero->SetMoveDirection(LEFT);
+        moveKeyPressed = true;
+        break;
+      case EventKeyboard::KeyCode::KEY_D:
+        mHero->SetMoveDirection(RIGHT);
+        moveKeyPressed = true;
+        break;
+      case EventKeyboard::KeyCode::KEY_W:
+        mHero->SetMoveDirection(UP);
+        moveKeyPressed = true;
+        break;
+      case EventKeyboard::KeyCode::KEY_S:
+        mHero->SetMoveDirection(DOWN);
+        moveKeyPressed = true;
+        break;
+      case EventKeyboard::KeyCode::KEY_SPACE:
+        mHero->Attack();
+        break;
+      default:
+        break;
+      }
+
+      break;
+    }
+  }
+
+  if (moveKeyPressed == false)
+    mHero->SetMoveDirection(NODIRECTION);
+
   mHero->Update(delta);
 }
 
+
 void HelloWorld::InitKeyboard()
 {
-   
+  auto listener = EventListenerKeyboard::create();
+  listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
+  listener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
+  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 }

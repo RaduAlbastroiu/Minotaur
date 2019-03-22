@@ -19,9 +19,12 @@ public:
 
   void Attack();
   void SetMoveDirection(int direction);
+  void DealDamage(float damage);
   void Update(float delta);
-
+  
 private:
+
+  float mHealth = 100;
 
   cocos2d::Action* mLastAction;
 
@@ -34,13 +37,16 @@ private:
   {
     attack,
     move,
-    idle
+    idle,
+    dead
   };
 
   void Init();
   void RunIdleAnimation();
   void RunMoveAnimation();
   void RunAttackAnimation();
+  void RunDeadAnimation();
+
   void ChangeState(heroState newState);
   void MovePosition();
 
@@ -48,6 +54,7 @@ private:
 
   float mTimePassed = 0;
   float mAttackTimeStart = -0.5;
+  float mDeadTimeStart = -0.5;
 
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mHero;
@@ -71,6 +78,13 @@ private:
   "MinotaurIdle_2.png" ,
   "MinotaurIdle_3.png" ,
   "MinotaurIdle_4.png" };
+
+  vector<string> mHeroDead = { "MinotaurDead_0.png",
+  "MinotaurDead_1.png" ,
+  "MinotaurDead_2.png" ,
+  "MinotaurDead_3.png" ,
+  "MinotaurDead_4.png" ,
+  "MinotaurDead_5.png" };
 
   vector<string> mHeroMove = { "MinotaurMove_0.png",
   "MinotaurMove_1.png" ,

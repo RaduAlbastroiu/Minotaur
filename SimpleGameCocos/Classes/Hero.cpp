@@ -32,7 +32,7 @@ void Hero::RunIdleAnimation()
   {
     animIdle.pushBack(spritecache->getSpriteFrameByName(mHeroIdle[i]));
   }
-  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.2);
+  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.175);
   cocos2d::Action* action = RepeatForever::create(Animate::create(idleAnimation));
   mLastAction = action;
   mHero->runAction(action);
@@ -46,7 +46,7 @@ void Hero::RunMoveAnimation()
   {
     animMove.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
   }
-  auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
+  auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.075);
   cocos2d::Action* action = RepeatForever::create(Animate::create(moveAnimation));
   mLastAction = action;
   mHero->runAction(action);
@@ -61,8 +61,22 @@ void Hero::RunAttackAnimation()
   {
     attackAnim.pushBack(spritecache->getSpriteFrameByName(mHeroAttack[i]));
   }
-  auto attackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.1);
+  auto attackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.06);
   cocos2d::Action* action = RepeatForever::create(Animate::create(attackAnimation));
+  mLastAction = action;
+  mHero->runAction(action);
+}
+
+void Hero::RunDeadAnimation()
+{
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector<SpriteFrame *> attackAnim;
+  for (int i = 0; i < 6; i++)
+  {
+    attackAnim.pushBack(spritecache->getSpriteFrameByName(mHeroDead[i]));
+  }
+  auto deadAnimation = Animation::createWithSpriteFrames(attackAnim, 0.125f);
+  cocos2d::Action* action = Repeat::create(Animate::create(deadAnimation), 1);
   mLastAction = action;
   mHero->runAction(action);
 }
@@ -84,6 +98,13 @@ void Hero::ChangeState(heroState newState)
       mAttackTimeStart = mTimePassed;
       RunAttackAnimation();
     }
+    if (newState == heroState::dead)
+    {
+      mCurrentState = heroState::dead;
+      mDeadTimeStart = mTimePassed;
+      mHero->stopAction(mLastAction);
+      RunDeadAnimation();
+    }
   }
   if (mCurrentState == heroState::move)
   {
@@ -100,6 +121,13 @@ void Hero::ChangeState(heroState newState)
       mAttackTimeStart = mTimePassed;
       RunAttackAnimation();
     }
+    if (newState == heroState::dead)
+    {
+      mCurrentState = heroState::dead;
+      mDeadTimeStart = mTimePassed;
+      mHero->stopAction(mLastAction);
+      RunDeadAnimation();
+    }
   }
   if (mCurrentState == heroState::attack)
   {
@@ -114,6 +142,13 @@ void Hero::ChangeState(heroState newState)
       mCurrentState = heroState::move;
       mHero->stopAction(mLastAction);
       RunMoveAnimation();
+    }
+    if (newState == heroState::dead)
+    {
+      mCurrentState = heroState::dead;
+      mDeadTimeStart = mTimePassed;
+      mHero->stopAction(mLastAction);
+      RunDeadAnimation();
     }
   }
 }
@@ -153,6 +188,12 @@ void Hero::SetMoveDirection(int direction)
   mDirection = direction;
 }
 
+void Hero::DealDamage(float damage)
+{
+  mHealth -= damage;
+}
+
+
 void Hero::Update(float delta)
 {
   mTimePassed += delta;
@@ -181,8 +222,14 @@ void Hero::Update(float delta)
   }
 
   // change between attack and idle
-  if (mCurrentState == heroState::attack && mTimePassed - mAttackTimeStart > 0.5f)
+  if (mCurrentState == heroState::attack && mTimePassed - mAttackTimeStart > 0.175f)
   {
     ChangeState(heroState::idle);
+  }
+
+  // update health 
+  if (mHealth <= 0 && mCurrentState != heroState::dead)
+  {
+    ChangeState(heroState::dead);
   }
 }
