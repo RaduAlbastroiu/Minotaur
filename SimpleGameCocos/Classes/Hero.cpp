@@ -1,10 +1,11 @@
 #include "Hero.h"
 
-Hero::Hero(cocos2d::Scene * scene, float positionX, float positionY)
+Hero::Hero(cocos2d::Scene * scene)
 {
   mScene = scene;
-  mCurrentPosition.x = positionX;
-  mCurrentPosition.y = positionY;
+
+  mCurrentPosition.x = Director::getInstance()->getVisibleSize().width / 2;
+  mCurrentPosition.y = Director::getInstance()->getVisibleSize().height / 2;
   mDirection = NODIRECTION;
   mCurrentState = heroState::idle;
 
@@ -51,6 +52,23 @@ void Hero::RunMoveAnimation()
   mHero->runAction(action);
 }
 
+void Hero::RunLeftMoveAnimation()
+{
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector<SpriteFrame *> animMove;
+  for (int i = 0; i < 8; i++)
+  {
+    auto x = spritecache->getSpriteFrameByName(mHeroMove[i]);
+    x->setRotated(true);
+    animMove.pushBack(x);
+  }
+  auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.1);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(moveAnimation));
+  mMoveAction = action;
+  mHero->runAction(action);
+}
+
+
 void Hero::RunAttackAnimation()
 {
   auto spritecache = SpriteFrameCache::getInstance();
@@ -77,6 +95,11 @@ void Hero::SetMoveDirection(int direction)
 void Hero::Update(float delta)
 {
   mTimePassed += delta;
+
+  if (mDirection == LEFT)
+    mHero->setFlippedX(true);
+  if (mDirection == RIGHT)
+    mHero->setFlippedX(false);
 
   if (mDirection != NODIRECTION && mCurrentState != heroState::move)
   {

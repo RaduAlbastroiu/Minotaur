@@ -15,7 +15,7 @@ using namespace std;
 class Hero : public cocos2d::Node
 {
 public:
-  Hero(cocos2d::Scene* scene, float positionX, float positionY);
+  Hero(cocos2d::Scene* scene);
 
   void Attack();
   void SetMoveDirection(int direction);
@@ -27,10 +27,12 @@ private:
   void Init();
   void RunIdleAnimation();
   void RunMoveAnimation();
+  void RunLeftMoveAnimation();
   void RunAttackAnimation();
 
   cocos2d::Action* mIdleAction;
   cocos2d::Action* mMoveAction;
+  cocos2d::Action* mMoveActionLeft;
   cocos2d::Action* mAttackAction;
 
   struct position
@@ -82,4 +84,5 @@ private:
   "MinotaurMove_5.png" ,
   "MinotaurMove_6.png" ,
   "MinotaurMove_7.png" };
+
 };

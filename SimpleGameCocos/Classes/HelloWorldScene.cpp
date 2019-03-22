@@ -63,7 +63,7 @@ bool HelloWorld::init()
 
   InitKeyboard();
 
-  mHero = new Hero(this, 100, 500);
+  mHero = new Hero(this);
 
   return true;
 }
