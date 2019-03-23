@@ -27,6 +27,7 @@
 
 #include "cocos2d.h"
 #include "Hero.h"
+#include "Enemy.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -57,6 +58,7 @@ private:
   int minotaurLine = 3;
 
   Hero* mHero;
+  Enemy* mEnemy;
 
   cocos2d::Sprite* aHero;
   cocos2d::Animation* AttackAnimation;

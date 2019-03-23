@@ -12,6 +12,7 @@ Hero::Hero(cocos2d::Scene * scene)
   mHero = Sprite::create("MinotaurFirst.png");
   mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
   mHero->setScale(3);
+  mHero->setAnchorPoint(Vec2(0.5, 0.5));
 
   Init();
 }
@@ -188,7 +189,7 @@ void Hero::SetMoveDirection(int direction)
   mDirection = direction;
 }
 
-void Hero::DealDamage(float damage)
+void Hero::TakeDamage(float damage)
 {
   mHealth -= damage;
 }

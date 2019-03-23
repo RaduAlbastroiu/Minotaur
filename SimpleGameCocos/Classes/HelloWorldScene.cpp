@@ -58,6 +58,7 @@ bool HelloWorld::init()
   InitKeyboard();
 
   mHero = new Hero(this);
+  mEnemy = new Enemy(this, mHero, mWindow.width/1.5, mWindow.height/2);
 
   return true;
 }

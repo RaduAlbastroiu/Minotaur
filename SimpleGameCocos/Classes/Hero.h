@@ -1,7 +1,6 @@
 #pragma once
 
 #include "cocos2d.h"
-#include "MoveableEntity.h"
 
 #define LEFT 1
 #define RIGHT 2
@@ -19,7 +18,7 @@ public:
 
   void Attack();
   void SetMoveDirection(int direction);
-  void DealDamage(float damage);
+  void TakeDamage(float damage);
   void Update(float delta);
   
 private:
@@ -37,7 +36,7 @@ private:
   {
     attack,
     move,
-    idle,
+    idle, 
     dead
   };
 
