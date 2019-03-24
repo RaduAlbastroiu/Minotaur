@@ -43,7 +43,7 @@ private:
   };
 
   void Init();
-  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns);
+  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv);
 
   void ChangeState(heroState newState);
   void MovePosition();
@@ -53,6 +53,11 @@ private:
   float mTimePassed = 0;
   float mAttackTimeStart = -0.5;
   float mDeadTimeStart = -0.5;
+
+  float mAttackFrecv = 0.05f;
+  float mIdleFrecv = 0.15f;
+  float mMoveFrecv = 0.075f;
+  float mDeadFrecv = 0.1f;
 
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mHero;

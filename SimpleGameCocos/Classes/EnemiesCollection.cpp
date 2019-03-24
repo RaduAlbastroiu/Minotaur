@@ -19,9 +19,30 @@ void EnemiesCollection::AttackAt(float X, float Y, int aForce)
     
     if (dist < mDistAttack)
     {
-      enemy->TakeDamage((rand() % (aForce/2)) + aForce);
+      enemy->TakeDamage(aForce);
     }
   }
+}
+
+bool EnemiesCollection::CanMoveAt(float currentX, float currentY, float X, float Y)
+{
+  auto currentPoint = Point(currentX, currentY);
+  auto nextPoint = Point(X, Y);
+  for (auto& enemy : mEnemies)
+  {
+    auto posEnemy = enemy->GetPosition();
+    auto enemyPoint = Point(posEnemy.first, posEnemy.second);
+
+    auto nextDist = enemyPoint.getDistance(nextPoint);
+    auto currentDist = enemyPoint.getDistance(currentPoint);
+
+    if (nextDist < currentDist && nextDist < mMinDistance)
+    {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 void EnemiesCollection::Update(float delta)

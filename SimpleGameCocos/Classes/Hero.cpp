@@ -23,11 +23,11 @@ void Hero::Init()
 {
   // Add sprites
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
-  RunAnimation(mHeroIdle, 1000);
+  RunAnimation(mHeroIdle, 1000, mIdleFrecv);
   mScene->addChild(mHero, 100);
 }
 
-void Hero::RunAnimation(vector<string>& aAnimSprites, int aNrRuns)
+void Hero::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv)
 {
   auto spritecache = SpriteFrameCache::getInstance();
   Vector<SpriteFrame *> anim;
@@ -35,7 +35,7 @@ void Hero::RunAnimation(vector<string>& aAnimSprites, int aNrRuns)
   {
     anim.pushBack(spritecache->getSpriteFrameByName(aAnimSprites[i]));
   }
-  auto animation = Animation::createWithSpriteFrames(anim, 0.1);
+  auto animation = Animation::createWithSpriteFrames(anim, aFrecv);
   cocos2d::Action* action = Repeat::create(Animate::create(animation), aNrRuns);
   mLastAction = action;
   mHero->runAction(action);
@@ -49,7 +49,7 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::move;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroMove, 1000);
+      RunAnimation(mHeroMove, 1000, mMoveFrecv);
     }
     if (newState == heroState::attack)
     {
@@ -57,14 +57,14 @@ void Hero::ChangeState(heroState newState)
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
       mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
-      RunAnimation(mHeroAttack, 1000);
+      RunAnimation(mHeroAttack, 1000, mAttackFrecv);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1);
+      RunAnimation(mHeroDead, 1, mDeadFrecv);
     }
   }
   if (mCurrentState == heroState::move)
@@ -73,7 +73,7 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::idle;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroIdle, 1000);
+      RunAnimation(mHeroIdle, 1000, mIdleFrecv);
     }
     if (newState == heroState::attack)
     {
@@ -81,14 +81,14 @@ void Hero::ChangeState(heroState newState)
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
       mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
-      RunAnimation(mHeroAttack, 1000);
+      RunAnimation(mHeroAttack, 1000, mAttackFrecv);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1);
+      RunAnimation(mHeroDead, 1, mDeadFrecv);
     }
   }
   if (mCurrentState == heroState::attack)
@@ -97,20 +97,20 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::idle;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroIdle, 1000);
+      RunAnimation(mHeroIdle, 1000, mIdleFrecv);
     }
     if (newState == heroState::move)
     {
       mCurrentState = heroState::move;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroMove, 1000);
+      RunAnimation(mHeroMove, 1000, mMoveFrecv);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1);
+      RunAnimation(mHeroDead, 1, mDeadFrecv);
     }
   }
 }
@@ -118,25 +118,35 @@ void Hero::ChangeState(heroState newState)
 void Hero::MovePosition()
 {
   auto direction = Vec2(0, 0);
+  float X = mHero->getPositionX();
+  float Y = mHero->getPositionY();
+
   if (mDirection == LEFT)
   {
-   direction = Vec2(-1 * mSpeed, 0);
+    direction = Vec2(-1 * mSpeed, 0);
+    X += -1 * mSpeed;
   }
   if (mDirection == RIGHT)
   {
     direction = Vec2(1 * mSpeed, 0);
+    X += mSpeed;
   }
   if (mDirection == UP)
   {
     direction = Vec2(0, 1 * mSpeed);
+    Y += mSpeed;
   }
   if (mDirection == DOWN)
   {
     direction = Vec2(0, -1 * mSpeed);
+    Y -= mSpeed;
   }
-
-  auto moveBy = MoveBy::create(0.01667f, direction);
-  mHero->runAction(moveBy);
+  
+  if (mEnemiesCollection->CanMoveAt(mHero->getPositionX(), mHero->getPositionY(), X, Y))
+  {
+    auto moveBy = MoveBy::create(0.01667f, direction);
+    mHero->runAction(moveBy);
+  }
 }
 
 void Hero::Attack()
@@ -157,7 +167,6 @@ void Hero::TakeDamage(float damage)
 {
   mHealth -= damage;
 }
-
 
 void Hero::Update(float delta)
 {
