@@ -22,7 +22,7 @@ void Hero::Init()
   // Add sprites
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
   RunIdleAnimation();
-  mScene->addChild(mHero);
+  mScene->addChild(mHero, 100);
 }
 
 void Hero::RunIdleAnimation()

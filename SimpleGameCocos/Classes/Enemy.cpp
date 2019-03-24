@@ -31,21 +31,21 @@ void Enemy::Update(float delta)
 
 void Enemy::Init()
 {
-  SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
+  SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Skeleton/SkeletonFinal.plist");
   RunIdleAnimation();
-  mScene->addChild(mEnemy);
+  mScene->addChild(mEnemy, 2);
 }
 
 void Enemy::RunIdleAnimation()
 {
   auto spritecache = SpriteFrameCache::getInstance();
-  Vector<SpriteFrame *> animIdle;
-  for (int i = 0; i < 5; i++)
+  Vector<SpriteFrame *> anim;
+  for (int i = 0; i < 11; i++)
   {
-    animIdle.pushBack(spritecache->getSpriteFrameByName(mEnemyIdle[i]));
+    anim.pushBack(spritecache->getSpriteFrameByName(mEnemyIdle[i]));
   }
-  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.175);
-  cocos2d::Action* action = RepeatForever::create(Animate::create(idleAnimation));
+  auto animation = Animation::createWithSpriteFrames(anim, 0.1);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(animation));
   mLastAction = action;
   mEnemy->runAction(action);
 }
