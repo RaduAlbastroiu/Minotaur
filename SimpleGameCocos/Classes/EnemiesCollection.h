@@ -17,7 +17,7 @@ public:
 
 private:
 
-  float mDistAttack = 150;
+  float mDistAttack = 175;
   float mMinDistance = 100;
 
   vector<unique_ptr<Enemy>> mEnemies;
