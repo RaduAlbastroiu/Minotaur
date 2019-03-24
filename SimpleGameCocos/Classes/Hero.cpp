@@ -11,20 +11,27 @@ Hero::Hero(cocos2d::Scene * scene, EnemiesCollection* aEnemiesCollection)
   mDirection = NODIRECTION;
   mCurrentState = heroState::idle;
 
-  mHero = Sprite::create("MinotaurFirst.png");
-  mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
-  mHero->setScale(3);
-  mHero->setAnchorPoint(Vec2(0.5, 0.5));
-
   Init();
 }
 
 void Hero::Init()
 {
-  // Add sprites
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
+
+  auto label = Label::createWithSystemFont("Health: 100", "Arial", 50);
+  label->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
+  label->setPosition(Director::getInstance()->getVisibleSize().width / 15, Director::getInstance()->getVisibleSize().height / 1.07);
+  label->setTextColor(cocos2d::Color4B::BLACK);
+
+  mHero = Sprite::create("MinotaurFirst.png");
+  mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
+  mHero->setScale(3);
+  mHero->setAnchorPoint(Vec2(0.5, 0.5));
+
+  mScene->addChild(label, 100);
+  mScene->addChild(mHero, 10);
+
   RunAnimation(mHeroIdle, 1000, mIdleFrecv);
-  mScene->addChild(mHero, 100);
 }
 
 void Hero::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv)
@@ -113,6 +120,14 @@ void Hero::ChangeState(heroState newState)
       RunAnimation(mHeroDead, 1, mDeadFrecv);
     }
   }
+
+  if (newState == heroState::hit && mCurrentState != newState)
+  {
+    mCurrentState = newState;
+    mHero->stopAction(mLastAction);
+    mHitTimeStart = mTimePassed;
+    RunAnimation(mHeroHit, 1, mHitFrecv);
+  }
 }
 
 void Hero::MovePosition()
@@ -163,9 +178,12 @@ void Hero::SetMoveDirection(int direction)
   mDirection = direction;
 }
 
-void Hero::TakeDamage(float damage)
+void Hero::TakeDamage(int damage)
 {
   mHealth -= damage;
+  mHealth = max(0, mHealth);
+  mHealthLabel->setString("Health: " + to_string(mHealth));
+  ChangeState(heroState::hit);
 }
 
 void Hero::Update(float delta)
