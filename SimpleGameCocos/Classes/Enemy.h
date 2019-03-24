@@ -15,28 +15,34 @@ using namespace std;
 class Enemy
 {
 public:
-  Enemy(cocos2d::Scene* scene, Hero * aHero, float X, float Y);
+  Enemy(cocos2d::Scene* aScene, Hero * aHero, float X, float Y);
+  
   void TakeDamage(float damage);
+  pair<float, float> GetPosition();
+
   void Update(float delta);
 
 private:
-
-  void Init();
-  void RunIdleAnimation();
- 
-  struct position
-  {
-    float x, y;
-  };
 
   enum enemyState
   {
     attack,
     move,
     idle,
+    hit,
     dead
   };
 
+  struct position
+  {
+    float x, y;
+  };
+
+  void Init();
+  void RunAnimation(vector<string> aAnimSprites, int aNrRuns);
+  void ChangeState(enemyState aNewState);
+ 
+  
   float mHealth = 100;
   cocos2d::Action* mLastAction;
 

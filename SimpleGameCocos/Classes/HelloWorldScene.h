@@ -22,12 +22,11 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#pragma once
 
 #include "cocos2d.h"
+#include "EnemiesCollection.h"
 #include "Hero.h"
-#include "Enemy.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -58,22 +57,10 @@ private:
   int minotaurLine = 3;
 
   Hero* mHero;
-  Enemy* mEnemy;
+  EnemiesCollection mEnemiesCollection;
 
   cocos2d::Sprite* aHero;
   cocos2d::Animation* AttackAnimation;
-
-  vector<string> str = { "MinotaurAttack_0.png", 
-  "MinotaurAttack_1.png" ,
-  "MinotaurAttack_2.png" ,
-  "MinotaurAttack_3.png" ,
-  "MinotaurAttack_4.png" ,
-  "MinotaurAttack_5.png" ,
-  "MinotaurAttack_6.png" ,
-  "MinotaurAttack_7.png" ,
-  "MinotaurAttack_8.png" };
-
-  //Hero mHero;
 
   cocos2d::Director* mDirector;
 
@@ -86,5 +73,3 @@ private:
     int width;
   }mWindow;
 };
-
-#endif // __HELLOWORLD_SCENE_H__

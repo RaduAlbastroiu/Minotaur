@@ -1,8 +1,10 @@
 #include "Hero.h"
+#include "EnemiesCollection.h"
 
-Hero::Hero(cocos2d::Scene * scene)
+Hero::Hero(cocos2d::Scene * scene, EnemiesCollection* aEnemiesCollection)
 {
   mScene = scene;
+  mEnemiesCollection = aEnemiesCollection;
 
   mCurrentPosition.x = Director::getInstance()->getVisibleSize().width / 2;
   mCurrentPosition.y = Director::getInstance()->getVisibleSize().height / 2;
@@ -33,7 +35,7 @@ void Hero::RunIdleAnimation()
   {
     animIdle.pushBack(spritecache->getSpriteFrameByName(mHeroIdle[i]));
   }
-  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.175);
+  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.175f);
   cocos2d::Action* action = RepeatForever::create(Animate::create(idleAnimation));
   mLastAction = action;
   mHero->runAction(action);
@@ -47,7 +49,7 @@ void Hero::RunMoveAnimation()
   {
     animMove.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
   }
-  auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.075);
+  auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.075f);
   cocos2d::Action* action = RepeatForever::create(Animate::create(moveAnimation));
   mLastAction = action;
   mHero->runAction(action);
@@ -62,7 +64,7 @@ void Hero::RunAttackAnimation()
   {
     attackAnim.pushBack(spritecache->getSpriteFrameByName(mHeroAttack[i]));
   }
-  auto attackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.06);
+  auto attackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.06f);
   cocos2d::Action* action = RepeatForever::create(Animate::create(attackAnimation));
   mLastAction = action;
   mHero->runAction(action);
@@ -97,6 +99,7 @@ void Hero::ChangeState(heroState newState)
       mCurrentState = heroState::attack;
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
+      mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
       RunAttackAnimation();
     }
     if (newState == heroState::dead)
@@ -120,6 +123,7 @@ void Hero::ChangeState(heroState newState)
       mCurrentState = heroState::attack;
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
+      mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
       RunAttackAnimation();
     }
     if (newState == heroState::dead)

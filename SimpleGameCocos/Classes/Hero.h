@@ -11,10 +11,12 @@
 USING_NS_CC;
 using namespace std;
 
-class Hero : public cocos2d::Node
+class EnemiesCollection;
+
+class Hero
 {
 public:
-  Hero(cocos2d::Scene* scene);
+  Hero(cocos2d::Scene* scene, EnemiesCollection* aEnemiesCollection);
 
   void Attack();
   void SetMoveDirection(int direction);
@@ -57,6 +59,8 @@ private:
 
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mHero;
+
+  EnemiesCollection* mEnemiesCollection;
 
   heroState mCurrentState = heroState::idle;
   position mCurrentPosition;

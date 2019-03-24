@@ -57,8 +57,13 @@ bool HelloWorld::init()
 
   InitKeyboard();
 
-  mHero = new Hero(this);
-  mEnemy = new Enemy(this, mHero, mWindow.width/1.5, mWindow.height/2);
+  mEnemiesCollection = EnemiesCollection();
+  mEnemiesCollection.AddEnemy(this, mHero, 1000, 1000);
+  mEnemiesCollection.AddEnemy(this, mHero, 1500, 500);
+  mEnemiesCollection.AddEnemy(this, mHero, 1000, 500);
+  mEnemiesCollection.AddEnemy(this, mHero, 1500, 1000);
+  mHero = new Hero(this, &mEnemiesCollection);
+
 
   return true;
 }
@@ -147,6 +152,7 @@ void HelloWorld::UpdateHero(float delta)
     mHero->SetMoveDirection(NODIRECTION);
 
   mHero->Update(delta);
+  mEnemiesCollection.Update(delta);
 }
 
 

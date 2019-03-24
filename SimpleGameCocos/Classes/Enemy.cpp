@@ -1,3 +1,4 @@
+#pragma once
 #include "Enemy.h"
 
 
@@ -24,28 +25,48 @@ void Enemy::TakeDamage(float damage)
   mHealth -= damage;
 }
 
+pair<float, float> Enemy::GetPosition()
+{
+  return make_pair(mCurrentPosition.x, mCurrentPosition.y);
+}
+
 void Enemy::Update(float delta)
 {
   mTimePassed += delta;
+
+  if (mHealth <= 0 && mCurrentState != enemyState::dead)
+  {
+    ChangeState(enemyState::dead);
+  }
 }
 
 void Enemy::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Skeleton/SkeletonFinal.plist");
-  RunIdleAnimation();
+  RunAnimation(mEnemyIdle, 1000);
   mScene->addChild(mEnemy, 2);
 }
 
-void Enemy::RunIdleAnimation()
+void Enemy::RunAnimation(vector<string> aAnimSprites, int aNrRuns)
 {
   auto spritecache = SpriteFrameCache::getInstance();
   Vector<SpriteFrame *> anim;
-  for (int i = 0; i < 11; i++)
+  for (int i = 0; i < aAnimSprites.size(); i++)
   {
-    anim.pushBack(spritecache->getSpriteFrameByName(mEnemyIdle[i]));
+    anim.pushBack(spritecache->getSpriteFrameByName(aAnimSprites[i]));
   }
   auto animation = Animation::createWithSpriteFrames(anim, 0.1);
-  cocos2d::Action* action = RepeatForever::create(Animate::create(animation));
+  cocos2d::Action* action = Repeat::create(Animate::create(animation), aNrRuns);
   mLastAction = action;
   mEnemy->runAction(action);
+}
+
+void Enemy::ChangeState(enemyState aNewState)
+{
+  if (aNewState == enemyState::dead)
+  {
+    mCurrentState = aNewState;
+    mEnemy->stopAction(mLastAction);
+    RunAnimation(mEnemyDead, 1);
+  }
 }
