@@ -43,10 +43,7 @@ private:
   };
 
   void Init();
-  void RunIdleAnimation();
-  void RunMoveAnimation();
-  void RunAttackAnimation();
-  void RunDeadAnimation();
+  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns);
 
   void ChangeState(heroState newState);
   void MovePosition();

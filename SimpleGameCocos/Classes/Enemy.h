@@ -39,7 +39,7 @@ private:
   };
 
   void Init();
-  void RunAnimation(vector<string> aAnimSprites, int aNrRuns);
+  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns);
   void ChangeState(enemyState aNewState);
  
   

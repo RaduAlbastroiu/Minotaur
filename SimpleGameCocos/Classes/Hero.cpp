@@ -23,63 +23,20 @@ void Hero::Init()
 {
   // Add sprites
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
-  RunIdleAnimation();
+  RunAnimation(mHeroIdle, 1000);
   mScene->addChild(mHero, 100);
 }
 
-void Hero::RunIdleAnimation()
+void Hero::RunAnimation(vector<string>& aAnimSprites, int aNrRuns)
 {
   auto spritecache = SpriteFrameCache::getInstance();
-  Vector<SpriteFrame *> animIdle;
-  for (int i = 0; i < 5; i++)
+  Vector<SpriteFrame *> anim;
+  for (int i = 0; i < aAnimSprites.size(); i++)
   {
-    animIdle.pushBack(spritecache->getSpriteFrameByName(mHeroIdle[i]));
+    anim.pushBack(spritecache->getSpriteFrameByName(aAnimSprites[i]));
   }
-  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.175f);
-  cocos2d::Action* action = RepeatForever::create(Animate::create(idleAnimation));
-  mLastAction = action;
-  mHero->runAction(action);
-}
-
-void Hero::RunMoveAnimation()
-{
-  auto spritecache = SpriteFrameCache::getInstance();
-  Vector<SpriteFrame *> animMove;
-  for (int i = 0; i < 8; i++)
-  {
-    animMove.pushBack(spritecache->getSpriteFrameByName(mHeroMove[i]));
-  }
-  auto moveAnimation = Animation::createWithSpriteFrames(animMove, 0.075f);
-  cocos2d::Action* action = RepeatForever::create(Animate::create(moveAnimation));
-  mLastAction = action;
-  mHero->runAction(action);
-}
-
-
-void Hero::RunAttackAnimation()
-{
-  auto spritecache = SpriteFrameCache::getInstance();
-  Vector<SpriteFrame *> attackAnim;
-  for (int i = 0; i < 8; i++)
-  {
-    attackAnim.pushBack(spritecache->getSpriteFrameByName(mHeroAttack[i]));
-  }
-  auto attackAnimation = Animation::createWithSpriteFrames(attackAnim, 0.06f);
-  cocos2d::Action* action = RepeatForever::create(Animate::create(attackAnimation));
-  mLastAction = action;
-  mHero->runAction(action);
-}
-
-void Hero::RunDeadAnimation()
-{
-  auto spritecache = SpriteFrameCache::getInstance();
-  Vector<SpriteFrame *> attackAnim;
-  for (int i = 0; i < 6; i++)
-  {
-    attackAnim.pushBack(spritecache->getSpriteFrameByName(mHeroDead[i]));
-  }
-  auto deadAnimation = Animation::createWithSpriteFrames(attackAnim, 0.125f);
-  cocos2d::Action* action = Repeat::create(Animate::create(deadAnimation), 1);
+  auto animation = Animation::createWithSpriteFrames(anim, 0.1);
+  cocos2d::Action* action = Repeat::create(Animate::create(animation), aNrRuns);
   mLastAction = action;
   mHero->runAction(action);
 }
@@ -92,7 +49,7 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::move;
       mHero->stopAction(mLastAction);
-      RunMoveAnimation();
+      RunAnimation(mHeroMove, 1000);
     }
     if (newState == heroState::attack)
     {
@@ -100,14 +57,14 @@ void Hero::ChangeState(heroState newState)
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
       mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
-      RunAttackAnimation();
+      RunAnimation(mHeroAttack, 1000);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunDeadAnimation();
+      RunAnimation(mHeroDead, 1);
     }
   }
   if (mCurrentState == heroState::move)
@@ -116,7 +73,7 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::idle;
       mHero->stopAction(mLastAction);
-      RunIdleAnimation();
+      RunAnimation(mHeroIdle, 1000);
     }
     if (newState == heroState::attack)
     {
@@ -124,14 +81,14 @@ void Hero::ChangeState(heroState newState)
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
       mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
-      RunAttackAnimation();
+      RunAnimation(mHeroAttack, 1000);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunDeadAnimation();
+      RunAnimation(mHeroDead, 1);
     }
   }
   if (mCurrentState == heroState::attack)
@@ -140,20 +97,20 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::idle;
       mHero->stopAction(mLastAction);
-      RunIdleAnimation();
+      RunAnimation(mHeroIdle, 1000);
     }
     if (newState == heroState::move)
     {
       mCurrentState = heroState::move;
       mHero->stopAction(mLastAction);
-      RunMoveAnimation();
+      RunAnimation(mHeroMove, 1000);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunDeadAnimation();
+      RunAnimation(mHeroDead, 1);
     }
   }
 }
@@ -185,7 +142,10 @@ void Hero::MovePosition()
 void Hero::Attack()
 {
   mAttackTimeStart = mTimePassed;
-  ChangeState(heroState::attack);
+  if (mCurrentState != heroState::attack)
+  {
+    ChangeState(heroState::attack);
+  }
 }
 
 void Hero::SetMoveDirection(int direction)

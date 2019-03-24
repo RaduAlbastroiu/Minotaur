@@ -47,7 +47,7 @@ void Enemy::Init()
   mScene->addChild(mEnemy, 2);
 }
 
-void Enemy::RunAnimation(vector<string> aAnimSprites, int aNrRuns)
+void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns)
 {
   auto spritecache = SpriteFrameCache::getInstance();
   Vector<SpriteFrame *> anim;
