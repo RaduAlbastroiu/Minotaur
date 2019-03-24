@@ -54,7 +54,7 @@ private:
   position mCurrentPosition;
   float mSpeed = 4;
 
-  vector<string> mHeroAttack = { "MinotaurAttack_0.png",
+  vector<string> mEnemyIdle = { "MinotaurAttack_0.png",
  "MinotaurAttack_1.png" ,
  "MinotaurAttack_2.png" ,
  "MinotaurAttack_3.png" ,

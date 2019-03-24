@@ -16,8 +16,6 @@ Enemy::Enemy(cocos2d::Scene * scene, Hero * aHero, float X, float Y)
   mEnemy->setScale(3);
   mEnemy->setAnchorPoint(Vec2(0.5, 0.5));
 
-  scene->addChild(mEnemy);
-
   Init();
 }
 
@@ -33,8 +31,21 @@ void Enemy::Update(float delta)
 
 void Enemy::Init()
 {
+  SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
+  RunIdleAnimation();
+  mScene->addChild(mEnemy);
 }
 
 void Enemy::RunIdleAnimation()
 {
+  auto spritecache = SpriteFrameCache::getInstance();
+  Vector<SpriteFrame *> animIdle;
+  for (int i = 0; i < 5; i++)
+  {
+    animIdle.pushBack(spritecache->getSpriteFrameByName(mEnemyIdle[i]));
+  }
+  auto idleAnimation = Animation::createWithSpriteFrames(animIdle, 0.175);
+  cocos2d::Action* action = RepeatForever::create(Animate::create(idleAnimation));
+  mLastAction = action;
+  mEnemy->runAction(action);
 }
