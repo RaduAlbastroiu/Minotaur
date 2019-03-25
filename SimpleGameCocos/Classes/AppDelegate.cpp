@@ -51,6 +51,8 @@ static cocos2d::Size smallResolution169 = cocos2d::Size(1366, 768);
 static cocos2d::Size mediumResolution169 = cocos2d::Size(1920, 1080);
 static cocos2d::Size largeResolution169 = cocos2d::Size(2560, 1440);
 
+static cocos2d::Size macResolution = cocos2d::Size(1440, 850);
+
 AppDelegate::AppDelegate()
 {
 }
@@ -86,7 +88,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
 
-    auto resolution = largeResolution169;
+    auto resolution = macResolution;
 
     if(!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)

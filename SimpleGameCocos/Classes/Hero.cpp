@@ -19,8 +19,7 @@ void Hero::Init()
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
 
   auto label = Label::createWithSystemFont("Health: 100", "Arial", 50);
-  label->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
-  label->setPosition(Director::getInstance()->getVisibleSize().width / 15, Director::getInstance()->getVisibleSize().height / 1.07);
+  label->setPosition(Director::getInstance()->getVisibleSize().width / 10, Director::getInstance()->getVisibleSize().height / 1.07);
   label->setTextColor(cocos2d::Color4B::BLACK);
 
   mHero = Sprite::create("MinotaurFirst.png");

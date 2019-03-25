@@ -58,10 +58,10 @@ bool HelloWorld::init()
   InitKeyboard();
 
   mEnemiesCollection = EnemiesCollection();
-  mEnemiesCollection.AddEnemy(this, mHero, 1000, 1000);
-  mEnemiesCollection.AddEnemy(this, mHero, 1500, 500);
-  mEnemiesCollection.AddEnemy(this, mHero, 1000, 500);
-  mEnemiesCollection.AddEnemy(this, mHero, 1500, 1000);
+  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height / 4);
+  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height / 4);
+  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height * 3 / 4);
+  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height * 3 / 4);
   mHero = new Hero(this, &mEnemiesCollection);
 
 
