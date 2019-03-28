@@ -50,6 +50,7 @@ private:
   int mDirection = 0;
 
   bool mIsAlive = true;
+  bool mIsVisible = true;
   float mTimePassed = 0;
   float mAttackTimeStart = -0.5;
   float mDeadTimeStart = -0.5;

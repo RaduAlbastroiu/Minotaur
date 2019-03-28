@@ -34,11 +34,18 @@ pair<float, float> Enemy::GetPosition()
 void Enemy::Update(float delta)
 {
   mTimePassed += delta;
-  if (mTimePassed - mDeadTimeStart > 1 && mCurrentState == enemyState::dead)
+  if (mTimePassed - mDeadTimeStart > 1 && mCurrentState == enemyState::dead && mIsAlive == true)
   {
     mIsAlive = false;
   }
 
+  if (mTimePassed - mDeadTimeStart > 2.5 && mCurrentState == enemyState::dead && mIsVisible == true)
+  {
+    mIsVisible = false;
+    mEnemy->setOpacity(255);
+    auto fadeOut = CCFadeOut::create(1.0f);
+    mEnemy->runAction(fadeOut);
+  }
 
   if (mHealth <= 0 && mCurrentState != enemyState::dead)
   {
