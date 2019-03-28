@@ -34,6 +34,11 @@ pair<float, float> Enemy::GetPosition()
 void Enemy::Update(float delta)
 {
   mTimePassed += delta;
+  if (mTimePassed - mDeadTimeStart > 1 && mCurrentState == enemyState::dead)
+  {
+    mIsAlive = false;
+  }
+
 
   if (mHealth <= 0 && mCurrentState != enemyState::dead)
   {
@@ -45,6 +50,11 @@ void Enemy::Update(float delta)
     ChangeState(enemyState::idle);
   }
 
+}
+
+bool Enemy::IsAlive()
+{
+  return mIsAlive;
 }
 
 void Enemy::Init()
@@ -80,11 +90,12 @@ void Enemy::ChangeState(enemyState aNewState)
   if (aNewState == enemyState::dead)
   {
     mCurrentState = aNewState;
+    mDeadTimeStart = mTimePassed;
     mEnemy->stopAction(mLastAction);
     RunAnimation(mEnemyDead, 1);
   }
 
-  if (aNewState == enemyState::hit)
+  if (aNewState == enemyState::hit && mCurrentState != enemyState::dead)
   {
     mCurrentState = aNewState;
     mEnemy->stopAction(mLastAction);

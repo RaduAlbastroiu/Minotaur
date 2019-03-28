@@ -21,6 +21,7 @@ public:
   pair<float, float> GetPosition();
 
   void Update(float delta);
+  bool IsAlive();
 
 private:
 
@@ -48,6 +49,7 @@ private:
 
   int mDirection = 0;
 
+  bool mIsAlive = true;
   float mTimePassed = 0;
   float mAttackTimeStart = -0.5;
   float mDeadTimeStart = -0.5;

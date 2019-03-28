@@ -30,6 +30,9 @@ bool EnemiesCollection::CanMoveAt(float currentX, float currentY, float X, float
   auto nextPoint = Point(X, Y);
   for (auto& enemy : mEnemies)
   {
+    if (enemy->IsAlive() == false)
+      continue;
+
     auto posEnemy = enemy->GetPosition();
     auto enemyPoint = Point(posEnemy.first, posEnemy.second);
 
