@@ -62,7 +62,6 @@ void Hero::ChangeState(heroState newState)
       mCurrentState = heroState::attack;
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
-      mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
       RunAnimation(mHeroAttack, 1000, mAttackFrecv);
     }
     if (newState == heroState::dead)
@@ -86,7 +85,6 @@ void Hero::ChangeState(heroState newState)
       mCurrentState = heroState::attack;
       mHero->stopAction(mLastAction);
       mAttackTimeStart = mTimePassed;
-      mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
       RunAnimation(mHeroAttack, 1000, mAttackFrecv);
     }
     if (newState == heroState::dead)
@@ -165,9 +163,10 @@ void Hero::MovePosition()
 
 void Hero::Attack()
 {
-  mAttackTimeStart = mTimePassed;
   if (mCurrentState != heroState::attack)
   {
+    mAttackTimeStart = mTimePassed;
+    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
     ChangeState(heroState::attack);
   }
 }
@@ -213,7 +212,7 @@ void Hero::Update(float delta)
   }
 
   // change between attack and idle
-  if (mCurrentState == heroState::attack && mTimePassed - mAttackTimeStart > 0.175f)
+  if (mCurrentState == heroState::attack && mTimePassed - mAttackTimeStart > 0.3f)
   {
     ChangeState(heroState::idle);
   }

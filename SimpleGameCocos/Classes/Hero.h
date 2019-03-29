@@ -58,7 +58,7 @@ private:
 
   float mAttackFrecv = 0.05f;
   float mIdleFrecv = 0.15f;
-  float mMoveFrecv = 0.075f;
+  float mMoveFrecv = 0.065f;
   float mDeadFrecv = 0.1f;
   float mHitFrecv = 0.1f;
 
@@ -71,7 +71,7 @@ private:
 
   heroState mCurrentState = heroState::idle;
   position mCurrentPosition;
-  float mSpeed = 4;
+  float mSpeed = 5;
 
   vector<string> mHeroAttack = { "MinotaurAttack_0.png",
   "MinotaurAttack_1.png" ,
