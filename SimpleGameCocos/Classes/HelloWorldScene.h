@@ -56,6 +56,8 @@ private:
   int maxMinotaur = 9;
   int minotaurLine = 3;
 
+  cocos2d::Label* mScoreLabel;
+
   Hero* mHero;
   EnemiesCollection mEnemiesCollection;
 

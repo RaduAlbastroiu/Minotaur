@@ -48,6 +48,20 @@ bool EnemiesCollection::CanMoveAt(float currentX, float currentY, float X, float
   return true;
 }
 
+int EnemiesCollection::GetNumberKilled()
+{
+  auto killed = 0;
+  for (auto& enemy : mEnemies)
+  {
+    if (enemy->IsAlive() == false)
+    {
+      killed++;
+    }
+  }
+
+  return killed;
+}
+
 void EnemiesCollection::Update(float delta)
 {
   for (auto& enemy : mEnemies)

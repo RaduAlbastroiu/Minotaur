@@ -13,6 +13,7 @@ public:
   void AddEnemy(cocos2d::Scene* aScene, Hero * aHero, float X, float Y);
   void AttackAt(float X, float Y, int aForce);
   bool CanMoveAt(float curetnX, float currentY, float X, float Y);
+  int GetNumberKilled();
   void Update(float delta);
 
 private:

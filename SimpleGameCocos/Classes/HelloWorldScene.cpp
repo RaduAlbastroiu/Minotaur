@@ -64,6 +64,10 @@ bool HelloWorld::init()
   mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height * 3 / 4);
   mHero = new Hero(this, &mEnemiesCollection);
 
+  mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);
+  mScoreLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10 * 9, Director::getInstance()->getVisibleSize().height / 1.07);
+  mScoreLabel->setTextColor(cocos2d::Color4B::BLACK);
+  this->addChild(mScoreLabel);
 
   return true;
 }
@@ -106,6 +110,10 @@ bool HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d:
 void HelloWorld::update(float delta)
 {
   elapsedTime += delta;
+
+  auto killed = mEnemiesCollection.GetNumberKilled();
+  mScoreLabel->setString("Killed: " + to_string(killed));
+
   UpdateHero(delta);
 }
 
