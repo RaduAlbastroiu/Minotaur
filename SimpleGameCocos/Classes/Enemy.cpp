@@ -2,10 +2,9 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(cocos2d::Scene * scene, Hero * aHero, float X, float Y)
+Enemy::Enemy(cocos2d::Scene * scene, float X, float Y)
 {
   mScene = scene;
-  mHero = aHero;
 
   mCurrentPosition.x = X;
   mCurrentPosition.y = Y;
@@ -29,6 +28,11 @@ void Enemy::TakeDamage(float damage)
 pair<float, float> Enemy::GetPosition()
 {
   return make_pair(mCurrentPosition.x, mCurrentPosition.y);
+}
+
+cocos2d::Sprite * Enemy::GetSprite()
+{
+  return mEnemy;
 }
 
 void Enemy::Update(float delta)
@@ -56,6 +60,7 @@ void Enemy::Update(float delta)
   {
     ChangeState(enemyState::idle);
   }
+
 
 }
 

@@ -15,11 +15,11 @@ using namespace std;
 class Enemy
 {
 public:
-  Enemy(cocos2d::Scene* aScene, Hero * aHero, float X, float Y);
+  Enemy(cocos2d::Scene* aScene, float X, float Y);
   
   void TakeDamage(float damage);
   pair<float, float> GetPosition();
-
+  cocos2d::Sprite* GetSprite();
   void Update(float delta);
   bool IsAlive();
 
@@ -56,7 +56,6 @@ private:
   float mDeadTimeStart = -0.5;
   float mHitAttackTimeStart = -0.5;
 
-  Hero* mHero;
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mEnemy;
 

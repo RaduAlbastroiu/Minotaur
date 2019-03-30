@@ -10,16 +10,22 @@ class EnemiesCollection
 {
 public:
 
-  void AddEnemy(cocos2d::Scene* aScene, Hero * aHero, float X, float Y);
+  void AddEnemy(cocos2d::Scene* aScene, float X, float Y);
   void AttackAt(float X, float Y, int aForce);
   bool CanMoveAt(float curetnX, float currentY, float X, float Y);
   int GetNumberKilled();
   void Update(float delta);
 
+  void SetHero(Hero* aHero);
+
 private:
 
+  Hero* mHero;
+
   float mDistAttack = 175;
+  float mDistForEnemy = 125;
   float mMinDistance = 100;
+  float mSpeed = 2;
 
   vector<unique_ptr<Enemy>> mEnemies;
 };

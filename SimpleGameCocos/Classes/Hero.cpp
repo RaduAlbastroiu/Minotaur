@@ -223,3 +223,11 @@ void Hero::Update(float delta)
     ChangeState(heroState::dead);
   }
 }
+
+pair<float, float> Hero::GetPosition()
+{
+  pair<float, float> pos;
+  pos.first = mHero->getPositionX();
+  pos.second = mHero->getPositionY();
+  return pos;
+}

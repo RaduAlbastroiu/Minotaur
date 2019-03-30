@@ -58,11 +58,12 @@ bool HelloWorld::init()
   InitKeyboard();
 
   mEnemiesCollection = EnemiesCollection();
-  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height / 4);
-  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height / 4);
-  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height * 3 / 4);
-  mEnemiesCollection.AddEnemy(this, mHero, mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height * 3 / 4);
+  mEnemiesCollection.AddEnemy(this, mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height / 4);
+  mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height / 4);
+  mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height * 3 / 4);
+  mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height * 3 / 4);
   mHero = new Hero(this, &mEnemiesCollection);
+  mEnemiesCollection.SetHero(mHero);
 
   mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);
   mScoreLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10 * 9, Director::getInstance()->getVisibleSize().height / 1.07);
