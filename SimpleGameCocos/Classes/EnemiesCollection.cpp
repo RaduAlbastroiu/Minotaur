@@ -62,6 +62,9 @@ int EnemiesCollection::GetNumberKilled()
     }
   }
 
+  // update game mechanics
+  mHitAtOnceMax = min(killed / 4 + 1, 10);
+
   return killed;
 }
 

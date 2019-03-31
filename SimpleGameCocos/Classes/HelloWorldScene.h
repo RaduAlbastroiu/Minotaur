@@ -50,11 +50,16 @@ private:
 
   void UpdateHero(float delta);
 
-  float elapsedTime = 0;
+  float mTimePassed = 0;
   float lastSecond = 0;
   int currentMinotaur = 0;
   int maxMinotaur = 9;
   int minotaurLine = 3;
+
+  float mTimeLastSpawn = -0.5f;
+  float mTimeBetweenSpawns = 1.0f;
+  float mTimeLastUpdate = 1.0f;
+  float mTimeUpdateLevel = 5.0f;
 
   cocos2d::Label* mScoreLabel;
 

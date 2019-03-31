@@ -155,7 +155,7 @@ void Hero::MovePosition()
 
 void Hero::Attack()
 {
-  if (mCurrentState != heroState::attack)
+  if (mCurrentState != heroState::attack && mCurrentState != heroState::dead)
   {
     mAttackTimeStart = mTimePassed;
     mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 35);
