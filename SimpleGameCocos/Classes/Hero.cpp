@@ -18,16 +18,16 @@ void Hero::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
 
-  mHealthLabel = Label::createWithSystemFont("Health: 100", "Arial", 50);
-  mHealthLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10, Director::getInstance()->getVisibleSize().height / 1.07);
-  mHealthLabel->setTextColor(cocos2d::Color4B::BLACK);
+  mHealthSprite = cocos2d::Sprite::create("LifeBar/100.png");
+  mHealthSprite->setScale(0.5f);
+  mHealthSprite->setPosition(Director::getInstance()->getVisibleSize().width / 9, Director::getInstance()->getVisibleSize().height / 1.07);
 
   mHero = Sprite::create("MinotaurFirst.png");
   mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
   mHero->setScale(3);
   mHero->setAnchorPoint(Vec2(0.5, 0.5));
 
-  mScene->addChild(mHealthLabel, 100);
+  mScene->addChild(mHealthSprite, 100);
   mScene->addChild(mHero, 10);
 
   RunAnimation(mHeroIdle, 1000, mIdleFrecv);
@@ -158,7 +158,7 @@ void Hero::Attack()
   if (mCurrentState != heroState::attack && mCurrentState != heroState::dead)
   {
     mAttackTimeStart = mTimePassed;
-    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 35);
+    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 50);
     ChangeState(heroState::attack);
   }
 }
@@ -174,7 +174,7 @@ void Hero::TakeDamage(int damage)
   {
     mHealth -= damage;
     mHealth = max(0, mHealth);
-    mHealthLabel->setString("Health: " + to_string(mHealth));
+    mHealthSprite->setTexture(mLifeBar[mHealth / 10]);
     mHitTimeStart = mTimePassed;
   }
 }
