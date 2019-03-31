@@ -29,6 +29,8 @@ public:
   void TakeDamage(float damage);
   pair<float, float> GetPosition();
   void MoveAt(float X, float Y);
+  bool Attack();
+  void ChangeState(enemyState aNewState);
   void Update(float delta);
   bool IsAlive();
 
@@ -43,8 +45,6 @@ private:
 
   void Init();
   void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFreq);
-  void ChangeState(enemyState aNewState);
- 
   
   float mHealth = 100;
   cocos2d::Action* mLastAction;
@@ -56,7 +56,7 @@ private:
   float mTimePassed = 0;
   float mAttackTimeStart = -0.5;
   float mDeadTimeStart = -0.5;
-  float mHitAttackTimeStart = -0.5;
+  float mHitTimeStart = -0.5;
 
   float mAttackFrecv = 0.05f;
   float mIdleFrecv = 0.15f;

@@ -21,6 +21,7 @@ public:
   void Attack();
   void SetMoveDirection(int direction);
   void TakeDamage(int damage);
+  bool IsAlive();
   void Update(float delta);
 
   pair<float, float> GetPosition();
@@ -99,15 +100,6 @@ private:
   "MinotaurDead_5.png" };
 
   vector<string> mHeroMove = { "MinotaurMove_0.png",
-  "MinotaurMove_1.png" ,
-  "MinotaurMove_2.png" ,
-  "MinotaurMove_3.png" ,
-  "MinotaurMove_4.png" ,
-  "MinotaurMove_5.png" ,
-  "MinotaurMove_6.png" ,
-  "MinotaurMove_7.png" };
-
-  vector<string> mHeroHit = { "MinotaurMove_0.png",
   "MinotaurMove_1.png" ,
   "MinotaurMove_2.png" ,
   "MinotaurMove_3.png" ,

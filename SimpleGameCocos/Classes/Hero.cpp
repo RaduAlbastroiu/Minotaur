@@ -18,16 +18,16 @@ void Hero::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
 
-  auto label = Label::createWithSystemFont("Health: 100", "Arial", 50);
-  label->setPosition(Director::getInstance()->getVisibleSize().width / 10, Director::getInstance()->getVisibleSize().height / 1.07);
-  label->setTextColor(cocos2d::Color4B::BLACK);
+  mHealthLabel = Label::createWithSystemFont("Health: 100", "Arial", 50);
+  mHealthLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10, Director::getInstance()->getVisibleSize().height / 1.07);
+  mHealthLabel->setTextColor(cocos2d::Color4B::BLACK);
 
   mHero = Sprite::create("MinotaurFirst.png");
   mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
   mHero->setScale(3);
   mHero->setAnchorPoint(Vec2(0.5, 0.5));
 
-  mScene->addChild(label, 100);
+  mScene->addChild(mHealthLabel, 100);
   mScene->addChild(mHero, 10);
 
   RunAnimation(mHeroIdle, 1000, mIdleFrecv);
@@ -117,14 +117,6 @@ void Hero::ChangeState(heroState newState)
       RunAnimation(mHeroDead, 1, mDeadFrecv);
     }
   }
-
-  if (newState == heroState::hit && mCurrentState != newState)
-  {
-    mCurrentState = newState;
-    mHero->stopAction(mLastAction);
-    mHitTimeStart = mTimePassed;
-    RunAnimation(mHeroHit, 1, mHitFrecv);
-  }
 }
 
 void Hero::MovePosition()
@@ -178,10 +170,18 @@ void Hero::SetMoveDirection(int direction)
 
 void Hero::TakeDamage(int damage)
 {
-  mHealth -= damage;
-  mHealth = max(0, mHealth);
-  mHealthLabel->setString("Health: " + to_string(mHealth));
-  ChangeState(heroState::hit);
+  if (mTimePassed - mHitTimeStart > 1.0f)
+  {
+    mHealth -= damage;
+    mHealth = max(0, mHealth);
+    mHealthLabel->setString("Health: " + to_string(mHealth));
+    mHitTimeStart = mTimePassed;
+  }
+}
+
+bool Hero::IsAlive()
+{
+  return mHealth > 0;
 }
 
 void Hero::Update(float delta)
@@ -189,10 +189,13 @@ void Hero::Update(float delta)
   mTimePassed += delta;
 
   // change direction
-  if (mDirection == LEFT)
-    mHero->setFlippedX(true);
-  if (mDirection == RIGHT)
-    mHero->setFlippedX(false);
+  if (mHealth > 0)
+  {
+    if (mDirection == LEFT)
+      mHero->setFlippedX(true);
+    if (mDirection == RIGHT)
+      mHero->setFlippedX(false);
+  }
 
   // change position relative to framerate
   if (mCurrentState == heroState::move)
@@ -221,6 +224,11 @@ void Hero::Update(float delta)
   if (mHealth <= 0 && mCurrentState != heroState::dead)
   {
     ChangeState(heroState::dead);
+  }
+
+  if (mCurrentState == heroState::hit && mTimePassed - mHitTimeStart < 0.5f)
+  {
+    ChangeState(heroState::idle);
   }
 }
 

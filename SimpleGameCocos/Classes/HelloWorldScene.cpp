@@ -59,9 +59,9 @@ bool HelloWorld::init()
 
   mEnemiesCollection = EnemiesCollection();
   mEnemiesCollection.AddEnemy(this, mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height / 4);
-  mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height / 4);
-  mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height * 3 / 4);
-  mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height * 3 / 4);
+  //mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height / 4);
+  //mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height * 3 / 4);
+  //mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height * 3 / 4);
   mHero = new Hero(this, &mEnemiesCollection);
   mEnemiesCollection.SetHero(mHero);
 

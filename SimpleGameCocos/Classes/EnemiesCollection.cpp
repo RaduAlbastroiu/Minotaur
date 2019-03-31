@@ -103,6 +103,13 @@ void EnemiesCollection::Update(float delta)
 
       enemy->MoveAt(xDirection, yDiretion);
     }
+    else
+    {
+      if (mHero->IsAlive() && enemy->Attack())
+      {
+        mHero->TakeDamage(10);
+      }
+    }
   }
 }
 
