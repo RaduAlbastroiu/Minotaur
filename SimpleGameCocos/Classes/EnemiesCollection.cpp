@@ -11,6 +11,7 @@ void EnemiesCollection::AddEnemy(cocos2d::Scene * aScene, float X, float Y)
 void EnemiesCollection::AttackAt(float X, float Y, int aForce)
 {
   auto heroPoint = Point(X, Y);
+  int count = 2;
   for (auto& enemy : mEnemies)
   {
     auto posEnemy = enemy->GetPosition();
@@ -18,9 +19,10 @@ void EnemiesCollection::AttackAt(float X, float Y, int aForce)
 
     auto dist = heroPoint.getDistance(enemyPoint);
     
-    if (dist < mDistAttack)
+    if (dist < mDistAttack && count > 0)
     {
       enemy->TakeDamage(aForce);
+      count--;
     }
   }
 }
@@ -105,9 +107,16 @@ void EnemiesCollection::Update(float delta)
     }
     else
     {
-      if (mHero->IsAlive() && enemy->Attack())
+      if (enemy->GetRegisterDamageAndReset())
       {
         mHero->TakeDamage(10);
+      }
+      else
+      {
+        if (mHero->IsAlive())
+        {
+          enemy->Attack();
+        }
       }
     }
   }

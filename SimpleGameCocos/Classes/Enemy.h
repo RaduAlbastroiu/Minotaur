@@ -31,6 +31,7 @@ public:
   void MoveAt(float X, float Y);
   bool Attack();
   void ChangeState(enemyState aNewState);
+  bool GetRegisterDamageAndReset();
   void Update(float delta);
   bool IsAlive();
 
@@ -51,6 +52,7 @@ private:
 
   int mDirection = 0;
 
+  bool mRegisterDamage = false;
   bool mIsAlive = true;
   bool mIsVisible = true;
   float mTimePassed = 0;

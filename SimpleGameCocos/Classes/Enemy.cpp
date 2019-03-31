@@ -60,6 +60,11 @@ void Enemy::Update(float delta)
     ChangeState(enemyState::idle);
   }
 
+  if (mTimePassed - mAttackTimeStart > 0.5f && mCurrentState == enemyState::attack)
+  {
+    mRegisterDamage = true;
+  }
+
   if (mTimePassed - mDeadTimeStart > 1 && mCurrentState == enemyState::dead && mIsAlive == true)
   {
     mIsAlive = false;
@@ -78,7 +83,7 @@ void Enemy::Update(float delta)
     ChangeState(enemyState::dead);
   }
 
-  if (mCurrentState == enemyState::hit && mTimePassed - mHitTimeStart > 0.3f)
+  if (mCurrentState == enemyState::hit && mTimePassed - mHitTimeStart > 0.7f)
   {
     ChangeState(enemyState::idle);
   }
@@ -191,13 +196,20 @@ void Enemy::ChangeState(enemyState newState)
     }
   }
 
-  if (newState == enemyState::hit && mCurrentState != newState)
+  if (newState == enemyState::hit && mCurrentState != newState && mCurrentState != enemyState::dead)
   {
     mCurrentState = newState;
     mEnemy->stopAction(mLastAction);
     mHitTimeStart = mTimePassed;
     RunAnimation(mEnemyHit, 1, mHitFrecv);
   }
+}
+
+bool Enemy::GetRegisterDamageAndReset()
+{
+  auto b = mRegisterDamage;
+  mRegisterDamage = false;
+  return b;
 }
 
 enemyState Enemy::GetState()
