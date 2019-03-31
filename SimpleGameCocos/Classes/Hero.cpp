@@ -6,16 +6,16 @@ Hero::Hero(cocos2d::Scene * scene, EnemiesCollection* aEnemiesCollection)
   mScene = scene;
   mEnemiesCollection = aEnemiesCollection;
 
-  mCurrentPosition.x = Director::getInstance()->getVisibleSize().width / 2;
-  mCurrentPosition.y = Director::getInstance()->getVisibleSize().height / 2;
-  mDirection = NODIRECTION;
-  mCurrentState = heroState::idle;
-
   Init();
 }
 
 void Hero::Init()
 {
+  mCurrentPosition.x = Director::getInstance()->getVisibleSize().width / 2;
+  mCurrentPosition.y = Director::getInstance()->getVisibleSize().height / 2;
+  mDirection = NODIRECTION;
+  mCurrentState = heroState::idle;
+
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
 
   mHealthSprite = cocos2d::Sprite::create("LifeBar/100.png");
@@ -182,6 +182,13 @@ void Hero::TakeDamage(int damage)
 bool Hero::IsAlive()
 {
   return mHealth > 0;
+}
+
+void Hero::Reset()
+{
+  Init();
+  mHealth = 100;
+  mCurrentState = heroState::idle;
 }
 
 void Hero::Update(float delta)

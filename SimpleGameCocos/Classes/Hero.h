@@ -22,6 +22,7 @@ public:
   void SetMoveDirection(int direction);
   void TakeDamage(int damage);
   bool IsAlive();
+  void Reset();
   void Update(float delta);
 
   pair<float, float> GetPosition();

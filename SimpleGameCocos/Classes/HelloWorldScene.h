@@ -37,6 +37,7 @@ public:
   void AddHelloWorld();
   void AddBackground();
   void update(float delta) override;
+  void Reset();
 
   void InitKeyboard();
 
@@ -60,8 +61,14 @@ private:
   float mTimeBetweenSpawns = 1.0f;
   float mTimeLastUpdate = 1.0f;
   float mTimeUpdateLevel = 5.0f;
+  float mDifficultyRateIncrease = 0.7;
+  bool isHeroDead = false;
+  float mTimeHeroDead = -0.5f;
+
+  bool isKeyboardPressed = false;
 
   cocos2d::Label* mScoreLabel;
+  cocos2d::Label* mResetLabel;
 
   Hero* mHero;
   EnemiesCollection mEnemiesCollection;

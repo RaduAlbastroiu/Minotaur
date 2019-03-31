@@ -14,6 +14,7 @@ public:
   void AttackAt(float X, float Y, int aForce);
   bool CanMoveAt(float curetnX, float currentY, float X, float Y);
   int GetNumberKilled();
+  void Reset();
   void Update(float delta);
 
   void SetHero(Hero* aHero);

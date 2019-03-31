@@ -87,9 +87,18 @@ int EnemiesCollection::GetNumberKilled()
   }
 
   // update game mechanics
-  mHitAtOnceMax = min(killed / 4 + 1, 10);
+  mHitAtOnceMax = min(killed / 6 + 1, 5);
 
   return killed;
+}
+
+void EnemiesCollection::Reset()
+{
+  for (auto& enemy : mEnemies)
+  {
+    enemy.reset();
+  }
+  mEnemies.clear();
 }
 
 void EnemiesCollection::Update(float delta)

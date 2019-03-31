@@ -45,6 +45,22 @@ bool HelloWorld::init()
     return false;
   }
 
+  // set environment
+  mTimePassed = 0;
+  lastSecond = 0;
+  currentMinotaur = 0;
+  maxMinotaur = 9;
+  minotaurLine = 3;
+
+  mTimeLastSpawn = -0.5f;
+  mTimeBetweenSpawns = 2.5f;
+  mTimeLastUpdate = 1.0f;
+  mTimeUpdateLevel = 5.0f;
+  isHeroDead = false;
+  mTimeHeroDead = -0.5f;
+
+  isKeyboardPressed = false;
+
   // set private members
   mDirector = Director::getInstance();
   mWindow.width = mDirector->getVisibleSize().width;
@@ -108,6 +124,29 @@ void HelloWorld::update(float delta)
 {
   mTimePassed += delta;
 
+  if (isHeroDead == false && mHero->IsAlive() == false)
+  {
+    isHeroDead = true;
+    mTimeHeroDead = mTimePassed;
+  }
+
+  // reset
+  if (isHeroDead && mTimePassed - mTimeHeroDead > 2.5f)
+  {
+    if (mResetLabel == nullptr)
+    {
+      mResetLabel = Label::createWithSystemFont("Press any key to play again!", "Arial", 40);
+      mResetLabel->setAnchorPoint(Vec2(0.5, 0.5));
+      mResetLabel->setPosition(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 4 * 3);
+      mResetLabel->setTextColor(cocos2d::Color4B::BLACK);
+      this->addChild(mResetLabel, 100);
+    }
+    if (isKeyboardPressed)
+    {
+      Reset();
+    }
+  }
+
   // spawn
   if (mTimePassed - mTimeLastSpawn > mTimeBetweenSpawns && mHero->IsAlive())
   {
@@ -146,7 +185,7 @@ void HelloWorld::update(float delta)
   if (mTimePassed - mTimeLastUpdate > mTimeUpdateLevel && mHero->IsAlive())
   {
     mTimeLastUpdate = mTimePassed;
-    mTimeBetweenSpawns = mTimeBetweenSpawns * 9 / 10;
+    mTimeBetweenSpawns = mTimeBetweenSpawns * mDifficultyRateIncrease;
   }
 
   auto killed = mEnemiesCollection.GetNumberKilled();
@@ -155,14 +194,25 @@ void HelloWorld::update(float delta)
   UpdateHero(delta);
 }
 
+void HelloWorld::Reset()
+{
+  mEnemiesCollection.Reset();
+  mHero->Reset();
+  mResetLabel->removeFromParent();
+  isHeroDead = false;
+  this->removeAllChildren();
+  init();
+}
+
 void HelloWorld::UpdateHero(float delta)
 {
   bool moveKeyPressed = false;
-
+  isKeyboardPressed = false;
   for (auto keyPressed : mKeyboard)
   {
     if (keyPressed.second == true)
     {
+      isKeyboardPressed = true;
       auto keyCode = keyPressed.first;
 
       switch (keyCode) {
