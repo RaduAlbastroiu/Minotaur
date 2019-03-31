@@ -27,7 +27,7 @@ void Enemy::TakeDamage(float damage)
 
 pair<float, float> Enemy::GetPosition()
 {
-  return make_pair(mCurrentPosition.x, mCurrentPosition.y);
+  return make_pair(mEnemy->getPositionX(), mEnemy->getPositionY());
 }
 
 cocos2d::Sprite * Enemy::GetSprite()
@@ -92,13 +92,6 @@ void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns)
 
 void Enemy::ChangeState(enemyState aNewState)
 {
-  if (aNewState == enemyState::idle)
-  {
-    mCurrentState = aNewState;
-    mEnemy->stopAction(mLastAction);
-    RunAnimation(mEnemyIdle, 1000);
-  }
-
   if (aNewState == enemyState::dead)
   {
     mCurrentState = aNewState;
@@ -107,11 +100,26 @@ void Enemy::ChangeState(enemyState aNewState)
     RunAnimation(mEnemyDead, 1);
   }
 
-  if (aNewState == enemyState::hit && mCurrentState != enemyState::dead)
+  if (mCurrentState != enemyState::dead)
   {
-    mCurrentState = aNewState;
-    mEnemy->stopAction(mLastAction);
-    mHitAttackTimeStart = mTimePassed;
-    RunAnimation(mEnemyHit, 1);
+    if (aNewState == enemyState::idle)
+    {
+      mCurrentState = aNewState;
+      mEnemy->stopAction(mLastAction);
+      RunAnimation(mEnemyIdle, 1000);
+    }
+
+    if (aNewState == enemyState::hit && mCurrentState != enemyState::dead)
+    {
+      mCurrentState = aNewState;
+      mEnemy->stopAction(mLastAction);
+      mHitAttackTimeStart = mTimePassed;
+      RunAnimation(mEnemyHit, 1);
+    }
   }
+}
+
+enemyState Enemy::GetState()
+{
+  return mCurrentState;
 }

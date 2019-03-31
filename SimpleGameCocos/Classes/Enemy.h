@@ -12,6 +12,15 @@
 USING_NS_CC;
 using namespace std;
 
+enum enemyState
+{
+  attack,
+  move,
+  idle,
+  hit,
+  dead
+};
+
 class Enemy
 {
 public:
@@ -22,17 +31,10 @@ public:
   cocos2d::Sprite* GetSprite();
   void Update(float delta);
   bool IsAlive();
+  void ChangeState(enemyState aNewState);
+  enemyState GetState();
 
 private:
-
-  enum enemyState
-  {
-    attack,
-    move,
-    idle,
-    hit,
-    dead
-  };
 
   struct position
   {
@@ -41,7 +43,7 @@ private:
 
   void Init();
   void RunAnimation(vector<string>& aAnimSprites, int aNrRuns);
-  void ChangeState(enemyState aNewState);
+  
  
   
   float mHealth = 100;
