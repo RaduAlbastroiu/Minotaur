@@ -158,7 +158,7 @@ void Hero::Attack()
   if (mCurrentState != heroState::attack)
   {
     mAttackTimeStart = mTimePassed;
-    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 25);
+    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 35);
     ChangeState(heroState::attack);
   }
 }

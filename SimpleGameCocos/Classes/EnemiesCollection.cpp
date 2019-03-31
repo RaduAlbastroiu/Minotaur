@@ -11,7 +11,7 @@ void EnemiesCollection::AddEnemy(cocos2d::Scene * aScene, float X, float Y)
 void EnemiesCollection::AttackAt(float X, float Y, int aForce)
 {
   auto heroPoint = Point(X, Y);
-  int count = 2;
+  int count = mHitAtOnceMax;
   for (auto& enemy : mEnemies)
   {
     auto posEnemy = enemy->GetPosition();
@@ -19,7 +19,7 @@ void EnemiesCollection::AttackAt(float X, float Y, int aForce)
 
     auto dist = heroPoint.getDistance(enemyPoint);
     
-    if (dist < mDistAttack && count > 0)
+    if (dist < mDistAttack && count > 0 && enemy->IsAlive())
     {
       enemy->TakeDamage(aForce);
       count--;
@@ -79,45 +79,48 @@ void EnemiesCollection::Update(float delta)
 
     auto dist = heroPoint.getDistance(enemyPoint);
 
-    // move
-    if (dist > mDistForEnemy)
+    if (mHero->IsAlive())
     {
-      int xDirection = 0;
-      int yDiretion = 0;
+      if (dist > mDistForEnemy)
+      {
+        int xDirection = 0;
+        int yDiretion = 0;
 
-      if (heroPos.first - 20 < enemyPos.first)
-      {
-        xDirection = -1 * mSpeed;
-      }
-      if (heroPos.first > enemyPos.first)
-      {
-        xDirection = mSpeed;
-      }
+        if (heroPos.first - 20 < enemyPos.first)
+        {
+          xDirection = -1 * mSpeed;
+        }
+        if (heroPos.first > enemyPos.first)
+        {
+          xDirection = mSpeed;
+        }
 
-      if (heroPos.second - 20 < enemyPos.second)
-      {
-        yDiretion = -1 * mSpeed;
-      }
-      if (heroPos.second > enemyPos.second)
-      {
-        yDiretion = mSpeed;
-      }
+        if (heroPos.second - 20 < enemyPos.second)
+        {
+          yDiretion = -1 * mSpeed;
+        }
+        if (heroPos.second > enemyPos.second)
+        {
+          yDiretion = mSpeed;
+        }
 
-      enemy->MoveAt(xDirection, yDiretion);
-    }
-    else
-    {
-      if (enemy->GetRegisterDamageAndReset())
-      {
-        mHero->TakeDamage(10);
+        enemy->MoveAt(xDirection, yDiretion);
       }
       else
       {
-        if (mHero->IsAlive())
+        if (enemy->GetRegisterDamageAndReset())
+        {
+          mHero->TakeDamage(10);
+        }
+        else
         {
           enemy->Attack();
         }
       }
+    }
+    else
+    {
+      enemy->ChangeState(enemyState::idle);
     }
   }
 }

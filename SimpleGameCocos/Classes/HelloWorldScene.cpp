@@ -58,10 +58,6 @@ bool HelloWorld::init()
   InitKeyboard();
 
   mEnemiesCollection = EnemiesCollection();
-  mEnemiesCollection.AddEnemy(this, mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height / 4);
-  //mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height / 4);
-  //mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width / 4, mDirector->getVisibleSize().height * 3 / 4);
-  //mEnemiesCollection.AddEnemy(this,  mDirector->getVisibleSize().width * 3 / 4, mDirector->getVisibleSize().height * 3 / 4);
   mHero = new Hero(this, &mEnemiesCollection);
   mEnemiesCollection.SetHero(mHero);
 
@@ -110,7 +106,48 @@ bool HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d:
 
 void HelloWorld::update(float delta)
 {
-  elapsedTime += delta;
+  mTimePassed += delta;
+
+  // spawn
+  if (mTimePassed - mTimeLastSpawn > mTimeBetweenSpawns && mHero->IsAlive())
+  {
+    mTimeLastSpawn = mTimePassed;
+    int width = mDirector->getVisibleSize().width;
+    int height = mDirector->getVisibleSize().height;
+
+    float X = 0;
+    float Y = 0;
+
+    auto direction = rand() % 4;
+    if (direction == 0)
+    {
+      X = -50;
+      Y = rand() % height;
+    }
+    if (direction == 1)
+    {
+      X = rand() % width;
+      Y = height + 50;
+    }
+    if (direction == 2)
+    {
+      X = width + 50;
+      Y = rand() % height;
+    }
+    if (direction == 3)
+    {
+      X = rand() % width;
+      Y = -50;
+    }
+
+    mEnemiesCollection.AddEnemy(this, X, Y);
+  }
+
+  if (mTimePassed - mTimeLastUpdate > mTimeUpdateLevel && mHero->IsAlive())
+  {
+    mTimeLastUpdate = mTimePassed;
+    mTimeBetweenSpawns = mTimeBetweenSpawns * 9 / 10;
+  }
 
   auto killed = mEnemiesCollection.GetNumberKilled();
   mScoreLabel->setString("Killed: " + to_string(killed));
