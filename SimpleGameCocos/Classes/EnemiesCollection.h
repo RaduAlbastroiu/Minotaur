@@ -25,7 +25,7 @@ private:
   float mDistAttack = 175;
   float mDistForEnemy = 125;
   float mMinDistance = 100;
-  float mSpeed = 2;
+  float mSpeed = 1.5;
 
   vector<unique_ptr<Enemy>> mEnemies;
 };

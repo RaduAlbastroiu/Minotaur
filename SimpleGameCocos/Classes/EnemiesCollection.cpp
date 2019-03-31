@@ -78,14 +78,11 @@ void EnemiesCollection::Update(float delta)
     auto dist = heroPoint.getDistance(enemyPoint);
 
     // move
-
-    if (dist > mDistForEnemy && enemy->GetState() != enemyState::dead && enemy->GetState() != enemyState::hit)
+    if (dist > mDistForEnemy)
     {
-      enemy->ChangeState(enemyState::move);
-      auto enemySprite = enemy->GetSprite();
       int xDirection = 0;
       int yDiretion = 0;
-      
+
       if (heroPos.first - 20 < enemyPos.first)
       {
         xDirection = -1 * mSpeed;
@@ -104,12 +101,7 @@ void EnemiesCollection::Update(float delta)
         yDiretion = mSpeed;
       }
 
-      auto moveBy = MoveBy::create(0.01667f, Vec2(xDirection, yDiretion));
-      enemySprite->runAction(moveBy);
-    }
-    else
-    {
-      enemy->ChangeState(enemyState::idle);
+      enemy->MoveAt(xDirection, yDiretion);
     }
   }
 }

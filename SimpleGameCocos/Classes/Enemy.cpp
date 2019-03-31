@@ -30,14 +30,20 @@ pair<float, float> Enemy::GetPosition()
   return make_pair(mEnemy->getPositionX(), mEnemy->getPositionY());
 }
 
-cocos2d::Sprite * Enemy::GetSprite()
+void Enemy::MoveAt(float X, float Y)
 {
-  return mEnemy;
+  if (mCurrentState!= enemyState::dead && mCurrentState != enemyState::hit)
+  {
+    ChangeState(enemyState::move);
+    auto moveBy = MoveBy::create(0.01667f, Vec2(X, Y));
+    mEnemy->runAction(moveBy);
+  }
 }
 
 void Enemy::Update(float delta)
 {
   mTimePassed += delta;
+
   if (mTimePassed - mDeadTimeStart > 1 && mCurrentState == enemyState::dead && mIsAlive == true)
   {
     mIsAlive = false;
@@ -56,7 +62,7 @@ void Enemy::Update(float delta)
     ChangeState(enemyState::dead);
   }
 
-  if (mCurrentState == enemyState::hit && mTimePassed - mHitAttackTimeStart > 0.5f)
+  if (mCurrentState == enemyState::hit && mTimePassed - mHitAttackTimeStart > 0.3f)
   {
     ChangeState(enemyState::idle);
   }
@@ -72,11 +78,11 @@ bool Enemy::IsAlive()
 void Enemy::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Skeleton/SkeletonFinal.plist");
-  RunAnimation(mEnemyIdle, 1000);
+  RunAnimation(mEnemyIdle, 1000, mIdleFrecv);
   mScene->addChild(mEnemy, 2);
 }
 
-void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns)
+void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFreq)
 {
   auto spritecache = SpriteFrameCache::getInstance();
   Vector<SpriteFrame *> anim;
@@ -84,7 +90,7 @@ void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns)
   {
     anim.pushBack(spritecache->getSpriteFrameByName(aAnimSprites[i]));
   }
-  auto animation = Animation::createWithSpriteFrames(anim, 0.1);
+  auto animation = Animation::createWithSpriteFrames(anim, aFreq);
   cocos2d::Action* action = Repeat::create(Animate::create(animation), aNrRuns);
   mLastAction = action;
   mEnemy->runAction(action);
@@ -97,24 +103,31 @@ void Enemy::ChangeState(enemyState aNewState)
     mCurrentState = aNewState;
     mDeadTimeStart = mTimePassed;
     mEnemy->stopAction(mLastAction);
-    RunAnimation(mEnemyDead, 1);
+    RunAnimation(mEnemyDead, 1, mDeadFrecv);
   }
 
-  if (mCurrentState != enemyState::dead)
+  if (mCurrentState != enemyState::dead && mCurrentState != enemyState::hit)
   {
-    if (aNewState == enemyState::idle)
+    if (aNewState == enemyState::idle && mCurrentState != enemyState::idle)
     {
       mCurrentState = aNewState;
       mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyIdle, 1000);
+      RunAnimation(mEnemyIdle, 1000, mIdleFrecv);
     }
 
-    if (aNewState == enemyState::hit && mCurrentState != enemyState::dead)
+    if (aNewState == enemyState::hit && mCurrentState != enemyState::hit)
     {
       mCurrentState = aNewState;
       mEnemy->stopAction(mLastAction);
       mHitAttackTimeStart = mTimePassed;
-      RunAnimation(mEnemyHit, 1);
+      RunAnimation(mEnemyHit, 1, mHitFrecv);
+    }
+
+    if (aNewState == enemyState::move && mCurrentState != enemyState::move)
+    {
+      mCurrentState = aNewState;
+      mEnemy->stopAction(mLastAction);
+      RunAnimation(mEnemyMove, 1000, mMoveFrecv);
     }
   }
 }

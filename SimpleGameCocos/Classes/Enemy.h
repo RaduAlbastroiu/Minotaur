@@ -28,10 +28,10 @@ public:
   
   void TakeDamage(float damage);
   pair<float, float> GetPosition();
-  cocos2d::Sprite* GetSprite();
+  void MoveAt(float X, float Y);
   void Update(float delta);
   bool IsAlive();
-  void ChangeState(enemyState aNewState);
+
   enemyState GetState();
 
 private:
@@ -42,8 +42,8 @@ private:
   };
 
   void Init();
-  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns);
-  
+  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFreq);
+  void ChangeState(enemyState aNewState);
  
   
   float mHealth = 100;
@@ -58,12 +58,17 @@ private:
   float mDeadTimeStart = -0.5;
   float mHitAttackTimeStart = -0.5;
 
+  float mAttackFrecv = 0.05f;
+  float mIdleFrecv = 0.15f;
+  float mMoveFrecv = 0.065f;
+  float mDeadFrecv = 0.1f;
+  float mHitFrecv = 0.1f;
+
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mEnemy;
 
   enemyState mCurrentState = enemyState::idle;
   position mCurrentPosition;
-  float mSpeed = 4;
 
   vector<string> mEnemyIdle = { "idle_0.png",
     "idle_1.png" ,
@@ -120,7 +125,7 @@ private:
     "dead_12.png",
     "dead_13.png" };
 
-  vector<string> mEnemyWalk = { "walk_0.png",
+  vector<string> mEnemyMove = { "walk_0.png",
     "walk_1.png" ,
     "walk_2.png" ,
     "walk_3.png" ,
