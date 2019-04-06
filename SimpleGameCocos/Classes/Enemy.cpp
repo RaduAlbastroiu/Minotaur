@@ -35,6 +35,12 @@ void Enemy::MoveAt(float X, float Y)
   if (mCurrentState!= enemyState::dead && mCurrentState != enemyState::hit)
   {
     ChangeState(enemyState::move);
+
+    if (X < 0)
+      mEnemy->setFlippedX(true);
+    else
+      mEnemy->setFlippedX(false);
+
     auto moveBy = MoveBy::create(0.01667f, Vec2(X, Y));
     mEnemy->runAction(moveBy);
   }
