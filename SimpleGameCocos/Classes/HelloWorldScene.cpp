@@ -85,18 +85,6 @@ bool HelloWorld::init()
   return true;
 }
 
-void HelloWorld::AddHelloWorld()
-{
-  auto label = Label::createWithSystemFont("Hello World", "Arial", 96);
-  if (label != nullptr)
-  {
-    label->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
-    label->setPosition(cocos2d::Vec2(mWindow.width / 2, mWindow.height / 1.25));
-
-    this->addChild(label, 1);
-  }
-}
-
 void HelloWorld::AddBackground()
 {
   for (int i = 0; i < 3; i++)

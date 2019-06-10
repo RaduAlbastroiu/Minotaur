@@ -29,47 +29,28 @@ void EnemiesCollection::AttackAt(float X, float Y, int aForce)
 
 bool EnemiesCollection::CanMoveAt(float currentX, float currentY, float X, float Y)
 {
-  auto currentPoint = Point(currentX, currentY);
-  auto nextPoint = Point(X, Y);
-  auto width = Director::getInstance()->getVisibleSize().width;
-  auto height = Director::getInstance()->getVisibleSize().height;
+  const auto width = Director::getInstance()->getVisibleSize().width;
+  const auto height = Director::getInstance()->getVisibleSize().height;
 
-  for (auto& enemy : mEnemies)
+  // left margin
+  if (X < currentX && X < 25)
   {
-    if (enemy->IsAlive() == false)
-      continue;
-
-    auto posEnemy = enemy->GetPosition();
-    auto enemyPoint = Point(posEnemy.first, posEnemy.second);
-
-    auto nextDist = enemyPoint.getDistance(nextPoint);
-    auto currentDist = enemyPoint.getDistance(currentPoint);
-
-    if (nextDist < currentDist && nextDist < mMinDistance)
-    {
-      return false;
-    }
-
-    // left margin
-    if (X < currentX && X < 25)
-    {
-      return false;
-    }
-    // right margin
-    if (X > currentX && X > width - 25)
-    {
-      return false;
-    }
-    // top
-    if (Y > currentY && Y > height - 25)
-    {
-      return false;
-    }
-    // bottom
-    if (Y < currentY && Y < 25)
-    {
-      return false;
-    }
+    return false;
+  }
+  // right margin
+  if (X > currentX && X > width - 25)
+  {
+    return false;
+  }
+  // top
+  if (Y > currentY && Y > height - 25)
+  {
+    return false;
+  }
+  // bottom
+  if (Y < currentY && Y < 25)
+  {
+    return false;
   }
 
   return true;

@@ -34,7 +34,6 @@ public:
   static cocos2d::Scene* createScene();
   virtual bool init();
 
-  void AddHelloWorld();
   void AddBackground();
   void update(float delta) override;
   void Reset();
