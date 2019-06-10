@@ -88,10 +88,13 @@ bool HelloWorld::init()
 void HelloWorld::AddHelloWorld()
 {
   auto label = Label::createWithSystemFont("Hello World", "Arial", 96);
-  label->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
-  label->setPosition(cocos2d::Vec2(mWindow.width / 2, mWindow.height / 1.25));
-  
-  this->addChild(label, 1);
+  if (label != nullptr)
+  {
+    label->setAnchorPoint(cocos2d::Vec2(0.5, 0.5));
+    label->setPosition(cocos2d::Vec2(mWindow.width / 2, mWindow.height / 1.25));
+
+    this->addChild(label, 1);
+  }
 }
 
 void HelloWorld::AddBackground()
@@ -101,9 +104,12 @@ void HelloWorld::AddBackground()
     for (int j = 0; j < 2; j++)
     {
       cocos2d::Sprite* background = Sprite::create("grass.png");
-      background->setAnchorPoint(Vec2(0, 0));
-      background->setPosition(Vec2(1024 * i, 1024 * j));
-      this->addChild(background);
+      if (background != nullptr)
+      {
+        background->setAnchorPoint(Vec2(0, 0));
+        background->setPosition(Vec2(1024 * i, 1024 * j));
+        this->addChild(background);
+      }
     }
   }
 }
@@ -151,13 +157,13 @@ void HelloWorld::update(float delta)
   if (mTimePassed - mTimeLastSpawn > mTimeBetweenSpawns && mHero->IsAlive())
   {
     mTimeLastSpawn = mTimePassed;
-    int width = mDirector->getVisibleSize().width;
-    int height = mDirector->getVisibleSize().height;
+    const int width = mDirector->getVisibleSize().width;
+    const int height = mDirector->getVisibleSize().height;
 
     float X = 0;
     float Y = 0;
 
-    auto direction = rand() % 4;
+    const int direction = rand() % 4;
     if (direction == 0)
     {
       X = -50;
@@ -188,7 +194,7 @@ void HelloWorld::update(float delta)
     mTimeBetweenSpawns = mTimeBetweenSpawns * mDifficultyRateIncrease;
   }
 
-  auto killed = mEnemiesCollection.GetNumberKilled();
+  const int killed = mEnemiesCollection.GetNumberKilled();
   mScoreLabel->setString("Killed: " + to_string(killed));
 
   UpdateHero(delta);
