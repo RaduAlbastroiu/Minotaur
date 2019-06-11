@@ -4,6 +4,10 @@
 #include <memory>
 #include <map>
 
+#include "cocos2d.h"
+
+USING_NS_CC;
+
 #define LEFT 1
 #define RIGHT 2
 #define UP 3

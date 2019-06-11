@@ -27,6 +27,7 @@
 #include "cocos2d.h"
 #include "EnemiesCollection.h"
 #include "Hero.h"
+#include "HealthLabel.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -63,6 +64,7 @@ private:
 
   Hero* mHero;
   EnemiesCollection mEnemiesCollection;
+  HealthLabel* healthLabel;
 
   cocos2d::Sprite* aHero;
   cocos2d::Director* mDirector;

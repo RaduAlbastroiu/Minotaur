@@ -55,6 +55,11 @@ bool HelloWorld::init()
   mWindow.width = mDirector->getVisibleSize().width;
   mWindow.height = mDirector->getVisibleSize().height;
 
+  // set healt label
+  healthLabel = new HealthLabel();
+  auto label = healthLabel->GetLabel();
+  this->addChild(label, 100);
+
   AddBackground();
   
   this->scheduleUpdate();
@@ -91,6 +96,9 @@ void HelloWorld::AddBackground()
 void HelloWorld::update(float delta)
 {
   mTimePassed += delta;
+
+  // update health label
+  healthLabel->UpdateValue(mHero->GetHealth());
 
   if (isHeroDead == false && mHero->IsAlive() == false)
   {

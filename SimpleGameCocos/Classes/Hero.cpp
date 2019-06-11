@@ -20,16 +20,11 @@ void Hero::Init()
 
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
 
-  mHealthSprite = cocos2d::Sprite::create("LifeBar/100.png");
-  mHealthSprite->setScale(0.5f);
-  mHealthSprite->setPosition(Director::getInstance()->getVisibleSize().width / 9, Director::getInstance()->getVisibleSize().height / 1.07);
-
   mHero = Sprite::create("MinotaurFirst.png");
   mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
   mHero->setScale(3);
   mHero->setAnchorPoint(Vec2(0.5, 0.5));
 
-  mScene->addChild(mHealthSprite, 100);
   mScene->addChild(mHero, 10);
 
   RunAnimation(mHeroIdle, 1000, mIdleFrecv);
@@ -171,7 +166,6 @@ void Hero::TakeDamage(int damage)
   {
     mHealth -= damage;
     mHealth = max(0, mHealth);
-    mHealthSprite->setTexture(mLifeBar[mHealth / 10]);
     mHitTimeStart = mTimePassed;
   }
 }
@@ -242,6 +236,11 @@ void Hero::GetKeyboardInput()
   mDirection = keyboardListener->GetMoveDirection();
   if (keyboardListener->GetAttackStatus())
     Attack();
+}
+
+int Hero::GetHealth()
+{
+  return mHealth;
 }
 
 pair<float, float> Hero::GetPosition()

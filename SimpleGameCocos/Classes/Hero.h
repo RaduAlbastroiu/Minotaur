@@ -20,6 +20,7 @@ public:
   void Reset();
   void Update(float delta);
   void GetKeyboardInput();
+  int GetHealth();
 
   pair<float, float> GetPosition();
   
@@ -68,7 +69,6 @@ private:
 
   cocos2d::Scene* mScene;
   cocos2d::Sprite* mHero;
-  cocos2d::Sprite* mHealthSprite;
 
   EnemiesCollection* mEnemiesCollection;
 
@@ -108,15 +108,4 @@ private:
   "MinotaurMove_6.png" ,
   "MinotaurMove_7.png" };
 
-  vector<string> mLifeBar = { "LifeBar/0.png",
-  "LifeBar/10.png" ,
-  "LifeBar/20.png" ,
-  "LifeBar/30.png" ,
-  "LifeBar/40.png" ,
-  "LifeBar/50.png" ,
-  "LifeBar/60.png" ,
-  "LifeBar/70.png" ,
-  "LifeBar/80.png" , 
-  "LifeBar/90.png" , 
-  "LifeBar/100.png" };
 };
