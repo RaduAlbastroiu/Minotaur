@@ -1,12 +1,8 @@
 #pragma once
 
 #include "cocos2d.h"
-
-#define LEFT 1
-#define RIGHT 2
-#define UP 3
-#define DOWN 4
-#define NODIRECTION -1
+#include "Includes.h"
+#include "KeyboardListener.h"
 
 USING_NS_CC;
 using namespace std;
@@ -16,7 +12,7 @@ class EnemiesCollection;
 class Hero
 {
 public:
-  Hero(cocos2d::Scene* scene, EnemiesCollection* aEnemiesCollection);
+  Hero(cocos2d::Scene* scene, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
 
   void Attack();
   void SetMoveDirection(int direction);
@@ -24,10 +20,13 @@ public:
   bool IsAlive();
   void Reset();
   void Update(float delta);
+  void GetKeyboardInput();
 
   pair<float, float> GetPosition();
   
 private:
+
+  KeyboardListener* keyboardListener;
 
   int mHealth = 100;
 

@@ -38,17 +38,9 @@ public:
   void update(float delta) override;
   void Reset();
 
-  void InitKeyboard();
-
   CREATE_FUNC(HelloWorld);
 
 private:
-
-  map<cocos2d::EventKeyboard::KeyCode, bool> mKeyboard;
-  bool onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-  bool onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-
-  void UpdateHero(float delta);
 
   float mTimePassed = 0;
   float lastSecond = 0;
@@ -64,7 +56,7 @@ private:
   bool isHeroDead = false;
   float mTimeHeroDead = -0.5f;
 
-  bool isKeyboardPressed = false;
+  KeyboardListener* keyboardListener;
 
   cocos2d::Label* mScoreLabel;
   cocos2d::Label* mResetLabel;
@@ -73,12 +65,7 @@ private:
   EnemiesCollection mEnemiesCollection;
 
   cocos2d::Sprite* aHero;
-  cocos2d::Animation* AttackAnimation;
-
   cocos2d::Director* mDirector;
-
-  cocos2d::Sprite* minotaur;
-  cocos2d::Sprite* lastSprite = nullptr;
 
   struct WindowSize
   {

@@ -30,6 +30,9 @@
     <ClCompile Include="..\Classes\EnemiesCollection.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\KeyboardListener.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -48,6 +51,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\EnemiesCollection.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\KeyboardListener.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Includes.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

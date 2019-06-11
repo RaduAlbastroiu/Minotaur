@@ -45,21 +45,10 @@ bool HelloWorld::init()
     return false;
   }
 
-  // set environment
-  mTimePassed = 0;
-  lastSecond = 0;
-  currentMinotaur = 0;
-  maxMinotaur = 9;
-  minotaurLine = 3;
-
-  mTimeLastSpawn = -0.5f;
-  mTimeBetweenSpawns = 2.5f;
-  mTimeLastUpdate = 1.0f;
-  mTimeUpdateLevel = 5.0f;
-  isHeroDead = false;
-  mTimeHeroDead = -0.5f;
-
-  isKeyboardPressed = false;
+  // set keyboard
+  keyboardListener = new KeyboardListener();
+  auto eventKeyboardListener = keyboardListener->initKeyboard();
+  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventKeyboardListener, this);
 
   // set private members
   mDirector = Director::getInstance();
@@ -67,14 +56,11 @@ bool HelloWorld::init()
   mWindow.height = mDirector->getVisibleSize().height;
 
   AddBackground();
-  //AddHelloWorld();
   
   this->scheduleUpdate();
 
-  InitKeyboard();
-
   mEnemiesCollection = EnemiesCollection();
-  mHero = new Hero(this, &mEnemiesCollection);
+  mHero = new Hero(this, &mEnemiesCollection, keyboardListener);
   mEnemiesCollection.SetHero(mHero);
 
   mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);
@@ -102,18 +88,6 @@ void HelloWorld::AddBackground()
   }
 }
 
-bool HelloWorld::onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
-{
-  mKeyboard[keyCode] = true;
-  return true;
-}
-
-bool HelloWorld::onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event * event)
-{
-  mKeyboard[keyCode] = false;
-  return true;
-}
-
 void HelloWorld::update(float delta)
 {
   mTimePassed += delta;
@@ -135,10 +109,10 @@ void HelloWorld::update(float delta)
       mResetLabel->setTextColor(cocos2d::Color4B::BLACK);
       this->addChild(mResetLabel, 100);
     }
-    if (isKeyboardPressed)
-    {
-      Reset();
-    }
+    //if (isKeyboardPressed)
+    //{
+    //  Reset();
+    //}
   }
 
   // spawn
@@ -185,70 +159,30 @@ void HelloWorld::update(float delta)
   const int killed = mEnemiesCollection.GetNumberKilled();
   mScoreLabel->setString("Killed: " + to_string(killed));
 
-  UpdateHero(delta);
+  mHero->Update(delta);
+  mEnemiesCollection.Update(delta);
 }
 
 void HelloWorld::Reset()
 {
+  // set environment
+  mTimePassed = 0;
+  lastSecond = 0;
+  currentMinotaur = 0;
+  maxMinotaur = 9;
+  minotaurLine = 3;
+
+  mTimeLastSpawn = -0.5f;
+  mTimeBetweenSpawns = 2.5f;
+  mTimeLastUpdate = 1.0f;
+  mTimeUpdateLevel = 5.0f;
+  isHeroDead = false;
+  mTimeHeroDead = -0.5f;
+
   mEnemiesCollection.Reset();
   mHero->Reset();
   mResetLabel->removeFromParent();
   isHeroDead = false;
   this->removeAllChildren();
   init();
-}
-
-void HelloWorld::UpdateHero(float delta)
-{
-  bool moveKeyPressed = false;
-  isKeyboardPressed = false;
-  for (auto keyPressed : mKeyboard)
-  {
-    if (keyPressed.second == true)
-    {
-      isKeyboardPressed = true;
-      auto keyCode = keyPressed.first;
-
-      switch (keyCode) {
-      case EventKeyboard::KeyCode::KEY_A:
-        mHero->SetMoveDirection(LEFT);
-        moveKeyPressed = true;
-        break;
-      case EventKeyboard::KeyCode::KEY_D:
-        mHero->SetMoveDirection(RIGHT);
-        moveKeyPressed = true;
-        break;
-      case EventKeyboard::KeyCode::KEY_W:
-        mHero->SetMoveDirection(UP);
-        moveKeyPressed = true;
-        break;
-      case EventKeyboard::KeyCode::KEY_S:
-        mHero->SetMoveDirection(DOWN);
-        moveKeyPressed = true;
-        break;
-      case EventKeyboard::KeyCode::KEY_SPACE:
-        mHero->Attack();
-        break;
-      default:
-        break;
-      }
-
-      break;
-    }
-  }
-
-  if (moveKeyPressed == false)
-    mHero->SetMoveDirection(NODIRECTION);
-
-  mHero->Update(delta);
-  mEnemiesCollection.Update(delta);
-}
-
-
-void HelloWorld::InitKeyboard()
-{
-  auto listener = EventListenerKeyboard::create();
-  listener->onKeyPressed = CC_CALLBACK_2(HelloWorld::onKeyPressed, this);
-  listener->onKeyReleased = CC_CALLBACK_2(HelloWorld::onKeyReleased, this);
-  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 }

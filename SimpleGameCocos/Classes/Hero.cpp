@@ -1,10 +1,12 @@
+
 #include "Hero.h"
 #include "EnemiesCollection.h"
 
-Hero::Hero(cocos2d::Scene * scene, EnemiesCollection* aEnemiesCollection)
+Hero::Hero(cocos2d::Scene * scene, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener)
 {
   mScene = scene;
   mEnemiesCollection = aEnemiesCollection;
+  keyboardListener = aKeyboardListener;
 
   Init();
 }
@@ -158,7 +160,7 @@ void Hero::Attack()
   if (mCurrentState != heroState::attack && mCurrentState != heroState::dead)
   {
     mAttackTimeStart = mTimePassed;
-    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), 50);
+    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), HERO_ATTACK_RADIUS);
     ChangeState(heroState::attack);
   }
 }
@@ -194,6 +196,7 @@ void Hero::Reset()
 void Hero::Update(float delta)
 {
   mTimePassed += delta;
+  GetKeyboardInput();
 
   // change direction
   if (mHealth > 0)
@@ -237,6 +240,13 @@ void Hero::Update(float delta)
   {
     ChangeState(heroState::idle);
   }
+}
+
+void Hero::GetKeyboardInput()
+{
+  SetMoveDirection(keyboardListener->GetMoveDirection());
+  if (keyboardListener->GetAttackStatus())
+    Attack();
 }
 
 pair<float, float> Hero::GetPosition()
