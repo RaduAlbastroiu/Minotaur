@@ -26,35 +26,6 @@ void EnemiesCollection::AttackAt(float X, float Y, int aForce)
   }
 }
 
-bool EnemiesCollection::CanMoveAt(float currentX, float currentY, float X, float Y)
-{
-  const auto width = Director::getInstance()->getVisibleSize().width;
-  const auto height = Director::getInstance()->getVisibleSize().height;
-
-  // left margin
-  if (X < currentX && X < 25)
-  {
-    return false;
-  }
-  // right margin
-  if (X > currentX && X > width - 25)
-  {
-    return false;
-  }
-  // top
-  if (Y > currentY && Y > height - 25)
-  {
-    return false;
-  }
-  // bottom
-  if (Y < currentY && Y < 25)
-  {
-    return false;
-  }
-
-  return true;
-}
-
 int EnemiesCollection::GetNumberKilled()
 {
   auto killed = 0;

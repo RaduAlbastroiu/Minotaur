@@ -148,7 +148,7 @@ void Hero::MovePosition()
     Y -= mSpeed;
   }
   
-  if (mEnemiesCollection->CanMoveAt(mHero->getPositionX(), mHero->getPositionY(), X, Y))
+  if (CanMoveAt(mHero->getPositionX(), mHero->getPositionY(), X, Y))
   {
     auto moveBy = MoveBy::create(0.01667f, direction);
     mHero->runAction(moveBy);
@@ -163,11 +163,6 @@ void Hero::Attack()
     mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), HERO_ATTACK_RADIUS);
     ChangeState(heroState::attack);
   }
-}
-
-void Hero::SetMoveDirection(int direction)
-{
-  mDirection = direction;
 }
 
 void Hero::TakeDamage(int damage)
@@ -244,7 +239,7 @@ void Hero::Update(float delta)
 
 void Hero::GetKeyboardInput()
 {
-  SetMoveDirection(keyboardListener->GetMoveDirection());
+  mDirection = keyboardListener->GetMoveDirection();
   if (keyboardListener->GetAttackStatus())
     Attack();
 }
@@ -255,4 +250,33 @@ pair<float, float> Hero::GetPosition()
   pos.first = mHero->getPositionX();
   pos.second = mHero->getPositionY();
   return pos;
+}
+
+bool Hero::CanMoveAt(float currentX, float currentY, float X, float Y)
+{
+  const auto width = Director::getInstance()->getVisibleSize().width;
+  const auto height = Director::getInstance()->getVisibleSize().height;
+
+  // left margin
+  if (X < currentX && X < 25)
+  {
+    return false;
+  }
+  // right margin
+  if (X > currentX && X > width - 25)
+  {
+    return false;
+  }
+  // top
+  if (Y > currentY && Y > height - 25)
+  {
+    return false;
+  }
+  // bottom
+  if (Y < currentY && Y < 25)
+  {
+    return false;
+  }
+
+  return true;
 }

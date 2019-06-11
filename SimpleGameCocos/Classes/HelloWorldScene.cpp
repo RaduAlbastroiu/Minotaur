@@ -109,10 +109,10 @@ void HelloWorld::update(float delta)
       mResetLabel->setTextColor(cocos2d::Color4B::BLACK);
       this->addChild(mResetLabel, 100);
     }
-    //if (isKeyboardPressed)
-    //{
-    //  Reset();
-    //}
+    if (keyboardListener->IsKeyboardPresed())
+    {
+      Reset();
+    }
   }
 
   // spawn

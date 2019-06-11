@@ -15,7 +15,6 @@ public:
   Hero(cocos2d::Scene* scene, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
 
   void Attack();
-  void SetMoveDirection(int direction);
   void TakeDamage(int damage);
   bool IsAlive();
   void Reset();
@@ -25,6 +24,8 @@ public:
   pair<float, float> GetPosition();
   
 private:
+
+  bool CanMoveAt(float currentX, float currentY, float X, float Y);
 
   KeyboardListener* keyboardListener;
 
