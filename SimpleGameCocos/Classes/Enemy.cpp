@@ -93,7 +93,6 @@ void Enemy::Update(float delta)
   {
     ChangeState(enemyState::idle);
   }
-
 }
 
 bool Enemy::IsAlive()

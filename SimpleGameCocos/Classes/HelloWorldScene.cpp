@@ -50,11 +50,6 @@ bool HelloWorld::init()
   auto eventKeyboardListener = keyboardListener->initKeyboard();
   Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventKeyboardListener, this);
 
-  // set private members
-  mDirector = Director::getInstance();
-  mWindow.width = mDirector->getVisibleSize().width;
-  mWindow.height = mDirector->getVisibleSize().height;
-
   // set healt label
   healthLabel = new HealthLabel();
   auto label = healthLabel->GetLabel();
@@ -127,8 +122,8 @@ void HelloWorld::update(float delta)
   if (mTimePassed - mTimeLastSpawn > mTimeBetweenSpawns && mHero->IsAlive())
   {
     mTimeLastSpawn = mTimePassed;
-    const int width = mDirector->getVisibleSize().width;
-    const int height = mDirector->getVisibleSize().height;
+    const int width = Director::getInstance()->getVisibleSize().width;
+    const int height = Director::getInstance()->getVisibleSize().height;
 
     float X = 0;
     float Y = 0;

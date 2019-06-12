@@ -57,21 +57,11 @@ private:
   bool isHeroDead = false;
   float mTimeHeroDead = -0.5f;
 
-  KeyboardListener* keyboardListener;
-
   cocos2d::Label* mScoreLabel;
   cocos2d::Label* mResetLabel;
 
   Hero* mHero;
   EnemiesCollection mEnemiesCollection;
+  KeyboardListener* keyboardListener;
   HealthLabel* healthLabel;
-
-  cocos2d::Sprite* aHero;
-  cocos2d::Director* mDirector;
-
-  struct WindowSize
-  {
-    int height;
-    int width;
-  }mWindow;
 };

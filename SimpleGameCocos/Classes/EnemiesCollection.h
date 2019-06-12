@@ -29,6 +29,8 @@ private:
 
   int mHitAtOnceMax = 1;
 
+  int killed = 0;
+
   vector<unique_ptr<Enemy>> mEnemies;
 };
 
