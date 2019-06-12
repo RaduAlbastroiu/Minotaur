@@ -11,7 +11,7 @@ class EnemiesCollection
 public:
 
   void AddEnemy(cocos2d::Scene* aScene, float X, float Y);
-  void AttackAt(float X, float Y, int aForce);
+  void AttackCollection();
   int GetNumberKilled();
   void Reset();
   void Update(float delta);
@@ -21,11 +21,6 @@ public:
 private:
 
   Hero* mHero;
-
-  float mDistAttack = 175;
-  float mDistForEnemy = 125;
-  float mMinDistance = 100;
-  float mSpeed = 2.0f;
 
   int mHitAtOnceMax = 1;
 

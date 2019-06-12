@@ -60,7 +60,10 @@ bool HelloWorld::init()
   this->scheduleUpdate();
 
   mEnemiesCollection = EnemiesCollection();
-  mHero = new Hero(this, &mEnemiesCollection, keyboardListener);
+  mHero = new Hero(&mEnemiesCollection, keyboardListener);
+  auto heroSprite = mHero->GetSprite();
+  this->addChild(heroSprite);
+
   mEnemiesCollection.SetHero(mHero);
 
   mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);

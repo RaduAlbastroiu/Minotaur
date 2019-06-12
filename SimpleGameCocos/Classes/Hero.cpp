@@ -2,9 +2,8 @@
 #include "Hero.h"
 #include "EnemiesCollection.h"
 
-Hero::Hero(cocos2d::Scene * scene, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener)
+Hero::Hero(EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener)
 {
-  mScene = scene;
   mEnemiesCollection = aEnemiesCollection;
   keyboardListener = aKeyboardListener;
 
@@ -25,9 +24,7 @@ void Hero::Init()
   mHero->setScale(3);
   mHero->setAnchorPoint(Vec2(0.5, 0.5));
 
-  mScene->addChild(mHero, 10);
-
-  RunAnimation(mHeroIdle, 1000, mIdleFrecv);
+  RunAnimation(mHeroIdle, 1000, 0.15f);
 }
 
 void Hero::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv)
@@ -52,21 +49,20 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::move;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroMove, 1000, mMoveFrecv);
+      RunAnimation(mHeroMove, 1000, 0.065f);
     }
     if (newState == heroState::attack)
     {
       mCurrentState = heroState::attack;
       mHero->stopAction(mLastAction);
-      mAttackTimeStart = mTimePassed;
-      RunAnimation(mHeroAttack, 1000, mAttackFrecv);
+      RunAnimation(mHeroAttack, 1000, 0.045f);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1, mDeadFrecv);
+      RunAnimation(mHeroDead, 1, 0.1f);
     }
   }
   if (mCurrentState == heroState::move)
@@ -75,21 +71,20 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::idle;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroIdle, 1000, mIdleFrecv);
+      RunAnimation(mHeroIdle, 1000, 0.15f);
     }
     if (newState == heroState::attack)
     {
       mCurrentState = heroState::attack;
       mHero->stopAction(mLastAction);
-      mAttackTimeStart = mTimePassed;
-      RunAnimation(mHeroAttack, 1000, mAttackFrecv);
+      RunAnimation(mHeroAttack, 1000, 0.045f);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1, mDeadFrecv);
+      RunAnimation(mHeroDead, 1, 0.1f);
     }
   }
   if (mCurrentState == heroState::attack)
@@ -98,24 +93,25 @@ void Hero::ChangeState(heroState newState)
     {
       mCurrentState = heroState::idle;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroIdle, 1000, mIdleFrecv);
+      RunAnimation(mHeroIdle, 1000, 0.15f);
     }
     if (newState == heroState::move)
     {
       mCurrentState = heroState::move;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroMove, 1000, mMoveFrecv);
+      RunAnimation(mHeroMove, 1000, 0.065f);
     }
     if (newState == heroState::dead)
     {
       mCurrentState = heroState::dead;
       mDeadTimeStart = mTimePassed;
       mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1, mDeadFrecv);
+      RunAnimation(mHeroDead, 1, 0.1f);
     }
   }
 }
 
+// move in the mDirection
 void Hero::MovePosition()
 {
   auto direction = Vec2(0, 0);
@@ -155,7 +151,7 @@ void Hero::Attack()
   if (mCurrentState != heroState::attack && mCurrentState != heroState::dead)
   {
     mAttackTimeStart = mTimePassed;
-    mEnemiesCollection->AttackAt(mHero->getPositionX(), mHero->getPositionY(), HERO_ATTACK_RADIUS);
+    mEnemiesCollection->AttackCollection();
     ChangeState(heroState::attack);
   }
 }
@@ -225,6 +221,7 @@ void Hero::Update(float delta)
     ChangeState(heroState::dead);
   }
 
+  // after hit go back to idle
   if (mCurrentState == heroState::hit && mTimePassed - mHitTimeStart < 0.5f)
   {
     ChangeState(heroState::idle);
@@ -241,6 +238,11 @@ void Hero::GetKeyboardInput()
 int Hero::GetHealth()
 {
   return mHealth;
+}
+
+cocos2d::Sprite* Hero::GetSprite()
+{
+  return mHero;
 }
 
 pair<float, float> Hero::GetPosition()

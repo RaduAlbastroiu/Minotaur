@@ -12,7 +12,7 @@ class EnemiesCollection;
 class Hero
 {
 public:
-  Hero(cocos2d::Scene* scene, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
+  Hero(EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
 
   void Attack();
   void TakeDamage(int damage);
@@ -21,6 +21,8 @@ public:
   void Update(float delta);
   void GetKeyboardInput();
   int GetHealth();
+
+  cocos2d::Sprite* GetSprite();
 
   pair<float, float> GetPosition();
   
@@ -61,13 +63,6 @@ private:
   float mDeadTimeStart = -0.5;
   float mHitTimeStart = -0.5;
 
-  float mAttackFrecv = 0.045f;
-  float mIdleFrecv = 0.15f;
-  float mMoveFrecv = 0.065f;
-  float mDeadFrecv = 0.1f;
-  float mHitFrecv = 0.1f;
-
-  cocos2d::Scene* mScene;
   cocos2d::Sprite* mHero;
 
   EnemiesCollection* mEnemiesCollection;

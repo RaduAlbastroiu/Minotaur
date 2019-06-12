@@ -7,9 +7,10 @@ void EnemiesCollection::AddEnemy(cocos2d::Scene * aScene, float X, float Y)
   mEnemies.push_back(make_unique<Enemy>(Enemy(aScene, X, Y)));
 }
 
-void EnemiesCollection::AttackAt(float X, float Y, int aForce)
+void EnemiesCollection::AttackCollection()
 {
-  auto heroPoint = Point(X, Y);
+  auto pos = mHero->GetPosition();
+  auto heroPoint = Point(pos.first, pos.second);
   int count = mHitAtOnceMax;
   for (auto& enemy : mEnemies)
   {
@@ -18,9 +19,9 @@ void EnemiesCollection::AttackAt(float X, float Y, int aForce)
 
     auto dist = heroPoint.getDistance(enemyPoint);
     
-    if (dist < mDistAttack && count > 0 && enemy->IsAlive())
+    if (dist < 175 && count > 0 && enemy->IsAlive())
     {
-      enemy->TakeDamage(aForce);
+      enemy->TakeDamage(HERO_STRENGTH);
       count--;
     }
   }
@@ -45,10 +46,6 @@ int EnemiesCollection::GetNumberKilled()
 
 void EnemiesCollection::Reset()
 {
-  for (auto& enemy : mEnemies)
-  {
-    enemy.reset();
-  }
   mEnemies.clear();
 }
 
@@ -57,54 +54,65 @@ void EnemiesCollection::Update(float delta)
   auto heroPos = mHero->GetPosition();
   Vec2 heroPoint = Vec2(heroPos.first, heroPos.second);
 
+  // set action for each enemy
   for (auto& enemy : mEnemies)
   {
+    // update enemy
     enemy->Update(delta);
-    
+
+    // get enemy position
     auto enemyPos = enemy->GetPosition();
     Vec2 enemyPoint = Vec2(enemyPos.first, enemyPos.second);
 
+    // distance to target
     auto dist = heroPoint.getDistance(enemyPoint);
 
+    // if target alive
     if (mHero->IsAlive())
     {
-      if (dist > mDistForEnemy)
+      // if not in range for attack
+      if (dist > 125)
       {
         int xDirection = 0;
         int yDiretion = 0;
 
         if (heroPos.first - 20 < enemyPos.first)
         {
-          xDirection = -1 * mSpeed;
+          xDirection = -2;
         }
         if (heroPos.first > enemyPos.first)
         {
-          xDirection = mSpeed;
+          xDirection = 2;
         }
 
         if (heroPos.second - 20 < enemyPos.second)
         {
-          yDiretion = -1 * mSpeed;
+          yDiretion = -2;
         }
         if (heroPos.second > enemyPos.second)
         {
-          yDiretion = mSpeed;
+          yDiretion = 2;
         }
 
+        // move towards target
         enemy->MoveAt(xDirection, yDiretion);
       }
+      // if in range for attack
       else
       {
-        if (enemy->GetRegisterDamageAndReset())
+        // if the enemy provoked damage to the target
+        if (enemy->DidProvokeDamage())
         {
           mHero->TakeDamage(10);
         }
+        // try provoke damage
         else
         {
           enemy->Attack();
         }
       }
     }
+    // if target dead
     else
     {
       enemy->ChangeState(enemyState::idle);

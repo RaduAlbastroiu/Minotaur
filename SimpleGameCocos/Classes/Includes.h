@@ -16,4 +16,6 @@ USING_NS_CC;
 
 #define HERO_ATTACK_RADIUS 50
 
+#define HERO_STRENGTH 50
+
 using namespace std;
