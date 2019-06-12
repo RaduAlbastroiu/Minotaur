@@ -4,9 +4,6 @@
 #include "Includes.h"
 #include "KeyboardListener.h"
 
-USING_NS_CC;
-using namespace std;
-
 class EnemiesCollection;
 
 class Hero
