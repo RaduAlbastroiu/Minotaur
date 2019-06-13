@@ -9,14 +9,10 @@
 class Character
 {
 public:
-  Character();
 
-  void Attack();
+  virtual void Attack() = 0;
   void TakeDamage(int damage);
   bool IsAlive();
-  void Reset();
-  void Update(float delta);
-  void GetKeyboardInput();
   int GetHealth();
 
   cocos2d::Sprite* GetSprite();
@@ -25,18 +21,11 @@ public:
 
 private:
 
-  bool CanMoveAt(float currentX, float currentY, float X, float Y);
-
-  KeyboardListener* keyboardListener;
-
-  int mHealth = 100;
-
-  cocos2d::Action* mLastAction;
-
   struct position
   {
     float x, y;
   };
+  position currentPosition;
 
   enum internalState
   {
@@ -46,23 +35,21 @@ private:
     hit,
     dead
   };
-
-  void Init();
-  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv);
-
-  void ChangeState(internalState newState);
-  void MovePosition();
-
-  int mDirection = 0;
-
-  float mTimePassed = 0;
-  float mAttackTimeStart = -0.5;
-  float mDeadTimeStart = -0.5;
-  float mHitTimeStart = -0.5;
-
-  cocos2d::Sprite* mHero;
-
   internalState currentState = internalState::idle;
-  position mCurrentPosition;
-  float mSpeed = 6;
+
+  virtual void RunAttackAnimation() = 0;
+  virtual void RunIdleAnimation() = 0;
+  virtual void RunMoveAnimation() = 0;
+  virtual void RunHitAnimation() = 0;
+  virtual void RunDeadAnimation() = 0;
+  void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv);
+  void ChangeState(internalState newState);
+
+  cocos2d::Sprite* sprite;
+  cocos2d::Action* lastAction;
+
+  int health = 100;
+  float timeDeadPassed = 0;
+  float timeHitPassed = 0;
+  float timePassed = 0;;
 };
