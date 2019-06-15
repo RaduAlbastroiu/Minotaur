@@ -12,7 +12,7 @@ public:
 
   virtual void Update(float delta) = 0;
 
-private:
+protected:
 
   float timePassed = 0;
 };

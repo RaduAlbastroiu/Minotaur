@@ -2,10 +2,11 @@
 
 #include "cocos2d.h"
 #include "Includes.h"
+#include "IUpdateable.h"
 #include "KeyboardListener.h"
 
 
-class Character
+class Character : public IUpdateable
 {
 public:
 
@@ -51,5 +52,4 @@ private:
   float timeAttackStart = 0;
   float timeDeadStart = 0;
   float timeHitStart = 0;
-  float timePassed = 0;;
 };
