@@ -62,7 +62,7 @@ bool HelloWorld::init()
   mEnemiesCollection = EnemiesCollection();
   mHero = new Hero(&mEnemiesCollection, keyboardListener);
   auto heroSprite = mHero->GetSprite();
-  this->addChild(heroSprite);
+  this->addChild(heroSprite, 10);
 
   mEnemiesCollection.SetHero(mHero);
 
