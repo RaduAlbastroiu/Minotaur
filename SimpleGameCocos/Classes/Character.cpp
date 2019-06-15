@@ -1,6 +1,15 @@
 
 #include "Character.h"
 
+void Character::Attack()
+{
+  if (currentState != internalState::attack && currentState != internalState::hit && currentState != internalState::dead)
+  {
+    timeAttackStart = timePassed;
+    ChangeState(internalState::attack);
+  }
+}
+
 void Character::TakeDamage(int damage)
 {
   health -= damage;
@@ -59,7 +68,7 @@ void Character::ChangeState(internalState newState)
     if (newState == internalState::dead)
     {
       currentState = internalState::dead;
-      timeDeadPassed = timePassed;
+      timeDeadStart = timePassed;
       sprite->stopAction(lastAction);
       RunDeadAnimation();
     }
@@ -81,7 +90,7 @@ void Character::ChangeState(internalState newState)
     if (newState == internalState::dead)
     {
       currentState = internalState::dead;
-      timeDeadPassed = timePassed;
+      timeDeadStart = timePassed;
       sprite->stopAction(lastAction);
       RunDeadAnimation();
     }
@@ -103,7 +112,7 @@ void Character::ChangeState(internalState newState)
     if (newState == internalState::dead)
     {
       currentState = internalState::dead;
-      timeDeadPassed = timePassed;
+      timeDeadStart = timePassed;
       sprite->stopAction(lastAction);
       RunDeadAnimation();
     }
@@ -122,7 +131,7 @@ void Character::ChangeState(internalState newState)
   {
     currentState = newState;
     sprite->stopAction(lastAction);
-    timeHitPassed = timePassed;
+    timeHitStart = timePassed;
     RunHitAnimation();
   }
 }

@@ -5,12 +5,11 @@
 #include "KeyboardListener.h"
 
 
-
 class Character
 {
 public:
 
-  virtual void Attack() = 0;
+  void Attack();
   void TakeDamage(int damage);
   bool IsAlive();
   int GetHealth();
@@ -49,7 +48,8 @@ private:
   cocos2d::Action* lastAction;
 
   int health = 100;
-  float timeDeadPassed = 0;
-  float timeHitPassed = 0;
+  float timeAttackStart = 0;
+  float timeDeadStart = 0;
+  float timeHitStart = 0;
   float timePassed = 0;;
 };
