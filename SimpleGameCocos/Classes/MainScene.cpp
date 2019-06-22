@@ -109,23 +109,6 @@ void MainScene::update(float delta)
     mTimeHeroDead = mTimePassed;
   }
 
-  // reset
-  if (isHeroDead && mTimePassed - mTimeHeroDead > 2.5f)
-  {
-    if (mResetLabel == nullptr)
-    {
-      mResetLabel = Label::createWithSystemFont("Press any key to play again!", "Arial", 40);
-      mResetLabel->setAnchorPoint(Vec2(0.5, 0.5));
-      mResetLabel->setPosition(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 4 * 3);
-      mResetLabel->setTextColor(cocos2d::Color4B::BLACK);
-      this->addChild(mResetLabel, 100);
-    }
-    if (keyboardListener->IsKeyboardPresed())
-    {
-      Reset();
-    }
-  }
-
   // spawn
   if (mTimePassed - mTimeLastSpawn > mTimeBetweenSpawns && mHero->IsAlive())
   {
@@ -171,28 +154,4 @@ void MainScene::update(float delta)
   mScoreLabel->setString("Killed: " + to_string(killed));
 
   updater->UpdateAll(delta);
-}
-
-void MainScene::Reset()
-{
-  // set environment
-  mTimePassed = 0;
-  lastSecond = 0;
-  currentMinotaur = 0;
-  maxMinotaur = 9;
-  minotaurLine = 3;
-
-  mTimeLastSpawn = -0.5f;
-  mTimeBetweenSpawns = 2.5f;
-  mTimeLastUpdate = 1.0f;
-  mTimeUpdateLevel = 5.0f;
-  isHeroDead = false;
-  mTimeHeroDead = -0.5f;
-
-  mEnemiesCollection->Reset();
-  mHero->Reset();
-  mResetLabel->removeFromParent();
-  isHeroDead = false;
-  this->removeAllChildren();
-  init();
 }

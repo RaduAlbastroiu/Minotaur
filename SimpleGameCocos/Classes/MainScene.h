@@ -38,7 +38,6 @@ public:
 
   void AddBackground();
   void update(float delta) override;
-  void Reset();
 
   CREATE_FUNC(MainScene);
 
@@ -54,12 +53,11 @@ private:
   float mTimeBetweenSpawns = 1.0f;
   float mTimeLastUpdate = 1.0f;
   float mTimeUpdateLevel = 5.0f;
-  float mDifficultyRateIncrease = 0.7;
+  float mDifficultyRateIncrease = 0.5;
   bool isHeroDead = false;
   float mTimeHeroDead = -0.5f;
 
   cocos2d::Label* mScoreLabel;
-  cocos2d::Label* mResetLabel;
 
   unique_ptr<Hero> mHero;
   unique_ptr<EnemiesCollection> mEnemiesCollection;

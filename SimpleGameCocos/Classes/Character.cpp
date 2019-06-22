@@ -53,87 +53,89 @@ void Character::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aF
 
 void Character::ChangeState(internalState newState)
 {
-  if (currentState == internalState::idle)
-  {
-    if (newState == internalState::move)
-    {
-      currentState = internalState::move;
-      characterSprite->stopAction(lastAction);
-      RunMoveAnimation();
-    }
-    if (newState == internalState::attack)
-    {
-      currentState = internalState::attack;
-      characterSprite->stopAction(lastAction);
-      RunAttackAnimation();
-    }
-    if (newState == internalState::dead)
-    {
-      currentState = internalState::dead;
-      timeDeadStart = timePassed;
-      characterSprite->stopAction(lastAction);
-      RunDeadAnimation();
-    }
-  }
-  if (currentState == internalState::move)
-  {
-    if (newState == internalState::idle)
-    {
-      currentState = internalState::idle;
-      characterSprite->stopAction(lastAction);
-      RunIdleAnimation();
-    }
-    if (newState == internalState::attack)
-    {
-      currentState = internalState::attack;
-      characterSprite->stopAction(lastAction);
-      RunAttackAnimation();
-    }
-    if (newState == internalState::dead)
-    {
-      currentState = internalState::dead;
-      timeDeadStart = timePassed;
-      characterSprite->stopAction(lastAction);
-      RunDeadAnimation();
-    }
-  }
-  if (currentState == internalState::attack)
-  {
-    if (newState == internalState::idle)
-    {
-      currentState = internalState::idle;
-      characterSprite->stopAction(lastAction);
-      RunIdleAnimation();
-    }
-    if (newState == internalState::move)
-    {
-      currentState = internalState::move;
-      characterSprite->stopAction(lastAction);
-      RunMoveAnimation();
-    }
-    if (newState == internalState::dead)
-    {
-      currentState = internalState::dead;
-      timeDeadStart = timePassed;
-      characterSprite->stopAction(lastAction);
-      RunDeadAnimation();
-    }
-  }
-  if (currentState == internalState::hit)
-  {
-    if (newState == internalState::idle)
-    {
-      currentState = internalState::idle;
-      characterSprite->stopAction(lastAction);
-      RunIdleAnimation();
-    }
-  }
-
-  if (newState == internalState::hit && currentState != newState && currentState != internalState::dead)
+  if (newState == internalState::hit && currentState != internalState::hit && currentState != internalState::dead)
   {
     currentState = newState;
     characterSprite->stopAction(lastAction);
     timeHitStart = timePassed;
     RunHitAnimation();
+  }
+
+  switch (currentState) 
+  {
+  case internalState::idle:
+    if (newState == internalState::move)
+    {
+      currentState = internalState::move;
+      characterSprite->stopAction(lastAction);
+      RunMoveAnimation();
+    }
+    if (newState == internalState::attack)
+    {
+      currentState = internalState::attack;
+      characterSprite->stopAction(lastAction);
+      RunAttackAnimation();
+    }
+    if (newState == internalState::dead)
+    {
+      currentState = internalState::dead;
+      timeDeadStart = timePassed;
+      characterSprite->stopAction(lastAction);
+      RunDeadAnimation();
+    }
+    break;
+
+  case internalState::move:
+    if (newState == internalState::idle)
+    {
+      currentState = internalState::idle;
+      characterSprite->stopAction(lastAction);
+      RunIdleAnimation();
+    }
+    if (newState == internalState::attack)
+    {
+      currentState = internalState::attack;
+      characterSprite->stopAction(lastAction);
+      RunAttackAnimation();
+    }
+    if (newState == internalState::dead)
+    {
+      currentState = internalState::dead;
+      timeDeadStart = timePassed;
+      characterSprite->stopAction(lastAction);
+      RunDeadAnimation();
+    }
+    break;
+
+  case internalState::attack:
+    if (newState == internalState::idle)
+    {
+      currentState = internalState::idle;
+      characterSprite->stopAction(lastAction);
+      RunIdleAnimation();
+    }
+    if (newState == internalState::move)
+    {
+      currentState = internalState::move;
+      characterSprite->stopAction(lastAction);
+      RunMoveAnimation();
+    }
+    if (newState == internalState::dead)
+    {
+      currentState = internalState::dead;
+      timeDeadStart = timePassed;
+      characterSprite->stopAction(lastAction);
+      RunDeadAnimation();
+    }
+    break;
+
+  case internalState::hit:
+    if (newState == internalState::idle)
+    {
+      currentState = internalState::idle;
+      characterSprite->stopAction(lastAction);
+      RunIdleAnimation();
+    }
+    break;
   }
 }

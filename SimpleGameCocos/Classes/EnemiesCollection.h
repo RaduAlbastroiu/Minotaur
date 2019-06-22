@@ -14,7 +14,6 @@ public:
   void AddEnemy(cocos2d::Scene* aScene, float X, float Y);
   void AttackCollection();
   int GetNumberKilled();
-  void Reset();
   void SetHero(Hero* aHero);
 
 private:
@@ -23,7 +22,7 @@ private:
 
   Hero* mHero;
 
-  int mHitAtOnceMax = 1;
+  int mHitAtOnceMax = 2;
 
   int killed = 0;
 

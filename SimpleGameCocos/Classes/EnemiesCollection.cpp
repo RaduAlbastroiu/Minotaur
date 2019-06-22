@@ -44,15 +44,7 @@ int EnemiesCollection::GetNumberKilled()
     }
   }
 
-  // update game mechanics
-  mHitAtOnceMax = min(killed / 6 + 1, 5);
-
   return killed;
-}
-
-void EnemiesCollection::Reset()
-{
-  mEnemies.clear();
 }
 
 void EnemiesCollection::DoUpdate(float delta)
@@ -79,7 +71,7 @@ void EnemiesCollection::DoUpdate(float delta)
         int xDirection = 0;
         int yDiretion = 0;
 
-        if (heroPos.first - 20 < enemyPos.first)
+        if (heroPos.first < enemyPos.first)
         {
           xDirection = -2;
         }
@@ -88,7 +80,7 @@ void EnemiesCollection::DoUpdate(float delta)
           xDirection = 2;
         }
 
-        if (heroPos.second - 20 < enemyPos.second)
+        if (heroPos.second < enemyPos.second)
         {
           yDiretion = -2;
         }
