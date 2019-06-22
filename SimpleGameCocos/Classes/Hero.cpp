@@ -106,7 +106,7 @@ void Hero::Attack()
 {
   if (currentState != internalState::attack && currentState != internalState::dead)
   {
-    mAttackTimeStart = mTimePassed;
+    timeAttackStart = timePassed;
     mEnemiesCollection->AttackCollection();
     ChangeState(internalState::attack);
   }
@@ -121,7 +121,7 @@ void Hero::Reset()
 
 void Hero::Update(float delta)
 {
-  mTimePassed += delta;
+  timePassed += delta;
   GetKeyboardInput();
 
   // change direction
@@ -151,7 +151,7 @@ void Hero::Update(float delta)
   }
 
   // change between attack and idle
-  if (currentState == internalState::attack && mTimePassed - mAttackTimeStart > 0.3f)
+  if (currentState == internalState::attack && timePassed - timeAttackStart > 0.3f)
   {
     ChangeState(internalState::idle);
   }
@@ -163,7 +163,7 @@ void Hero::Update(float delta)
   }
 
   // after hit go back to idle
-  if (currentState == internalState::hit && mTimePassed - mHitTimeStart < 0.5f)
+  if (currentState == internalState::hit && timePassed - timeHitStart < 0.5f)
   {
     ChangeState(internalState::idle);
   }
@@ -174,6 +174,12 @@ void Hero::GetKeyboardInput()
   mDirection = keyboardListener->GetMoveDirection();
   if (keyboardListener->GetAttackStatus())
     Attack();
+}
+
+void Hero::TakeDamage(int damage)
+{
+  health -= damage;
+  health = max(0, health);
 }
 
 int Hero::GetHealth()

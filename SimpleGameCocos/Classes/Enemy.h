@@ -12,65 +12,32 @@
 USING_NS_CC;
 using namespace std;
 
-enum enemyState
-{
-  attack,
-  move,
-  idle,
-  hit,
-  dead
-};
-
-class Enemy
+class Enemy : public Character
 {
 public:
   Enemy(cocos2d::Scene* aScene, float X, float Y);
   
-  void TakeDamage(float damage);
-  pair<float, float> GetPosition();
   void MoveAt(float X, float Y);
-  bool Attack();
-  void ChangeState(enemyState aNewState);
+  void Idle();
   bool DidFinishAttack();
   void Update(float delta);
-  bool IsAlive();
-
-  enemyState GetState();
 
 private:
-
-  struct position
-  {
-    float x, y;
-  };
 
   void Init();
   void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFreq);
   
-  float mHealth = 100;
-  cocos2d::Action* mLastAction;
-
-  int mDirection = 0;
+  // Inherited via Character
+  virtual void RunAttackAnimation() override;
+  virtual void RunIdleAnimation() override;
+  virtual void RunMoveAnimation() override;
+  virtual void RunHitAnimation() override;
+  virtual void RunDeadAnimation() override;
 
   bool provokeDamage = false;
-  bool mIsAlive = true;
   bool mIsVisible = true;
-  float mTimePassed = 0;
-  float mAttackTimeStart = -0.5;
-  float mDeadTimeStart = -0.5;
-  float mHitTimeStart = -0.5;
-
-  float mAttackFrecv = 0.05f;
-  float mIdleFrecv = 0.15f;
-  float mMoveFrecv = 0.065f;
-  float mDeadFrecv = 0.1f;
-  float mHitFrecv = 0.1f;
 
   cocos2d::Scene* mScene;
-  cocos2d::Sprite* mEnemy;
-
-  enemyState mCurrentState = enemyState::idle;
-  position mCurrentPosition;
 
   vector<string> mEnemyIdle = { "idle_0.png",
     "idle_1.png" ,
@@ -140,5 +107,6 @@ private:
     "walk_10.png",
     "walk_11.png",
     "walk_12.png"};
+
 };
 

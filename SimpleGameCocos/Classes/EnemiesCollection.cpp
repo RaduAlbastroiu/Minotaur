@@ -115,7 +115,7 @@ void EnemiesCollection::Update(float delta)
     // if target dead
     else
     {
-      enemy->ChangeState(enemyState::idle);
+      enemy->Idle();
     }
   }
 }

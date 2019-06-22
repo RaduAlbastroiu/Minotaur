@@ -16,6 +16,7 @@ public:
   void Reset();
   void Update(float delta) override;
   void GetKeyboardInput();
+  void TakeDamage(int damage) override;
   int GetHealth();
 
   cocos2d::Sprite* GetSprite();
@@ -44,11 +45,6 @@ protected:
   void MovePosition();
 
   int mDirection = 0;
-
-  float mTimePassed = 0;
-  float mAttackTimeStart = -0.5;
-  float mDeadTimeStart = -0.5;
-  float mHitTimeStart = -0.5;
 
   EnemiesCollection* mEnemiesCollection;
 

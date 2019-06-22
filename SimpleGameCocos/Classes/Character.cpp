@@ -14,6 +14,7 @@ void Character::TakeDamage(int damage)
 {
   health -= damage;
   health = max(0, health);
+  ChangeState(internalState::hit);
 }
 
 bool Character::IsAlive()

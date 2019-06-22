@@ -6,101 +6,69 @@ Enemy::Enemy(cocos2d::Scene * scene, float X, float Y)
 {
   mScene = scene;
 
-  mCurrentPosition.x = X;
-  mCurrentPosition.y = Y;
-  mDirection = NODIRECTION;
-  mCurrentState = enemyState::idle;
-
-  mEnemy = Sprite::create("Skeleton/Skeleton.png");
-  mEnemy->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
-  mEnemy->setScale(3);
-  mEnemy->setAnchorPoint(Vec2(0.5, 0.5));
+  characterSprite = Sprite::create("Skeleton/Skeleton.png");
+  characterSprite->setPosition(Vec2(X, Y));
+  characterSprite->setScale(3);
+  characterSprite->setAnchorPoint(Vec2(0.5, 0.5));
 
   Init();
 }
 
-void Enemy::TakeDamage(float damage)
-{
-  mHealth -= damage;
-  ChangeState(enemyState::hit);
-}
-
-pair<float, float> Enemy::GetPosition()
-{
-  return make_pair(mEnemy->getPositionX(), mEnemy->getPositionY());
-}
-
 void Enemy::MoveAt(float X, float Y)
 {
-  if (mCurrentState!= enemyState::dead && mCurrentState != enemyState::hit)
+  if (currentState!= internalState::dead && currentState != internalState::hit)
   {
-    ChangeState(enemyState::move);
+    ChangeState(internalState::move);
 
     if (X < 0)
-      mEnemy->setFlippedX(true);
+      characterSprite->setFlippedX(true);
     else
-      mEnemy->setFlippedX(false);
+      characterSprite->setFlippedX(false);
 
     auto moveBy = MoveBy::create(0.01667f, Vec2(X, Y));
-    mEnemy->runAction(moveBy);
+    characterSprite->runAction(moveBy);
   }
 }
 
-bool Enemy::Attack()
+void Enemy::Idle()
 {
-  if (mCurrentState != enemyState::attack && mCurrentState != enemyState::hit && mCurrentState != enemyState::dead)
-  {
-    mAttackTimeStart = mTimePassed;
-    ChangeState(enemyState::attack);
-    return true;
-  }
-  return false;
+  ChangeState(internalState::idle);
 }
 
 void Enemy::Update(float delta)
 {
-  mTimePassed += delta;
+  timePassed += delta;
 
-  if (mTimePassed - mAttackTimeStart > 1.0f && mCurrentState == enemyState::attack)
+  if (timePassed - timeAttackStart > 1.0f && currentState == internalState::attack)
   {
     provokeDamage = true;
-    ChangeState(enemyState::idle);
+    ChangeState(internalState::idle);
   }
 
-  if (mTimePassed - mDeadTimeStart > 1 && mCurrentState == enemyState::dead && mIsAlive == true)
-  {
-    mIsAlive = false;
-  }
-
-  if (mTimePassed - mDeadTimeStart > 2.5 && mCurrentState == enemyState::dead && mIsVisible == true)
+  if (timePassed - timeDeadStart > 2.5 && currentState == internalState::dead && mIsVisible == true)
   {
     mIsVisible = false;
-    mEnemy->setOpacity(255);
+    characterSprite->setOpacity(255);
     auto fadeOut = CCFadeOut::create(1.0f);
-    mEnemy->runAction(fadeOut);
+    characterSprite->runAction(fadeOut);
   }
 
-  if (mHealth <= 0 && mCurrentState != enemyState::dead)
+  if (health <= 0 && currentState != internalState::dead)
   {
-    ChangeState(enemyState::dead);
+    ChangeState(internalState::dead);
   }
 
-  if (mCurrentState == enemyState::hit && mTimePassed - mHitTimeStart > 0.7f)
+  if (currentState == internalState::hit && timePassed - timeHitStart > 0.7f)
   {
-    ChangeState(enemyState::idle);
+    ChangeState(internalState::idle);
   }
-}
-
-bool Enemy::IsAlive()
-{
-  return mIsAlive;
 }
 
 void Enemy::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Skeleton/SkeletonFinal.plist");
-  RunAnimation(mEnemyIdle, 1000, mIdleFrecv);
-  mScene->addChild(mEnemy, 2);
+  RunAnimation(mEnemyIdle, 1000, 0.15f);
+  mScene->addChild(characterSprite, 2);
 }
 
 void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFreq)
@@ -113,97 +81,33 @@ void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFreq)
   }
   auto animation = Animation::createWithSpriteFrames(anim, aFreq);
   cocos2d::Action* action = Repeat::create(Animate::create(animation), aNrRuns);
-  mLastAction = action;
-  mEnemy->runAction(action);
+  lastAction = action;
+  characterSprite->runAction(action);
 }
 
-void Enemy::ChangeState(enemyState newState)
+void Enemy::RunAttackAnimation()
 {
-  if (mCurrentState == enemyState::idle)
-  {
-    if (newState == enemyState::move)
-    {
-      mCurrentState = enemyState::move;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyMove, 1000, mMoveFrecv);
-    }
-    if (newState == enemyState::attack)
-    {
-      mCurrentState = enemyState::attack;
-      mEnemy->stopAction(mLastAction);
-      mAttackTimeStart = mTimePassed;
-      RunAnimation(mEnemyAttack, 1, mAttackFrecv);
-    }
-    if (newState == enemyState::dead)
-    {
-      mCurrentState = enemyState::dead;
-      mDeadTimeStart = mTimePassed;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyDead, 1, mDeadFrecv);
-    }
-  }
-  if (mCurrentState == enemyState::move)
-  {
-    if (newState == enemyState::idle)
-    {
-      mCurrentState = enemyState::idle;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyIdle, 1000, mIdleFrecv);
-    }
-    if (newState == enemyState::attack)
-    {
-      mCurrentState = enemyState::attack;
-      mEnemy->stopAction(mLastAction);
-      mAttackTimeStart = mTimePassed;
-      RunAnimation(mEnemyAttack, 1, mAttackFrecv);
-    }
-    if (newState == enemyState::dead)
-    {
-      mCurrentState = enemyState::dead;
-      mDeadTimeStart = mTimePassed;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyDead, 1, mDeadFrecv);
-    }
-  }
-  if (mCurrentState == enemyState::attack)
-  {
-    if (newState == enemyState::idle)
-    {
-      mCurrentState = enemyState::idle;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyIdle, 1000, mIdleFrecv);
-    }
-    if (newState == enemyState::move)
-    {
-      mCurrentState = enemyState::move;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyMove, 1000, mMoveFrecv);
-    }
-    if (newState == enemyState::dead)
-    {
-      mCurrentState = enemyState::dead;
-      mDeadTimeStart = mTimePassed;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyDead, 1, mDeadFrecv);
-    }
-  }
-  if (mCurrentState == enemyState::hit)
-  {
-    if (newState == enemyState::idle)
-    {
-      mCurrentState = enemyState::idle;
-      mEnemy->stopAction(mLastAction);
-      RunAnimation(mEnemyIdle, 1000, mIdleFrecv);
-    }
-  }
+  RunAnimation(mEnemyAttack, 1, 0.05f);
+}
 
-  if (newState == enemyState::hit && mCurrentState != newState && mCurrentState != enemyState::dead)
-  {
-    mCurrentState = newState;
-    mEnemy->stopAction(mLastAction);
-    mHitTimeStart = mTimePassed;
-    RunAnimation(mEnemyHit, 1, mHitFrecv);
-  }
+void Enemy::RunIdleAnimation()
+{
+  RunAnimation(mEnemyIdle, 1000, 0.15f);
+}
+
+void Enemy::RunMoveAnimation()
+{
+  RunAnimation(mEnemyMove, 1000, 0.065f);
+}
+
+void Enemy::RunHitAnimation()
+{
+  RunAnimation(mEnemyHit, 1, 0.1f);
+}
+
+void Enemy::RunDeadAnimation()
+{
+  RunAnimation(mEnemyDead, 1, 0.1f);
 }
 
 // if the enemy provoked damage to the target
@@ -214,7 +118,3 @@ bool Enemy::DidFinishAttack()
   return before;
 }
 
-enemyState Enemy::GetState()
-{
-  return mCurrentState;
-}
