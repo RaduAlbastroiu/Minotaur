@@ -152,7 +152,7 @@ void Hero::DoUpdate(float delta)
   }
 
   // change between attack and idle
-  if (currentState == internalState::attack && timePassed - timeAttackStart > 0.3f)
+  if (currentState == internalState::attack && timePassed - timeAttackStart > 0.6f)
   {
     ChangeState(internalState::idle);
   }

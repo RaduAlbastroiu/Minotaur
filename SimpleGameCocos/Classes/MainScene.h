@@ -30,7 +30,7 @@
 #include "HealthLabel.h"
 #include "Updater.h"
 
-class HelloWorld : public cocos2d::Scene
+class MainScene : public cocos2d::Scene
 {
 public:
   static cocos2d::Scene* createScene();
@@ -40,7 +40,7 @@ public:
   void update(float delta) override;
   void Reset();
 
-  CREATE_FUNC(HelloWorld);
+  CREATE_FUNC(MainScene);
 
 private:
 
@@ -61,9 +61,9 @@ private:
   cocos2d::Label* mScoreLabel;
   cocos2d::Label* mResetLabel;
 
-  Hero* mHero;
-  EnemiesCollection* mEnemiesCollection;
-  KeyboardListener* keyboardListener;
-  HealthLabel* healthLabel;
-  Updater* updater;
+  unique_ptr<Hero> mHero;
+  unique_ptr<EnemiesCollection> mEnemiesCollection;
+  unique_ptr<KeyboardListener> keyboardListener;
+  unique_ptr<HealthLabel> healthLabel;
+  unique_ptr<Updater> updater;
 };

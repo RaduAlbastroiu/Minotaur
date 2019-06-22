@@ -38,7 +38,7 @@ void Enemy::DoUpdate(float delta)
 {
   timePassed += delta;
 
-  if (timePassed - timeAttackStart > 1.0f && currentState == internalState::attack)
+  if (timePassed - timeAttackStart > 2.0f && currentState == internalState::attack)
   {
     provokeDamage = true;
     ChangeState(internalState::idle);

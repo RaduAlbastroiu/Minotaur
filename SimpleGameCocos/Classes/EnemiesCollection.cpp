@@ -63,9 +63,6 @@ void EnemiesCollection::DoUpdate(float delta)
   // set action for each enemy
   for (auto& enemy : mEnemies)
   {
-    // update enemy
-    enemy->DoUpdate(delta);
-
     // get enemy position
     auto enemyPos = enemy->GetPosition();
     Vec2 enemyPoint = Vec2(enemyPos.first, enemyPos.second);

@@ -22,23 +22,23 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "HelloWorldScene.h"
+#include "MainScene.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
 
-Scene* HelloWorld::createScene()
+Scene* MainScene::createScene()
 {
   // 'scene' is an autorelease object
   auto scene = Scene::create();
-  auto layer = HelloWorld::create();
+  auto layer = MainScene::create();
 
   scene->addChild(layer);
 
   return scene;
 }
 
-bool HelloWorld::init()
+bool MainScene::init()
 {
   if (!Scene::init())
   {
@@ -46,38 +46,40 @@ bool HelloWorld::init()
   }
 
   // create updater
-  updater = new Updater();
+  updater = make_unique<Updater>();
 
   // set keyboard
-  keyboardListener = new KeyboardListener();
+  keyboardListener = make_unique<KeyboardListener>();
   auto eventKeyboardListener = keyboardListener->initKeyboard();
   Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventKeyboardListener, this);
 
   // set healt label
-  healthLabel = new HealthLabel();
+  healthLabel = make_unique<HealthLabel>();
   auto label = healthLabel->GetLabel();
   this->addChild(label, 100);
 
   AddBackground();
   
-  this->scheduleUpdate();
-
-  mEnemiesCollection = new EnemiesCollection(updater);
-  mHero = new Hero(updater, mEnemiesCollection, keyboardListener);
+  // create enemy collection
+  mEnemiesCollection = make_unique<EnemiesCollection>(updater.get());
+  mHero = make_unique<Hero>(updater.get(), mEnemiesCollection.get(), keyboardListener.get());
   auto heroSprite = mHero->GetSprite();
   this->addChild(heroSprite, 10);
 
-  mEnemiesCollection->SetHero(mHero);
+  mEnemiesCollection->SetHero(mHero.get());
 
+  // add score label
   mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);
   mScoreLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10 * 9, Director::getInstance()->getVisibleSize().height / 1.07);
   mScoreLabel->setTextColor(cocos2d::Color4B::BLACK);
   this->addChild(mScoreLabel);
 
+  this->scheduleUpdate();
+
   return true;
 }
 
-void HelloWorld::AddBackground()
+void MainScene::AddBackground()
 {
   for (int i = 0; i < 3; i++)
   {
@@ -94,7 +96,7 @@ void HelloWorld::AddBackground()
   }
 }
 
-void HelloWorld::update(float delta)
+void MainScene::update(float delta)
 {
   mTimePassed += delta;
 
@@ -171,7 +173,7 @@ void HelloWorld::update(float delta)
   updater->UpdateAll(delta);
 }
 
-void HelloWorld::Reset()
+void MainScene::Reset()
 {
   // set environment
   mTimePassed = 0;
