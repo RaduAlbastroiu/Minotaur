@@ -10,22 +10,15 @@ class Character : public IUpdateable
 {
 public:
 
-  void Attack();
-  void TakeDamage(int damage);
-  bool IsAlive();
-  int GetHealth();
+  virtual void Attack();
+  virtual void TakeDamage(int damage);
+  virtual bool IsAlive();
 
-  cocos2d::Sprite* GetSprite();
+  virtual cocos2d::Sprite* GetSprite();
 
-  pair<float, float> GetPosition();
+  virtual pair<float, float> GetPosition();
 
-private:
-
-  struct position
-  {
-    float x, y;
-  };
-  position currentPosition;
+protected:
 
   enum internalState
   {
@@ -45,7 +38,7 @@ private:
   void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv);
   void ChangeState(internalState newState);
 
-  cocos2d::Sprite* sprite;
+  cocos2d::Sprite* characterSprite;
   cocos2d::Action* lastAction;
 
   int health = 100;

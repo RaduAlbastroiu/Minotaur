@@ -2,55 +2,45 @@
 
 #include "cocos2d.h"
 #include "Includes.h"
+#include "Character.h"
 #include "KeyboardListener.h"
 
 class EnemiesCollection;
 
-class Hero
+class Hero : public Character
 {
 public:
   Hero(EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
 
-  void Attack();
-  void TakeDamage(int damage);
-  bool IsAlive();
+  void Attack() override;
   void Reset();
-  void Update(float delta);
+  void Update(float delta) override;
   void GetKeyboardInput();
   int GetHealth();
 
   cocos2d::Sprite* GetSprite();
 
-  pair<float, float> GetPosition();
-  
-private:
+protected:
 
   bool CanMoveAt(float currentX, float currentY, float X, float Y);
 
   KeyboardListener* keyboardListener;
 
-  int mHealth = 100;
-
-  cocos2d::Action* mLastAction;
-
-  struct position
-  {
-    float x, y;
-  };
-
-  enum heroState
-  {
-    attack,
-    move,
-    idle, 
-    hit,
-    dead
-  };
-
   void Init();
   void RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv);
 
-  void ChangeState(heroState newState);
+
+  // Inherited via Character
+  virtual void RunAttackAnimation() override;
+
+  virtual void RunIdleAnimation() override;
+
+  virtual void RunMoveAnimation() override;
+
+  virtual void RunHitAnimation() override;
+
+  virtual void RunDeadAnimation() override;
+
   void MovePosition();
 
   int mDirection = 0;
@@ -60,12 +50,8 @@ private:
   float mDeadTimeStart = -0.5;
   float mHitTimeStart = -0.5;
 
-  cocos2d::Sprite* mHero;
-
   EnemiesCollection* mEnemiesCollection;
 
-  heroState mCurrentState = heroState::idle;
-  position mCurrentPosition;
   float mSpeed = 6;
 
   vector<string> mHeroAttack = { "MinotaurAttack_0.png",

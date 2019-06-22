@@ -61,14 +61,10 @@ void Enemy::Update(float delta)
 {
   mTimePassed += delta;
 
-  if (mTimePassed - mAttackTimeStart > 1.25f && mCurrentState == enemyState::attack)
-  {
-    ChangeState(enemyState::idle);
-  }
-
-  if (mTimePassed - mAttackTimeStart > 0.5f && mCurrentState == enemyState::attack)
+  if (mTimePassed - mAttackTimeStart > 1.0f && mCurrentState == enemyState::attack)
   {
     provokeDamage = true;
+    ChangeState(enemyState::idle);
   }
 
   if (mTimePassed - mDeadTimeStart > 1 && mCurrentState == enemyState::dead && mIsAlive == true)
@@ -211,7 +207,7 @@ void Enemy::ChangeState(enemyState newState)
 }
 
 // if the enemy provoked damage to the target
-bool Enemy::DidProvokeDamage()
+bool Enemy::DidFinishAttack()
 {
   auto before = provokeDamage;
   provokeDamage = false;

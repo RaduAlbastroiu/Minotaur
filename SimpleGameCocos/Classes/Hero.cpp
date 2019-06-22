@@ -12,17 +12,19 @@ Hero::Hero(EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardLis
 
 void Hero::Init()
 {
-  mCurrentPosition.x = Director::getInstance()->getVisibleSize().width / 2;
-  mCurrentPosition.y = Director::getInstance()->getVisibleSize().height / 2;
   mDirection = NODIRECTION;
-  mCurrentState = heroState::idle;
+  currentState = internalState::idle;
 
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Minotaur.plist");
 
-  mHero = Sprite::create("MinotaurFirst.png");
-  mHero->setPosition(Vec2(mCurrentPosition.x, mCurrentPosition.y));
-  mHero->setScale(3);
-  mHero->setAnchorPoint(Vec2(0.5, 0.5));
+  characterSprite = Sprite::create("MinotaurFirst.png");
+
+  auto X = Director::getInstance()->getVisibleSize().width / 2;
+  auto Y = Director::getInstance()->getVisibleSize().height / 2;
+  
+  characterSprite->setPosition(Vec2(X, Y));
+  characterSprite->setScale(3);
+  characterSprite->setAnchorPoint(Vec2(0.5, 0.5));
 
   RunAnimation(mHeroIdle, 1000, 0.15f);
 }
@@ -37,86 +39,16 @@ void Hero::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv)
   }
   auto animation = Animation::createWithSpriteFrames(anim, aFrecv);
   cocos2d::Action* action = Repeat::create(Animate::create(animation), aNrRuns);
-  mLastAction = action;
-  mHero->runAction(action);
-}
-
-void Hero::ChangeState(heroState newState)
-{
-  if (mCurrentState == heroState::idle)
-  {
-    if (newState == heroState::move)
-    {
-      mCurrentState = heroState::move;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroMove, 1000, 0.065f);
-    }
-    if (newState == heroState::attack)
-    {
-      mCurrentState = heroState::attack;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroAttack, 1000, 0.045f);
-    }
-    if (newState == heroState::dead)
-    {
-      mCurrentState = heroState::dead;
-      mDeadTimeStart = mTimePassed;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1, 0.1f);
-    }
-  }
-  if (mCurrentState == heroState::move)
-  {
-    if (newState == heroState::idle)
-    {
-      mCurrentState = heroState::idle;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroIdle, 1000, 0.15f);
-    }
-    if (newState == heroState::attack)
-    {
-      mCurrentState = heroState::attack;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroAttack, 1000, 0.045f);
-    }
-    if (newState == heroState::dead)
-    {
-      mCurrentState = heroState::dead;
-      mDeadTimeStart = mTimePassed;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1, 0.1f);
-    }
-  }
-  if (mCurrentState == heroState::attack)
-  {
-    if (newState == heroState::idle)
-    {
-      mCurrentState = heroState::idle;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroIdle, 1000, 0.15f);
-    }
-    if (newState == heroState::move)
-    {
-      mCurrentState = heroState::move;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroMove, 1000, 0.065f);
-    }
-    if (newState == heroState::dead)
-    {
-      mCurrentState = heroState::dead;
-      mDeadTimeStart = mTimePassed;
-      mHero->stopAction(mLastAction);
-      RunAnimation(mHeroDead, 1, 0.1f);
-    }
-  }
+  lastAction = action;
+  characterSprite->runAction(action);
 }
 
 // move in the mDirection
 void Hero::MovePosition()
 {
   auto direction = Vec2(0, 0);
-  float X = mHero->getPositionX();
-  float Y = mHero->getPositionY();
+  float X = characterSprite->getPositionX();
+  float Y = characterSprite->getPositionY();
 
   if (mDirection == LEFT)
   {
@@ -139,43 +71,52 @@ void Hero::MovePosition()
     Y -= mSpeed;
   }
   
-  if (CanMoveAt(mHero->getPositionX(), mHero->getPositionY(), X, Y))
+  if (CanMoveAt(characterSprite->getPositionX(), characterSprite->getPositionY(), X, Y))
   {
     auto moveBy = MoveBy::create(0.01667f, direction);
-    mHero->runAction(moveBy);
+    characterSprite->runAction(moveBy);
   }
+}
+
+void Hero::RunAttackAnimation()
+{
+  RunAnimation(mHeroAttack, 1000, 0.045f);
+}
+
+void Hero::RunIdleAnimation()
+{
+  RunAnimation(mHeroIdle, 1000, 0.15f);
+}
+
+void Hero::RunMoveAnimation()
+{
+  RunAnimation(mHeroMove, 1000, 0.065f);
+}
+
+void Hero::RunHitAnimation()
+{
+}
+
+void Hero::RunDeadAnimation()
+{
+  RunAnimation(mHeroDead, 1, 0.1f);
 }
 
 void Hero::Attack()
 {
-  if (mCurrentState != heroState::attack && mCurrentState != heroState::dead)
+  if (currentState != internalState::attack && currentState != internalState::dead)
   {
     mAttackTimeStart = mTimePassed;
     mEnemiesCollection->AttackCollection();
-    ChangeState(heroState::attack);
+    ChangeState(internalState::attack);
   }
-}
-
-void Hero::TakeDamage(int damage)
-{
-  if (mTimePassed - mHitTimeStart > 1.0f)
-  {
-    mHealth -= damage;
-    mHealth = max(0, mHealth);
-    mHitTimeStart = mTimePassed;
-  }
-}
-
-bool Hero::IsAlive()
-{
-  return mHealth > 0;
 }
 
 void Hero::Reset()
 {
   Init();
-  mHealth = 100;
-  mCurrentState = heroState::idle;
+  health = 100;
+  currentState = internalState::idle;
 }
 
 void Hero::Update(float delta)
@@ -184,47 +125,47 @@ void Hero::Update(float delta)
   GetKeyboardInput();
 
   // change direction
-  if (mHealth > 0)
+  if (health > 0)
   {
     if (mDirection == LEFT)
-      mHero->setFlippedX(true);
+      characterSprite->setFlippedX(true);
     if (mDirection == RIGHT)
-      mHero->setFlippedX(false);
+      characterSprite->setFlippedX(false);
   }
 
   // change position relative to framerate
-  if (mCurrentState == heroState::move)
+  if (currentState == internalState::move)
   {
     MovePosition();
   }
 
   // change between walking and idling
-  if (mDirection != NODIRECTION && mCurrentState == heroState::idle)
+  if (mDirection != NODIRECTION && currentState == internalState::idle)
   {
-    ChangeState(heroState::move);
+    ChangeState(internalState::move);
   }
 
-  if (mDirection == NODIRECTION && mCurrentState == heroState::move)
+  if (mDirection == NODIRECTION && currentState == internalState::move)
   {
-    ChangeState(heroState::idle);
+    ChangeState(internalState::idle);
   }
 
   // change between attack and idle
-  if (mCurrentState == heroState::attack && mTimePassed - mAttackTimeStart > 0.3f)
+  if (currentState == internalState::attack && mTimePassed - mAttackTimeStart > 0.3f)
   {
-    ChangeState(heroState::idle);
+    ChangeState(internalState::idle);
   }
 
   // update health 
-  if (mHealth <= 0 && mCurrentState != heroState::dead)
+  if (health <= 0 && currentState != internalState::dead)
   {
-    ChangeState(heroState::dead);
+    ChangeState(internalState::dead);
   }
 
   // after hit go back to idle
-  if (mCurrentState == heroState::hit && mTimePassed - mHitTimeStart < 0.5f)
+  if (currentState == internalState::hit && mTimePassed - mHitTimeStart < 0.5f)
   {
-    ChangeState(heroState::idle);
+    ChangeState(internalState::idle);
   }
 }
 
@@ -237,20 +178,12 @@ void Hero::GetKeyboardInput()
 
 int Hero::GetHealth()
 {
-  return mHealth;
+  return health;
 }
 
 cocos2d::Sprite* Hero::GetSprite()
 {
-  return mHero;
-}
-
-pair<float, float> Hero::GetPosition()
-{
-  pair<float, float> pos;
-  pos.first = mHero->getPositionX();
-  pos.second = mHero->getPositionY();
-  return pos;
+  return characterSprite;
 }
 
 bool Hero::CanMoveAt(float currentX, float currentY, float X, float Y)

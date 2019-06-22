@@ -31,7 +31,7 @@ public:
   void MoveAt(float X, float Y);
   bool Attack();
   void ChangeState(enemyState aNewState);
-  bool DidProvokeDamage();
+  bool DidFinishAttack();
   void Update(float delta);
   bool IsAlive();
 

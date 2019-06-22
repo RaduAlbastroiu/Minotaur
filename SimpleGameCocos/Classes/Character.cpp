@@ -13,6 +13,7 @@ void Character::Attack()
 void Character::TakeDamage(int damage)
 {
   health -= damage;
+  health = max(0, health);
 }
 
 bool Character::IsAlive()
@@ -20,19 +21,14 @@ bool Character::IsAlive()
   return health > 0;
 }
 
-int Character::GetHealth()
-{
-  return health;
-}
-
 cocos2d::Sprite* Character::GetSprite()
 {
-  return sprite;
+  return characterSprite;
 }
 
 pair<float, float> Character::GetPosition()
 {
-  return make_pair(currentPosition.x, currentPosition.y);
+  return make_pair(characterSprite->getPositionX(), characterSprite->getPositionY());
 }
 
 void Character::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFrecv)
@@ -46,7 +42,7 @@ void Character::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aF
   auto animation = Animation::createWithSpriteFrames(anim, aFrecv);
   cocos2d::Action* action = Repeat::create(Animate::create(animation), aNrRuns);
   lastAction = action;
-  sprite->runAction(action);
+  characterSprite->runAction(action);
 }
 
 void Character::ChangeState(internalState newState)
@@ -56,20 +52,20 @@ void Character::ChangeState(internalState newState)
     if (newState == internalState::move)
     {
       currentState = internalState::move;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunMoveAnimation();
     }
     if (newState == internalState::attack)
     {
       currentState = internalState::attack;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunAttackAnimation();
     }
     if (newState == internalState::dead)
     {
       currentState = internalState::dead;
       timeDeadStart = timePassed;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunDeadAnimation();
     }
   }
@@ -78,20 +74,20 @@ void Character::ChangeState(internalState newState)
     if (newState == internalState::idle)
     {
       currentState = internalState::idle;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunIdleAnimation();
     }
     if (newState == internalState::attack)
     {
       currentState = internalState::attack;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunAttackAnimation();
     }
     if (newState == internalState::dead)
     {
       currentState = internalState::dead;
       timeDeadStart = timePassed;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunDeadAnimation();
     }
   }
@@ -100,20 +96,20 @@ void Character::ChangeState(internalState newState)
     if (newState == internalState::idle)
     {
       currentState = internalState::idle;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunIdleAnimation();
     }
     if (newState == internalState::move)
     {
       currentState = internalState::move;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunMoveAnimation();
     }
     if (newState == internalState::dead)
     {
       currentState = internalState::dead;
       timeDeadStart = timePassed;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunDeadAnimation();
     }
   }
@@ -122,7 +118,7 @@ void Character::ChangeState(internalState newState)
     if (newState == internalState::idle)
     {
       currentState = internalState::idle;
-      sprite->stopAction(lastAction);
+      characterSprite->stopAction(lastAction);
       RunIdleAnimation();
     }
   }
@@ -130,7 +126,7 @@ void Character::ChangeState(internalState newState)
   if (newState == internalState::hit && currentState != newState && currentState != internalState::dead)
   {
     currentState = newState;
-    sprite->stopAction(lastAction);
+    characterSprite->stopAction(lastAction);
     timeHitStart = timePassed;
     RunHitAnimation();
   }

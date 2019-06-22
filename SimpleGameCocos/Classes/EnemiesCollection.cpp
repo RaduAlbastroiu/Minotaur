@@ -101,7 +101,7 @@ void EnemiesCollection::Update(float delta)
       else
       {
         // if the enemy provoked damage to the target
-        if (enemy->DidProvokeDamage())
+        if (enemy->DidFinishAttack())
         {
           mHero->TakeDamage(10);
         }
