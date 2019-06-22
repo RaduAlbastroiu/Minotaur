@@ -15,7 +15,7 @@ using namespace std;
 class Enemy : public Character
 {
 public:
-  Enemy(cocos2d::Scene* aScene, float X, float Y);
+  Enemy(Updater* updater, float X, float Y);
   
   void MoveAt(float X, float Y);
   void Idle();
@@ -38,8 +38,6 @@ private:
 
   bool provokeDamage = false;
   bool mIsVisible = true;
-
-  cocos2d::Scene* mScene;
 
   vector<string> mEnemyIdle = { "idle_0.png",
     "idle_1.png" ,

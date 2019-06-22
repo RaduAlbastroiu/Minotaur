@@ -1,6 +1,11 @@
 
 #include "Character.h"
 
+Character::Character(Updater* updater)
+  :Updatable(updater)
+{
+}
+
 void Character::Attack()
 {
   if (currentState != internalState::attack && currentState != internalState::hit && currentState != internalState::dead)

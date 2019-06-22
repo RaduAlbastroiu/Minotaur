@@ -39,7 +39,10 @@
     <ClCompile Include="..\Classes\Character.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Updateable.cpp">
+    <ClCompile Include="..\Classes\Updater.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Updatable.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +77,10 @@
     <ClInclude Include="..\Classes\Character.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Updateable.h">
+    <ClInclude Include="..\Classes\Updater.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Updatable.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

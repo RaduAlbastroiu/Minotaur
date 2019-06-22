@@ -2,13 +2,14 @@
 
 #include "cocos2d.h"
 #include "Includes.h"
-#include "Updateable.h"
+#include "Updatable.h"
 #include "KeyboardListener.h"
 
 
-class Character : public Updateable
+class Character : public Updatable
 {
 public:
+  Character(Updater* updater);
 
   virtual void Attack();
   virtual void TakeDamage(int damage);

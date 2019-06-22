@@ -2,10 +2,9 @@
 #include "Enemy.h"
 
 
-Enemy::Enemy(cocos2d::Scene * scene, float X, float Y)
+Enemy::Enemy(Updater* updater, float X, float Y)
+  : Character(updater)
 {
-  mScene = scene;
-
   characterSprite = Sprite::create("Skeleton/Skeleton.png");
   characterSprite->setPosition(Vec2(X, Y));
   characterSprite->setScale(3);
@@ -68,7 +67,6 @@ void Enemy::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Skeleton/SkeletonFinal.plist");
   RunAnimation(mEnemyIdle, 1000, 0.15f);
-  mScene->addChild(characterSprite, 2);
 }
 
 void Enemy::RunAnimation(vector<string>& aAnimSprites, int aNrRuns, float aFreq)

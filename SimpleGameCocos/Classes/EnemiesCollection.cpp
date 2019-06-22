@@ -2,9 +2,15 @@
 #include "EnemiesCollection.h"
 
 
+EnemiesCollection::EnemiesCollection(Updater* updater)
+  :Updatable(updater)
+{
+}
+
 void EnemiesCollection::AddEnemy(cocos2d::Scene * aScene, float X, float Y)
 {
-  mEnemies.push_back(make_unique<Enemy>(Enemy(aScene, X, Y)));
+  mEnemies.push_back(make_unique<Enemy>(updater, X, Y));
+  aScene->addChild(mEnemies.back()->GetSprite());
 }
 
 void EnemiesCollection::AttackCollection()
@@ -49,7 +55,7 @@ void EnemiesCollection::Reset()
   mEnemies.clear();
 }
 
-void EnemiesCollection::Update(float delta)
+void EnemiesCollection::DoUpdate(float delta)
 {
   auto heroPos = mHero->GetPosition();
   Vec2 heroPoint = Vec2(heroPos.first, heroPos.second);

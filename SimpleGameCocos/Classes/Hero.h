@@ -10,7 +10,7 @@ class EnemiesCollection;
 class Hero : public Character
 {
 public:
-  Hero(EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
+  Hero(Updater* updater, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
 
   void Attack() override;
   void Reset();

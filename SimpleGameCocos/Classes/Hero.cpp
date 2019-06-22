@@ -2,7 +2,8 @@
 #include "Hero.h"
 #include "EnemiesCollection.h"
 
-Hero::Hero(EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener)
+Hero::Hero(Updater* updater, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener)
+  : Character(updater)
 {
   mEnemiesCollection = aEnemiesCollection;
   keyboardListener = aKeyboardListener;

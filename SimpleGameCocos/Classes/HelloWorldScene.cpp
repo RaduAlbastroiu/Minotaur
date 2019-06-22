@@ -45,6 +45,9 @@ bool HelloWorld::init()
     return false;
   }
 
+  // create updater
+  updater = new Updater();
+
   // set keyboard
   keyboardListener = new KeyboardListener();
   auto eventKeyboardListener = keyboardListener->initKeyboard();
@@ -59,12 +62,12 @@ bool HelloWorld::init()
   
   this->scheduleUpdate();
 
-  mEnemiesCollection = EnemiesCollection();
-  mHero = new Hero(&mEnemiesCollection, keyboardListener);
+  mEnemiesCollection = new EnemiesCollection(updater);
+  mHero = new Hero(updater, mEnemiesCollection, keyboardListener);
   auto heroSprite = mHero->GetSprite();
   this->addChild(heroSprite, 10);
 
-  mEnemiesCollection.SetHero(mHero);
+  mEnemiesCollection->SetHero(mHero);
 
   mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);
   mScoreLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10 * 9, Director::getInstance()->getVisibleSize().height / 1.07);
@@ -153,7 +156,7 @@ void HelloWorld::update(float delta)
       Y = -50;
     }
 
-    mEnemiesCollection.AddEnemy(this, X, Y);
+    mEnemiesCollection->AddEnemy(this, X, Y);
   }
 
   if (mTimePassed - mTimeLastUpdate > mTimeUpdateLevel && mHero->IsAlive())
@@ -162,11 +165,10 @@ void HelloWorld::update(float delta)
     mTimeBetweenSpawns = mTimeBetweenSpawns * mDifficultyRateIncrease;
   }
 
-  const int killed = mEnemiesCollection.GetNumberKilled();
+  const int killed = mEnemiesCollection->GetNumberKilled();
   mScoreLabel->setString("Killed: " + to_string(killed));
 
-  mHero->Update(delta);
-  mEnemiesCollection.Update(delta);
+  updater->UpdateAll(delta);
 }
 
 void HelloWorld::Reset()
@@ -185,7 +187,7 @@ void HelloWorld::Reset()
   isHeroDead = false;
   mTimeHeroDead = -0.5f;
 
-  mEnemiesCollection.Reset();
+  mEnemiesCollection->Reset();
   mHero->Reset();
   mResetLabel->removeFromParent();
   isHeroDead = false;

@@ -28,6 +28,7 @@
 #include "EnemiesCollection.h"
 #include "Hero.h"
 #include "HealthLabel.h"
+#include "Updater.h"
 
 class HelloWorld : public cocos2d::Scene
 {
@@ -61,7 +62,8 @@ private:
   cocos2d::Label* mResetLabel;
 
   Hero* mHero;
-  EnemiesCollection mEnemiesCollection;
+  EnemiesCollection* mEnemiesCollection;
   KeyboardListener* keyboardListener;
   HealthLabel* healthLabel;
+  Updater* updater;
 };
