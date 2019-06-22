@@ -23,7 +23,6 @@ private:
   Hero* mHero;
 
   int mHitAtOnceMax = 2;
-
   int killed = 0;
 
   vector<unique_ptr<Enemy>> mEnemies;

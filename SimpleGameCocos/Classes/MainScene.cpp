@@ -109,6 +109,15 @@ void MainScene::update(float delta)
     mTimeHeroDead = mTimePassed;
   }
 
+  if (mTimePassed - mTimeHeroDead > 1.0f && isHeroDead == true)
+  {
+    auto gameOverLabel = Label::createWithSystemFont("Game Over", "Arial", 60);
+    gameOverLabel->setAnchorPoint(Vec2(0.5, 0.5));
+    gameOverLabel->setPosition(Director::getInstance()->getVisibleSize().width / 2, Director::getInstance()->getVisibleSize().height / 4 * 3);
+    gameOverLabel->setTextColor(cocos2d::Color4B::BLACK);
+    this->addChild(gameOverLabel, 100);
+  }
+
   // spawn
   if (mTimePassed - mTimeLastSpawn > mTimeBetweenSpawns && mHero->IsAlive())
   {
@@ -152,6 +161,8 @@ void MainScene::update(float delta)
 
   const int killed = mEnemiesCollection->GetNumberKilled();
   mScoreLabel->setString("Killed: " + to_string(killed));
+
+  
 
   updater->UpdateAll(delta);
 }
