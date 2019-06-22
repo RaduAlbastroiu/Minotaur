@@ -71,11 +71,11 @@ void EnemiesCollection::DoUpdate(float delta)
         int xDirection = 0;
         int yDiretion = 0;
 
-        if (heroPos.first < enemyPos.first)
+        if (heroPos.first < enemyPos.first - 10)
         {
           xDirection = -2;
         }
-        if (heroPos.first > enemyPos.first)
+        if (heroPos.first - 10 > enemyPos.first)
         {
           xDirection = 2;
         }
