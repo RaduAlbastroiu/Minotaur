@@ -14,14 +14,16 @@ public:
 
   void Attack() override;
   void Reset();
-  void Update(float delta) override;
+
   void GetKeyboardInput();
   void TakeDamage(int damage) override;
   int GetHealth();
 
   cocos2d::Sprite* GetSprite();
 
-protected:
+private:
+
+  void DoUpdate(float delta) override;
 
   bool CanMoveAt(float currentX, float currentY, float X, float Y);
 

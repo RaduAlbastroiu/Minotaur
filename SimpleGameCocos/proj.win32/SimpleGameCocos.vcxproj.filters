@@ -39,7 +39,7 @@
     <ClCompile Include="..\Classes\Character.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\IUpdateable.cpp">
+    <ClCompile Include="..\Classes\Updateable.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +74,7 @@
     <ClInclude Include="..\Classes\Character.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\IUpdateable.h">
+    <ClInclude Include="..\Classes\Updateable.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

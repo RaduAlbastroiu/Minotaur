@@ -119,7 +119,7 @@ void Hero::Reset()
   currentState = internalState::idle;
 }
 
-void Hero::Update(float delta)
+void Hero::DoUpdate(float delta)
 {
   timePassed += delta;
   GetKeyboardInput();

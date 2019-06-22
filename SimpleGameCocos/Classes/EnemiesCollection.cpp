@@ -58,7 +58,7 @@ void EnemiesCollection::Update(float delta)
   for (auto& enemy : mEnemies)
   {
     // update enemy
-    enemy->Update(delta);
+    enemy->DoUpdate(delta);
 
     // get enemy position
     auto enemyPos = enemy->GetPosition();

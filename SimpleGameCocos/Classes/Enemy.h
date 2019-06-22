@@ -20,7 +20,9 @@ public:
   void MoveAt(float X, float Y);
   void Idle();
   bool DidFinishAttack();
-  void Update(float delta);
+
+  void DoUpdate(float delta);
+
 
 private:
 

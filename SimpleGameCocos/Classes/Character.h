@@ -2,11 +2,11 @@
 
 #include "cocos2d.h"
 #include "Includes.h"
-#include "IUpdateable.h"
+#include "Updateable.h"
 #include "KeyboardListener.h"
 
 
-class Character : public IUpdateable
+class Character : public Updateable
 {
 public:
 

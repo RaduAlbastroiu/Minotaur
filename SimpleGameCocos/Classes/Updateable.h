@@ -6,13 +6,12 @@
 #include "Includes.h"
 
 
-class IUpdateable
+class Updateable
 {
 public:
-
-  virtual void Update(float delta) = 0;
+  void Update(float delta);
 
 protected:
-
+  virtual void DoUpdate(float delta) = 0;
   float timePassed = 0;
 };

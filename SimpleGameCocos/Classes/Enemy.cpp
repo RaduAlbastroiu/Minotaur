@@ -35,7 +35,7 @@ void Enemy::Idle()
   ChangeState(internalState::idle);
 }
 
-void Enemy::Update(float delta)
+void Enemy::DoUpdate(float delta)
 {
   timePassed += delta;
 
