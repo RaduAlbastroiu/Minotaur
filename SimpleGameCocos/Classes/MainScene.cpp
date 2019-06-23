@@ -45,41 +45,19 @@ bool MainScene::init()
     return false;
   }
 
-  // create updater
-  updater = make_unique<Updater>();
-
-  // set keyboard
-  keyboardListener = make_unique<KeyboardListener>();
-  auto eventKeyboardListener = keyboardListener->initKeyboard();
-  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventKeyboardListener, this);
-
-  // set healt label
-  healthLabel = make_unique<HealthLabel>();
-  auto label = healthLabel->GetLabel();
-  this->addChild(label, 100);
-
-  AddBackground();
-  
-  // create enemy collection
-  mEnemiesCollection = make_unique<EnemiesCollection>(updater.get());
-  mHero = make_unique<Hero>(updater.get(), mEnemiesCollection.get(), keyboardListener.get());
-  auto heroSprite = mHero->GetSprite();
-  this->addChild(heroSprite, 10);
-
-  mEnemiesCollection->SetHero(mHero.get());
-
-  // add score label
-  mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);
-  mScoreLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10 * 9, Director::getInstance()->getVisibleSize().height / 1.07);
-  mScoreLabel->setTextColor(cocos2d::Color4B::BLACK);
-  this->addChild(mScoreLabel);
+  InitUpdater();
+  InitKeyboardListener();
+  InitHealthLabel();
+  InitBackground();
+  InitEnemiesCollectionAndHero();
+  InitScoreLabel();
 
   this->scheduleUpdate();
 
   return true;
 }
 
-void MainScene::AddBackground()
+void MainScene::InitBackground()
 {
   for (int i = 0; i < 3; i++)
   {
@@ -94,6 +72,25 @@ void MainScene::AddBackground()
       }
     }
   }
+}
+
+void MainScene::InitEnemiesCollectionAndHero()
+{
+  // create enemy collection
+  mEnemiesCollection = make_unique<EnemiesCollection>(updater.get());
+  mHero = make_unique<Hero>(updater.get(), mEnemiesCollection.get(), keyboardListener.get());
+  auto heroSprite = mHero->GetSprite();
+  this->addChild(heroSprite, 10);
+  mEnemiesCollection->SetHero(mHero.get());
+}
+
+void MainScene::InitScoreLabel()
+{
+  // add score label
+  mScoreLabel = Label::createWithSystemFont("Killed: 0", "Arial", 50);
+  mScoreLabel->setPosition(Director::getInstance()->getVisibleSize().width / 10 * 9, Director::getInstance()->getVisibleSize().height / 1.07);
+  mScoreLabel->setTextColor(cocos2d::Color4B::BLACK);
+  this->addChild(mScoreLabel);
 }
 
 void MainScene::update(float delta)
@@ -163,4 +160,25 @@ void MainScene::update(float delta)
   mScoreLabel->setString("Killed: " + to_string(killed));
 
   updater->UpdateAll(delta);
+}
+
+void MainScene::InitUpdater()
+{
+  updater = make_unique<Updater>();
+}
+
+void MainScene::InitKeyboardListener()
+{
+  // set keyboard
+  keyboardListener = make_unique<KeyboardListener>();
+  auto eventKeyboardListener = keyboardListener->initKeyboard();
+  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventKeyboardListener, this);
+}
+
+void MainScene::InitHealthLabel()
+{
+  // set healt label
+  healthLabel = make_unique<HealthLabel>();
+  auto label = healthLabel->GetLabel();
+  this->addChild(label, 100);
 }

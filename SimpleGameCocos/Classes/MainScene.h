@@ -36,12 +36,19 @@ public:
   static cocos2d::Scene* createScene();
   virtual bool init();
 
-  void AddBackground();
+  
   void update(float delta) override;
 
   CREATE_FUNC(MainScene);
 
 private:
+
+  void InitUpdater();
+  void InitKeyboardListener();
+  void InitHealthLabel();
+  void InitBackground();
+  void InitEnemiesCollectionAndHero();
+  void InitScoreLabel();
 
   float mTimePassed = 0;
   float lastSecond = 0;
