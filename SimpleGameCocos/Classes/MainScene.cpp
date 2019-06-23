@@ -64,12 +64,9 @@ void MainScene::InitBackground()
     for (int j = 0; j < 2; j++)
     {
       cocos2d::Sprite* background = Sprite::create("grass.png");
-      if (background != nullptr)
-      {
-        background->setAnchorPoint(Vec2(0, 0));
-        background->setPosition(Vec2(1024 * i, 1024 * j));
-        this->addChild(background);
-      }
+      background->setAnchorPoint(Vec2(0, 0));
+      background->setPosition(Vec2(1024 * i, 1024 * j));
+      this->addChild(background);
     }
   }
 }
