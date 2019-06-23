@@ -162,7 +162,5 @@ void MainScene::update(float delta)
   const int killed = mEnemiesCollection->GetNumberKilled();
   mScoreLabel->setString("Killed: " + to_string(killed));
 
-  
-
   updater->UpdateAll(delta);
 }
