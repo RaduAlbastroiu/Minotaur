@@ -39,12 +39,9 @@ int KeyboardListener::GetMoveDirection()
 
 bool KeyboardListener::GetAttackStatus()
 {
-  for (auto keyPressed : mKeyboard)
+  if (mKeyboard.find(EventKeyboard::KeyCode::KEY_SPACE) != mKeyboard.end())
   {
-    if (keyPressed.second == true && keyPressed.first == EventKeyboard::KeyCode::KEY_SPACE)
-    {
-      return true;
-    }
+    return true;
   }
 
   return false;
