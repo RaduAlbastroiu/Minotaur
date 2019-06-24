@@ -51,25 +51,27 @@ void Hero::MovePosition()
   float X = characterSprite->getPositionX();
   float Y = characterSprite->getPositionY();
 
-  if (mDirection == LEFT)
+  switch (mDirection)
   {
+  case LEFT:
     direction = Vec2(-1 * mSpeed, 0);
     X += -1 * mSpeed;
-  }
-  if (mDirection == RIGHT)
-  {
+    break;
+
+  case RIGHT:
     direction = Vec2(1 * mSpeed, 0);
     X += mSpeed;
-  }
-  if (mDirection == UP)
-  {
+    break;
+
+  case UP:
     direction = Vec2(0, 1 * mSpeed);
     Y += mSpeed;
-  }
-  if (mDirection == DOWN)
-  {
+    break;
+
+  case DOWN:
     direction = Vec2(0, -1 * mSpeed);
     Y -= mSpeed;
+    break;
   }
   
   if (CanMoveAt(characterSprite->getPositionX(), characterSprite->getPositionY(), X, Y))

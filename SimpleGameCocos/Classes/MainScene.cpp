@@ -59,14 +59,14 @@ bool MainScene::init()
 
 void MainScene::InitBackground()
 {
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i <= Director::getInstance()->getVisibleSize().width / 1024; i++)
   {
-    for (int j = 0; j < 2; j++)
+    for (int j = 0; j <= Director::getInstance()->getVisibleSize().height / 1024; j++)
     {
       cocos2d::Sprite* background = Sprite::create("grass.png");
       background->setAnchorPoint(Vec2(0, 0));
       background->setPosition(Vec2(1024 * i, 1024 * j));
-      this->addChild(background);
+      this->addChild(background, 0);
     }
   }
 }

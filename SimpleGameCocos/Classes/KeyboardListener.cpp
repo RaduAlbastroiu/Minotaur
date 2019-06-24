@@ -8,12 +8,10 @@ EventListenerKeyboard* KeyboardListener::initKeyboard()
 
   listener->onKeyPressed = [&](cocos2d::EventKeyboard::KeyCode keycode, Event* event) {
     mKeyboard[keycode] = true;
-    return true;
   };
 
   listener->onKeyReleased = [&](cocos2d::EventKeyboard::KeyCode keycode, Event* event) {
-    mKeyboard[keycode] = false;
-    return true;
+    mKeyboard.erase(keycode);
   };
 
   return listener;
@@ -23,20 +21,17 @@ int KeyboardListener::GetMoveDirection()
 {
   for (auto keyPressed : mKeyboard)
   {
-    if (keyPressed.second == true)
-    {
-      auto keyCode = keyPressed.first;
+    auto keyCode = keyPressed.first;
 
-      switch (keyCode) {
-      case EventKeyboard::KeyCode::KEY_A:
-        return LEFT;
-      case EventKeyboard::KeyCode::KEY_D:
-        return RIGHT;
-      case EventKeyboard::KeyCode::KEY_W:
-        return UP;
-      case EventKeyboard::KeyCode::KEY_S:
-        return DOWN;
-      }
+    switch (keyCode) {
+    case EventKeyboard::KeyCode::KEY_A:
+      return LEFT;
+    case EventKeyboard::KeyCode::KEY_D:
+      return RIGHT;
+    case EventKeyboard::KeyCode::KEY_W:
+      return UP;
+    case EventKeyboard::KeyCode::KEY_S:
+      return DOWN;
     }
   } 
   return NODIRECTION;

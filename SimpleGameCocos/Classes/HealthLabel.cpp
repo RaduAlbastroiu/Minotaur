@@ -3,7 +3,7 @@
 HealthLabel::HealthLabel()
 {
   mHealthSprite = cocos2d::Sprite::create(mLifeBar[10]);
-  mHealthSprite->setScale(0.5f);
+  mHealthSprite->setScale(0.4f);
   mHealthSprite->setPosition(Director::getInstance()->getVisibleSize().width / 9, Director::getInstance()->getVisibleSize().height / 1.07);
 }
 
