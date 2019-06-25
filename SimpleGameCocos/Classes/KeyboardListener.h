@@ -5,12 +5,15 @@
 class KeyboardListener : public cocos2d::Node
 {
 public:
-  EventListenerKeyboard* initKeyboard();
+  KeyboardListener();
+  EventListenerKeyboard* GetListener();
+
   int GetMoveDirection();
   bool GetAttackStatus();
   bool IsKeyboardPresed();
 
 private:
   
+  EventListenerKeyboard* listener;
   map<EventKeyboard::KeyCode, bool> mKeyboard;
 };

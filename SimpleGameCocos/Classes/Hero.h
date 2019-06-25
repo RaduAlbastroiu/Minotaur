@@ -4,13 +4,14 @@
 #include "Includes.h"
 #include "Character.h"
 #include "KeyboardListener.h"
+#include "HealthLabel.h"
 
 class EnemiesCollection;
 
 class Hero : public Character
 {
 public:
-  Hero(Updater* updater, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener);
+  Hero(Updater* updater, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener, HealthBar* aHealthBar);
 
   void Attack() override;
   void Reset();
@@ -49,6 +50,7 @@ private:
   int mDirection = 0;
 
   EnemiesCollection* mEnemiesCollection;
+  HealthBar* healthBar;
 
   float mSpeed = 6;
 

@@ -75,7 +75,7 @@ void MainScene::InitEnemiesCollectionAndHero()
 {
   // create enemy collection
   mEnemiesCollection = make_unique<EnemiesCollection>(updater.get());
-  mHero = make_unique<Hero>(updater.get(), mEnemiesCollection.get(), keyboardListener.get());
+  mHero = make_unique<Hero>(updater.get(), mEnemiesCollection.get(), keyboardListener.get(), healthLabel.get());
   auto heroSprite = mHero->GetSprite();
   this->addChild(heroSprite, 10);
   mEnemiesCollection->SetHero(mHero.get());
@@ -93,9 +93,6 @@ void MainScene::InitScoreLabel()
 void MainScene::update(float delta)
 {
   mTimePassed += delta;
-
-  // update health label
-  healthLabel->UpdateValue(mHero->GetHealth());
 
   if (isHeroDead == false && mHero->IsAlive() == false)
   {
@@ -168,14 +165,13 @@ void MainScene::InitKeyboardListener()
 {
   // set keyboard
   keyboardListener = make_unique<KeyboardListener>();
-  auto eventKeyboardListener = keyboardListener->initKeyboard();
-  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(eventKeyboardListener, this);
+  Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(keyboardListener->GetListener(), this);
 }
 
 void MainScene::InitHealthLabel()
 {
   // set healt label
-  healthLabel = make_unique<HealthLabel>();
+  healthLabel = make_unique<HealthBar>();
   auto label = healthLabel->GetLabel();
   this->addChild(label, 100);
 }

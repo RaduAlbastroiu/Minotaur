@@ -69,6 +69,6 @@ private:
   unique_ptr<Hero> mHero;
   unique_ptr<EnemiesCollection> mEnemiesCollection;
   unique_ptr<KeyboardListener> keyboardListener;
-  unique_ptr<HealthLabel> healthLabel;
+  unique_ptr<HealthBar> healthLabel;
   unique_ptr<Updater> updater;
 };

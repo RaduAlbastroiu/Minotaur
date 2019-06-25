@@ -2,10 +2,10 @@
 
 #include "Includes.h"
 
-class HealthLabel
+class HealthBar
 {
 public:
-  HealthLabel();
+  HealthBar();
   cocos2d::Sprite* GetLabel();
   void UpdateValue(int health);
 

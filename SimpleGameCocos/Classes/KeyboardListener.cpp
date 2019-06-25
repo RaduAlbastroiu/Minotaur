@@ -2,9 +2,9 @@
 #include "KeyboardListener.h"
 
 
-EventListenerKeyboard* KeyboardListener::initKeyboard()
+KeyboardListener::KeyboardListener()
 {
-  auto listener = EventListenerKeyboard::create();
+  listener = EventListenerKeyboard::create();
 
   listener->onKeyPressed = [&](cocos2d::EventKeyboard::KeyCode keycode, Event* event) {
     mKeyboard[keycode] = true;
@@ -14,6 +14,10 @@ EventListenerKeyboard* KeyboardListener::initKeyboard()
     mKeyboard.erase(keycode);
   };
 
+}
+
+EventListenerKeyboard* KeyboardListener::GetListener()
+{
   return listener;
 }
 

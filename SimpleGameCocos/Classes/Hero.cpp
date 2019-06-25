@@ -2,11 +2,12 @@
 #include "Hero.h"
 #include "EnemiesCollection.h"
 
-Hero::Hero(Updater* updater, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener)
+Hero::Hero(Updater* updater, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener, HealthBar* aHealthBar)
   : Character(updater)
 {
   mEnemiesCollection = aEnemiesCollection;
   keyboardListener = aKeyboardListener;
+  healthBar = aHealthBar;
 
   Init();
 }
@@ -183,6 +184,7 @@ void Hero::TakeDamage(int damage)
 {
   health -= damage;
   health = max(0, health);
+  healthBar->UpdateValue(health);
 }
 
 int Hero::GetHealth()
