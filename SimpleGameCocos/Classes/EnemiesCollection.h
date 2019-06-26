@@ -25,6 +25,8 @@ private:
   int mHitAtOnceMax = 2;
   int killed = 0;
 
-  vector<unique_ptr<Enemy>> mEnemies;
+  cocos2d::Scene* scene;
+
+  set<Enemy*> mEnemies;
 };
 

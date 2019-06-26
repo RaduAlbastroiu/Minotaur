@@ -13,7 +13,7 @@ class Hero : public Character
 public:
   Hero(Updater* updater, EnemiesCollection* aEnemiesCollection, KeyboardListener* aKeyboardListener, HealthBar* aHealthBar);
 
-  void Attack() override;
+  
   void Reset();
 
   void GetKeyboardInput();
@@ -45,6 +45,7 @@ private:
 
   virtual void RunDeadAnimation() override;
 
+  void Attack() override;
   void MovePosition();
 
   int mDirection = 0;

@@ -63,6 +63,11 @@ void Enemy::DoUpdate(float delta)
   }
 }
 
+bool Enemy::IsVisible()
+{
+  return mIsVisible;
+}
+
 void Enemy::Init()
 {
   SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Skeleton/SkeletonFinal.plist");

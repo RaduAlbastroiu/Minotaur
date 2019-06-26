@@ -22,7 +22,7 @@ public:
   bool DidFinishAttack();
 
   void DoUpdate(float delta);
-
+  bool IsVisible();
 
 private:
 

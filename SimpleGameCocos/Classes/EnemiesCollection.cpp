@@ -9,8 +9,10 @@ EnemiesCollection::EnemiesCollection(Updater* updater)
 
 void EnemiesCollection::AddEnemy(cocos2d::Scene * aScene, float X, float Y)
 {
-  mEnemies.push_back(make_unique<Enemy>(updater, X, Y));
-  aScene->addChild(mEnemies.back()->GetSprite());
+  scene = aScene;
+  auto enemy = new Enemy(updater, X, Y);
+  mEnemies.insert(enemy);
+  aScene->addChild(enemy->GetSprite());
 }
 
 void EnemiesCollection::AttackCollection()
@@ -18,7 +20,7 @@ void EnemiesCollection::AttackCollection()
   auto pos = mHero->GetPosition();
   auto heroPoint = Point(pos.first, pos.second);
   int count = mHitAtOnceMax;
-  for (auto& enemy : mEnemies)
+  for (auto enemy : mEnemies)
   {
     auto posEnemy = enemy->GetPosition();
     auto enemyPoint = Point(posEnemy.first, posEnemy.second);
@@ -28,22 +30,13 @@ void EnemiesCollection::AttackCollection()
     if (dist < 175 && count > 0 && enemy->IsAlive())
     {
       enemy->TakeDamage(HERO_STRENGTH);
-      count--;
+      // count--;
     }
   }
 }
 
 int EnemiesCollection::GetNumberKilled()
 {
-  auto killed = 0;
-  for (auto& enemy : mEnemies)
-  {
-    if (enemy->IsAlive() == false)
-    {
-      killed++;
-    }
-  }
-
   return killed;
 }
 
@@ -52,9 +45,17 @@ void EnemiesCollection::DoUpdate(float delta)
   auto heroPos = mHero->GetPosition();
   Vec2 heroPoint = Vec2(heroPos.first, heroPos.second);
 
+  vector<Enemy*> toDelete;
+
   // set action for each enemy
-  for (auto& enemy : mEnemies)
+  for (auto enemy : mEnemies)
   {
+    if (enemy->IsVisible() == false)
+    {
+      toDelete.push_back(enemy);
+      continue;
+    }
+
     // get enemy position
     auto enemyPos = enemy->GetPosition();
     Vec2 enemyPoint = Vec2(enemyPos.first, enemyPos.second);
@@ -112,6 +113,15 @@ void EnemiesCollection::DoUpdate(float delta)
     {
       enemy->Idle();
     }
+  }
+
+  killed += toDelete.size();
+  for (auto enemy : toDelete)
+  {
+    auto ptr = enemy;
+    mEnemies.erase(enemy);
+    scene->removeChild(ptr->GetSprite());
+    // delete ptr;
   }
 }
 
